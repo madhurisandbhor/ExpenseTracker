@@ -63,7 +63,7 @@ WebStorm is a powerful IDE, and why not also use it as debugger tool? Here are t
 ### Troubleshooting
 
 1.  You miss the last `.` (dot) in `webpack://.`
-2.  The port debugger is listening tool and the JetBrain extension is mismatch.
+2.  The port  is listening tool and the JetBrain extension is mismatch.
 
 ### Enable ESLint
 

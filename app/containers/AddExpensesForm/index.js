@@ -44,17 +44,21 @@ const Section = styled(CenteredSection)`
 export function AddExpensesForm(props) {
   useInjectReducer({ key: 'addExpensesForm', reducer });
   useInjectSaga({ key: 'addExpensesForm', saga });
-  const [currentDate, setCurrentDate] = useState(new Date().toISOString().split('T')[0]);
+  const [expenseDate, setexpenseDate] = useState(new Date().toISOString().split('T')[0]);
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [amount, setAmount] = useState(0);
+
+
   const onSave = async () => {
-    alert(`currentDate: ${currentDate}, category: ${category}, description:${description}, amount:${amount}`);
+    // e.preventDefault();
     const data = {
-      task: 'Task1',
-      status: 'true'
+      'expense-date': expenseDate,
+      // category: category,
+      description: description,
+      amount: amount
     }
-    const response = await fetch('/task', {
+    const response = await fetch('api/expense', {
       method: 'POST',
       mode: 'cors',
       headers: {
@@ -62,7 +66,7 @@ export function AddExpensesForm(props) {
       },
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
-    return response.json();
+    response.text().then(text => alert(text));
   }
 
   return (
@@ -132,8 +136,8 @@ export function AddExpensesForm(props) {
             label='Expense Date'
             type='date'
             style={{ width: '20ch' }}
-            value={currentDate}
-            onChange={(e) => setCurrentDate(e.target.value)}
+            value={expenseDate}
+            onChange={(e) => setexpenseDate(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
