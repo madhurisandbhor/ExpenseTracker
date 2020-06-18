@@ -2,7 +2,7 @@
   "boilerplate.components.Footer.author.message": "By Madhuri.",
   "boilerplate.components.Footer.about.message": "This is an Expense tracker app created using React hooks, redux & node JS",
   "boilerplate.components.Header.features": "Features",
-  "boilerplate.components.Header.home": "Home",
+  "boilerplate.components.Header.home": "Overview",
   "boilerplate.containers.FeaturePage.css.header": "Features",
   "boilerplate.containers.FeaturePage.css.message": "Next generation CSS",
   "boilerplate.containers.FeaturePage.feedback.header": "Instant feedback",

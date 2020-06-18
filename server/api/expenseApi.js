@@ -1,24 +1,46 @@
-const Expenses = require('../MysqlDB/Expenses');
+const Expense = require('../model/expenseModel');
 
-exports.list_all_expenses = (req, res) => {
-    Expenses.getExpenseList(function (err, expenseList) {
-        if (err)
+const responseCallback = (res, message) => {
+    return (err, result) => {
+        if (err) {
+            console.log('Error:', err);
             res.send(err);
-        res.json(expenseList);
-    });
+        }
+        else if (message !== undefined)
+            res.send(message);
+        else
+            res.json(result);
+    }
 };
 
-exports.add_expense = (req, res) => {
-    const new_expense = req.body;
 
-    if (!new_expense.description || !new_expense['expense-date']) {
+exports.listAllExpenses = (req, res) => {
+    const searchText = req.query.search;
+    Expense.getExpenseList(searchText, responseCallback(res));
+};
+
+exports.addExpense = (req, res) => {
+    const new_expense = new Expense(req.body);
+
+    if (!new_expense.description || !new_expense.expense_date) {
         res.status(400).send({ error: true, message: 'Please provide description/date' });
     }
     else {
-        Expenses.addExpense(new_expense, function (err, expense) {
-            if (err)
-                res.send(err);
-            res.send('Expense is added');
-        });
+        Expense.addExpense(new_expense, responseCallback(res, 'Expense is added'));
     }
 };
+
+exports.readExpense = (req, res) => {
+    const expenseId = req.params.expenseId;
+    Expense.getExpenseById(expenseId, function (err, expense) {
+        if (err)
+            res.send(err);
+        res.json(expense);
+    });
+};
+
+exports.updateExpense = (req, res) => {
+    const updatedExpense = new Expense(req.body);
+    Expense.updateExpenseById(
+        req.params.expenseId, updatedExpense, responseCallback(res, 'Expense is updated'));
+}

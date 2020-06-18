@@ -6,6 +6,7 @@ import NavItem from './NavItem';
 import HeaderLink from './HeaderLink';
 import messages from './messages';
 
+
 function Header() {
   return (
     <Wrapper>
@@ -15,11 +16,11 @@ function Header() {
             <FormattedMessage {...messages.home} />
           </HeaderLink>
         </NavItem>
-        {/* <NavItem>
-          <HeaderLink to="/features">
-            <FormattedMessage {...messages.features} />
+        <NavItem>
+          <HeaderLink to="/expensesList">
+            <FormattedMessage {...messages.expenseList} />
           </HeaderLink>
-        </NavItem> */}
+        </NavItem>
         <NavItem>
           <HeaderLink to="/about">
             <FormattedMessage {...messages.about} />

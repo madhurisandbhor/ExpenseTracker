@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
-import image from './images/fr_background.jpg';
+// import image from './images/fr_background.jpg';
+import img1 from './images/piggy.jpg';
+import img2 from './images/calculator.jpg';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -20,23 +22,34 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Lora', sans-serif;
+    font-weight: 300;
   }
 
-  body.fontLoaded {
-    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', serif;
   }
 
   #app {
     min-height: 100%;
     min-width: 100%;
     font-size: 1.6rem;
+   
+    background: linear-gradient(90deg, rgba(213,190,174,1) 0%, rgba(171,126,112,1) 84%);
+    
+    // background: url(${img1}) no-repeat center center fixed;    
+    // background-size: cover;
+    // background-position: bottom;
   }
 
   p,
   label {
-    font-family: Georgia, Times, 'Times New Roman', serif;
+    font-weight: 300;
     line-height: 1.5rem;
+  }
+
+  image{
+    min-height: 100%;
   }
 `;
 

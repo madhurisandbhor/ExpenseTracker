@@ -27,8 +27,7 @@ import { makeSelectUsername } from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import IconButton from '@material-ui/core/IconButton';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
 
 const key = 'home';
@@ -58,12 +57,36 @@ const Info = styled.div`
   padding: .8rem;
 `;
 
+const AddBtnWrapper = styled.div`
+  position: absolute;
+  bottom: 2rem;
+  right: 5rem;
+  display:flex;
+  align-items: center;
+`;
+
+const AddText = styled.span`
+  // color: ${props => props.theme.palette.secondary.dark};
+  color: #fff;
+  margin-right: 1.5rem;
+  order:0;
+  opacity:0;
+  visibility: hidden;
+  transition: visibility 0s, opacity 0.5s linear;
+`;
+
 const IconButtonWrapper = withStyles(theme => ({
   root: {
     color: '#fff',
+    order: 1,
+    background: theme.palette.primary.main,
     '&:hover': {
-      background: theme.palette.primary.dark, // '#48727d',
-    }
+      background: theme.palette.primary.dark,
+    },
+    '&:hover + .add_text': {
+      opacity: 1,
+      visibility: 'visible',
+    },
   },
 }))(IconButton);
 
@@ -83,8 +106,8 @@ export function HomePage({
     rest.history.push('/addExpenses');
   }
 
-  const onAddExpenseList = () => {
-    rest.history.push('/addExpensesList');
+  const onShowAllExpenses = () => {
+    rest.history.push('/expensesList');
   }
 
   return (
@@ -97,24 +120,17 @@ export function HomePage({
         />
       </Helmet>
       <Wrapper>
-        <Section>
-          <SectionItem>
-            <span>Add Expense</span>
-            <IconButtonWrapper aria-label="add expenses" onClick={onAddExpense}>
-              <AddCircleOutlineIcon fontSize="large" />
-            </IconButtonWrapper>
-          </SectionItem>
-          <SectionItem>
-            <span>Add Expense List</span>
-            <IconButtonWrapper aria-label="add expense list" onClick={onAddExpenseList}>
-              <PlaylistAddIcon fontSize="large" />
-            </IconButtonWrapper>
-          </SectionItem>
-        </Section>
+        <AddBtnWrapper>
+          <IconButtonWrapper aria-label="add expenses" onClick={onAddExpense}>
+            <AddIcon fontSize="large" />
+          </IconButtonWrapper>
+          <AddText className='add_text'>Add New Expense</AddText>
+        </AddBtnWrapper>
         <Container>
           <Info>Your total expenses this year : €8900+ Rs.456 </Info>
           <Info>You owe Rs.67 to Prasad</Info>
-          <Info>Prasad owes you €1560 </Info></Container>
+          <Info>Prasad owes you €1560 </Info>
+        </Container>
       </Wrapper>
     </article >
   );

@@ -24,7 +24,7 @@ import App from 'containers/App';
 import LanguageProvider from 'containers/LanguageProvider';
 
 // Load the image file and the .htaccess file
-import '!file-loader?name=[name].[ext]!./images/fr_background.jpg';
+// import '!file-loader?name=[name].[ext]!./images/piggy.jpg';
 // import 'file-loader?name=.htaccess!./.htaccess'; // eslint-disable-line import/extensions
 
 import configureStore from './configureStore';

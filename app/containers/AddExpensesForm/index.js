@@ -7,6 +7,7 @@
 import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
@@ -18,7 +19,7 @@ import reducer from './reducer';
 import saga from './saga';
 import messages from './messages';
 import CenteredSection from 'Components/CenteredSection';
-import { withTheme } from '@material-ui/core/styles';
+import { withStyles, withTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -28,7 +29,10 @@ import Select from '@material-ui/core/Select';
 
 const Wrapper = styled.div`
   margin: 2rem auto;
+  padding: 2rem;
   width: 50%;
+  background-color: #fff;
+  border-radius: .4rem;
 `;
 
 const FieldWrapper = styled.div`
@@ -39,7 +43,20 @@ const FieldWrapper = styled.div`
 
 const Section = styled(CenteredSection)`
   color: ${props => props.theme.palette.primary.dark};
+  font-weight: bold;
 `;
+
+const ButtonWrapper = withStyles(theme => ({
+  root: {
+    width: '20ch',
+    color: '#fff',
+    background: theme.palette.primary.main,
+    margin: '.8rem',
+    '&:hover': {
+      background: theme.palette.primary.dark,
+    }
+  },
+}))(Button);
 
 export function AddExpensesForm(props) {
   useInjectReducer({ key: 'addExpensesForm', reducer });
@@ -53,8 +70,8 @@ export function AddExpensesForm(props) {
   const onSave = async () => {
     // e.preventDefault();
     const data = {
-      'expense-date': expenseDate,
-      // category: category,
+      'expense_date': expenseDate,
+      category: category,
       description: description,
       amount: amount
     }
@@ -67,6 +84,10 @@ export function AddExpensesForm(props) {
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     });
     response.text().then(text => alert(text));
+  }
+
+  const onCancel = () => {
+    props.history.push('/');
   }
 
   return (
@@ -142,19 +163,20 @@ export function AddExpensesForm(props) {
               shrink: true,
             }}
           />
-          <Button
-            type='submit'
-            value="Submit"
-            style={{
-              width: '20ch',
-              marginTop: '.8rem',
-              alignSelf: 'center',
-              color: '#fff',
-              background: props.theme.palette.primary.main,
-            }}
-          >
-            Save
-          </Button>
+          <div style={{
+            alignSelf: 'center',
+          }}>
+            <ButtonWrapper
+              type='submit'
+            >
+              Save
+          </ButtonWrapper>
+            <ButtonWrapper
+              type='button'
+              onClick={onCancel}
+            >
+              Cancel
+          </ButtonWrapper></div>
         </FieldWrapper>
       </form>
     </Wrapper>
@@ -184,4 +206,5 @@ export default compose(
   withConnect,
   memo,
   withTheme,
+  withRouter,
 )(AddExpensesForm);

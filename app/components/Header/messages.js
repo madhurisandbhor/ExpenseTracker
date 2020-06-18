@@ -10,10 +10,14 @@ export const scope = 'boilerplate.components.Header';
 export default defineMessages({
   home: {
     id: `${scope}.home`,
-    defaultMessage: 'Home',
+    defaultMessage: 'Overview',
   },
   about: {
     id: `${scope}.about`,
     defaultMessage: 'About',
+  },
+  expenseList: {
+    id: `${scope}.expenseList`,
+    defaultMessage: 'Expense List',
   },
 });

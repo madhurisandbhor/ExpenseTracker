@@ -1,23 +1,14 @@
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import { withStyles } from '@material-ui/core/styles';
 
 const activeClassName = 'active';
-
-const IconButtonWrapper = withStyles(theme => ({
-  root: {
-    '&:hover': {
-      background: theme.palette.primary.dark,
-    }
-  },
-}))(NavLink);
-
 
 export default styled(NavLink).attrs({
   activeClassName: activeClassName,
 })`
   display: inline-flex;
-  padding: 1rem 2rem;
+  padding: .8rem 2rem;
+  color: ${props => props.theme.palette.primary.dark};
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   -webkit-touch-callout: none;
@@ -27,8 +18,15 @@ export default styled(NavLink).attrs({
   font-family: Roboto, sans-serif;
   font-size: 1.8rem;
   font-weight: 200;
+  align-items: center;
+  height: -webkit-fill-available;
 
-  &:active, &:hover,&.${activeClassName} {
-    color: ${props=>props.theme.palette.primary.dark};
+ &:hover {
+    // background: ${props => props.theme.palette.primary.main};
+    color: ${props => props.theme.palette.primary.main};
+  }
+  &:active, &.${activeClassName} {
+    background: ${props => props.theme.palette.primary.main};
+    color: #fff;
   }
 `;

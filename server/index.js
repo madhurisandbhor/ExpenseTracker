@@ -5,7 +5,7 @@ const logger = require('./logger');
 const bodyParser = require('body-parser');
 const argv = require('./argv');
 const port = require('./port');
-const connection = require('./mysqlDB/db');
+const connection = require('./model/db');
 const setup = require('./middlewares/frontendMiddleware');
 const appRoute = require('./routes/appRoutes');
 
