@@ -7,19 +7,14 @@ var Expense = function (expense) {
     this.expense_date = expense.expense_date;
 };
 
-// const handleResponse = result => {
-//     return (err, response) => {
-//         result(err, response);
-//     }
-// }
 
 Expense.getExpenseList = (searchText, handleResponse) => {
     if (!searchText) {
         connection.query('select * from expense', handleResponse);
     } else {
         const searchKeyword = `%${searchText}%`;
-        connection.query("select * from expense WHERE category LIKE ? or description LIKE ?",
-            [searchKeyword, searchKeyword], handleResponse);
+        connection.query("select * from expense where expense_date like ? or description like ? or category like ? or amount like ?",
+            [searchKeyword, searchKeyword, searchKeyword, searchKeyword], handleResponse);
     }
 };
 

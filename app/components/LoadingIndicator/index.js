@@ -4,7 +4,7 @@ import Circle from './Circle';
 import Wrapper from './Wrapper';
 
 const LoadingIndicator = () => (
-  <Wrapper>
+  <Wrapper style={{ color: 'blue' }}>
     <Circle />
     <Circle rotate={30} delay={-1.1} />
     <Circle rotate={60} delay={-1} />
