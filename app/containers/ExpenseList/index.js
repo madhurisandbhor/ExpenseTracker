@@ -7,6 +7,7 @@
 import React, { memo, useEffect, useState, forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -26,13 +27,13 @@ import {
 } from '@devexpress/dx-react-grid-material-ui';
 
 import {
+  SearchState,
   SortingState,
   IntegratedSorting,
-  SearchState,
 } from '@devexpress/dx-react-grid';
 import { loadExpenseList as loadExpenseListAction } from './actions';
-import { withStyles } from '@material-ui/core/styles';
 import Loader from 'components/Loader';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -43,21 +44,69 @@ const Container = styled.div`
   font-size: 1.6rem;
 `;
 
+const Pagination = styled.div`
+  display: flex;
+  align-items:center;
+  justify-content:center;
+  padding: 1rem;
+`;
+
+const Btn = withStyles(theme => ({
+  root: {
+    minWidth: '4rem',
+    width: '4rem',
+    height: '4rem',
+    margin: '.8rem',
+    backgroundColor: theme.palette.primary.main,
+    boxShadow: '0 0.5rem 1rem grey',
+    fontSize: '3rem',
+    fontWeight: 'bold',
+    color: "#fff",
+    borderRadius: '50%',
+    borderWidth: 0,
+    textAlign: 'center',
+    '&:hover': {
+      transform: 'translateY(-0.2rem)',
+      boxShadow: '0 1rem 2rem grey',
+      backgroundColor: theme.palette.primary.dark,
+    },
+    '&:disabled': {
+      opacity: '0.5',
+    }
+  }
+}))(Button);
+
 const HeaderCell = withStyles({
   cell: {
-    padding: '1.6rem',
+    padding: '1rem',
     '&:first-child': {
       paddingLeft: '1.6rem',
     },
+    '&:nth-last-child(3)': {
+      paddingLeft: '1.6rem',
+      paddingRight: '1.6rem',
+    },
+    '&:nth-last-child(2)': {
+      paddingLeft: '1rem',
+      paddingRight: 0,
+    }
   },
 })(TableHeaderRow.Cell);
 
 const CellWrapper = withStyles({
   cell: {
-    padding: '1.6rem',
+    padding: '0 1rem',
     '&:first-child': {
       paddingLeft: '1.6rem',
     },
+    '&:nth-last-child(3)': {
+      paddingLeft: '1.6rem',
+      paddingRight: '1.6rem',
+    },
+    '&:nth-last-child(2)': {
+      paddingLeft: '1.6rem',
+      paddingRight: 0,
+    }
   },
 })(Table.Cell);
 
@@ -101,7 +150,7 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
     { columnName: 'category', width: 150 },
     { columnName: 'amount', width: 150 },
     { columnName: 'edit', width: 85 },
-    { columnName: 'delete', width: 100 },
+    { columnName: 'delete', width: 82 },
   ];
 
   const createData = item => ({
@@ -113,11 +162,25 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
   });
 
   const formatterRows = () => [...expenseList.list].map(item => createData(item));
+
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchText, setSearchText] = useState(expenseList.searchText);
   const [typingTimeout, setTypingTimeout] = useState(0);
+  const [nextLink, setNextLink] = useState(expenseList.info && expenseList.info.next ? expenseList.info.next : '');
+  const [prevLink, setPrevLink] = useState(expenseList.info && expenseList.info.prev ? expenseList.info.prev : '');
+  const [limit, setLimit] = useState(5);
+  const [pagesCount, setPagesCount] = useState(expenseList.info.pages ? expenseList.info.pages : 1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const searchTxt = expenseList.searchText ? expenseList.searchText : '';
+  const [searchText, setSearchText] = useState(searchTxt);
 
+
+  const onNavigationClick = (nextORPrev) => {
+    const url = (nextORPrev === 'next') ? new URL(expenseList.info.next) : new URL(expenseList.info.prev);
+    const urlParams = new URLSearchParams(url.search);
+    const page = urlParams.get('page');
+    setCurrentPage(page);
+  }
 
   const onEditExpense = expenseId => {
     console.log('expense id:', expenseId);
@@ -136,7 +199,7 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
       return (
         <CellWrapper ref={ref}>
           <IconButtonWrapper aria-label="edit expense" onClick={() => onEditExpense(row.id)}>
-            <EditIcon fontSize="medium" />
+            <EditIcon fontSize="small" />
           </IconButtonWrapper>
         </CellWrapper>
       );
@@ -145,7 +208,7 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
       return (
         <CellWrapper ref={ref}>
           <IconButtonWrapper aria-label="delete expense" onClick={() => onDeleteExpense(row.id)}>
-            <DeleteIcon fontSize="medium" />
+            <DeleteIcon fontSize="small" />
           </IconButtonWrapper>
         </CellWrapper>
       );
@@ -158,14 +221,11 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
   }
 
   useEffect(() => {
-    console.log('mounted');
-    loadExpenseList();
-    return clearAll();
-  }, []);
-
-  useEffect(() => {
     setRows(formatterRows());
     setLoading(expenseList.loading);
+    setPagesCount(expenseList.info.pages);
+    setNextLink(expenseList.info.next);
+    setPrevLink(expenseList.info.prev);
   }, [expenseList.loading]);
 
   useEffect(() => {
@@ -173,9 +233,12 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
       clearTimeout(typingTimeout);
     setTypingTimeout(
       setTimeout(() => {
-        searchText !== '' && loadExpenseList(searchText);
-        searchText === '' && loadExpenseList();
+        loadExpenseList(currentPage, limit, searchText);
       }, 500));
+  }, [currentPage, searchText, limit]);
+
+  useEffect(() => {
+    setCurrentPage(1);
   }, [searchText]);
 
   return (
@@ -191,7 +254,7 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
             onValueChange={setSearchText}
           />
           <SortingState
-            defaultSorting={[{ columnName: 'expenseDate', direction: 'desc' }]}
+          // defaultSorting={[{ columnName: 'expenseDate', direction: 'desc' }]}
           />
           <IntegratedSorting />
           <Table
@@ -199,10 +262,30 @@ export const ExpenseList = ({ loadExpenseList, expenseList }) => {
             cellComponent={Cell}
           />
           <TableColumnResizing defaultColumnWidths={defaultColumnWidths} />
-          <TableHeaderRow cellComponent={HeaderCell} showSortingControls/>
+          <TableHeaderRow cellComponent={HeaderCell} showSortingControls />
           <Toolbar />
           <SearchPanel />
         </Grid>
+        <Pagination>
+          {pagesCount !== 0 &&
+            <>
+              <Btn
+                size="large"
+                onClick={() => onNavigationClick('prev')}
+                disabled={prevLink === ''}
+              >
+                &#8249;
+              </Btn>
+              <span>{currentPage}/{pagesCount}</span>
+              <Btn
+                size="small"
+                onClick={() => onNavigationClick('next')}
+                disabled={nextLink === ''}
+              >
+                &#8250;
+            </Btn>
+            </>}
+        </Pagination>
       </Paper>
     </Container>
   );
@@ -218,8 +301,8 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadExpenseList: params =>
-    dispatch(loadExpenseListAction(params)),
+  loadExpenseList: (page, limit, searchText) =>
+    dispatch(loadExpenseListAction(page, limit, searchText)),
 });
 
 const withConnect = connect(

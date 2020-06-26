@@ -46,6 +46,11 @@ const theme = createMuiTheme({
     },
     MuiToolbar: fontSize14,
     MuiMenuItem: fontSize12,
+    TableStubCell:{
+      cell:{
+        display:'none',
+      }
+    },
   }
 });
 

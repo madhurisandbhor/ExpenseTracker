@@ -10,18 +10,25 @@ export const initialState = {
   error: '',
   list: [],
   searchText: '',
+  info: {
+    totalCount: 0,
+    pages: 1,
+    next: '',
+    prev: ''
+  },
 };
 
 /* eslint-disable default-case, no-param-reassign */
 const expenseListReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_EXPENSE_LIST:
-      return { ...state, loading: true, searchText: action.params };
+      return { ...state, loading: true, searchText: action.params.searchText };
     case LOAD_EXPENSE_LIST_SUCCESS:
       return {
         ...state,
         loading: false,
-        list: action.payload,
+        list: action.payload.result,
+        info: action.payload.info,
       };
     case LOAD_EXPENSE_LIST_ERROR:
       return { ...state, loading: false, error: action.error };
