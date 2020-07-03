@@ -1,5 +1,12 @@
-const connection = require('./db');
+/* eslint-disable no-console */
+/* eslint-disable prettier/prettier */
+/* eslint-disable indent */
+/* eslint-disable global-require */
+/* eslint-disable func-names */
+
+
 const mysql = require('mysql');
+const connection = require('./db');
 
 const Expense = function (expense) {
     this.description = expense.description;
@@ -24,23 +31,21 @@ Expense.getExpenseList = function (page, limit, offset, searchText, handleRespon
     const searchKeyword = `%${searchText}%`;
     const searchRecordsQuery = mysql.format('select count(*) as TotalCount from expense where expense_date like ? or description like ? or category like ? or amount like ?',
         [searchKeyword, searchKeyword, searchKeyword, searchKeyword]);
-        
+
     let query = searchText ? searchRecordsQuery : totalRecordsQuery;
     connection.query(query, function (err, rows) {
         if (err) {
             return err;
-        } else {
-            totalCount = rows[0].TotalCount
-            if (offset !== '' || limit !== '') {
-                startNum = offset;
-                LimitNum = limit;
-            }
+        }
+        totalCount = rows[0].TotalCount
+        if (offset !== '' || limit !== '') {
+            startNum = offset;
+            LimitNum = limit;
         }
 
         if (!searchText) {
             query = mysql.format('select * from expense limit ? offset ?', [LimitNum, startNum]);
         } else {
-            const searchKeyword = `%${searchText}%`;
             query = mysql.format('select * from expense where expense_date like ? or description like ? or category like ? or amount like ? limit ? offset ?',
                 [searchKeyword, searchKeyword, searchKeyword, searchKeyword, LimitNum, startNum]);
         }

@@ -9,8 +9,12 @@ import { defineMessages } from 'react-intl';
 export const scope = 'app.containers.AddExpensesForm';
 
 export default defineMessages({
-  header: {
-    id: `${scope}.header`,
-    defaultMessage: 'Add Expenses',
+  addHeader: {
+    id: `${scope}.addHeader`,
+    defaultMessage: 'Add Expense',
+  },
+  updateHeader: {
+    id: `${scope}.updateHeader`,
+    defaultMessage: 'Update Expense',
   },
 });

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const CenteredSection = styled.section`
-  margin: .8rem auto;
+  margin: 0.8rem auto;
   text-align: center;
   &:first-child {
     margin-top: 0;

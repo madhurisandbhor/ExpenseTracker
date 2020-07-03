@@ -51,7 +51,7 @@ export default function App() {
             <AppContainer>
               <Switch>
                 <Route exact path="/" component={HomePage} />
-                <Route path="/addExpenses" component={AddExpensesForm} />
+                <Route path="/addExpenses" component={AddExpensesForm} /> //add authentication for accessing
                 <Route path="/expensesList" component={ExpenseList} />
                 <Route path='/about' component={TestPage} />
                 <Route path='/login' component={LoginPage} />

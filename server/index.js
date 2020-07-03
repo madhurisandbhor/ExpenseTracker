@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-unused-expressions */
 /* eslint consistent-return:0 import/order:0 */
 
 const express = require('express');
@@ -7,7 +9,6 @@ const argv = require('./argv');
 const port = require('./port');
 const connection = require('./model/db');
 const setup = require('./middlewares/frontendMiddleware');
-const appRoute = require('./routes/appRoutes');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const ngrok =
@@ -17,18 +18,18 @@ const ngrok =
 const { resolve } = require('path');
 const app = express();
 
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 connection.connect(err => {
   err ? console.log(err) : console.log('Mysql database connected');
-})
+});
 
 // If you need a backend, e.g. an API, add your custom backend-specific middleware here
 // app.use('/api', appRoute);
 
-const routes = require('./routes/appRoutes'); //importing route
-routes(app); //register the route
+const routes = require('./routes/appRoutes'); // importing route
+routes(app); // register the route
 
 // In production we need to pass these values in instead of relying on webpack
 setup(app, {

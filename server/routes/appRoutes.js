@@ -1,3 +1,7 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable indent */
+/* eslint-disable global-require */
+/* eslint-disable func-names */
 module.exports = function (app) {
   const expenseList = require('../api/expenseApi');
 

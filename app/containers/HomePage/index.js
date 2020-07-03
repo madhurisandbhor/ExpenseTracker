@@ -103,7 +103,12 @@ export function HomePage({
   }, []);
 
   const onAddExpense = () => {
-    rest.history.push('/addExpenses');
+    rest.history.push({
+      pathname: '/addExpenses',
+      params: {
+        formType: 'add',
+      }
+    });
   }
 
   const onShowAllExpenses = () => {
