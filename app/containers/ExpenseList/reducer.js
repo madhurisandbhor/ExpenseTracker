@@ -10,6 +10,12 @@ import {
   SAVE_EXPENSE_DATA,
   SAVE_EXPENSE_DATA_SUCCESS,
   SAVE_EXPENSE_DATA_ERROR,
+  UPDATE_EXPENSE_DATA,
+  UPDATE_EXPENSE_DATA_SUCCESS,
+  UPDATE_EXPENSE_DATA_ERROR,
+  DELETE_EXPENSE_DATA,
+  DELETE_EXPENSE_DATA_SUCCESS,
+  DELETE_EXPENSE_DATA_ERROR,
 } from './constants';
 
 export const initialState = {
@@ -48,6 +54,26 @@ const expenseListReducer = (state = initialState, action) => {
         message: action.payload.message,
       };
     case SAVE_EXPENSE_DATA_ERROR:
+      return { ...state, loading: false, error: action.error };
+    case UPDATE_EXPENSE_DATA:
+      return state;
+    case UPDATE_EXPENSE_DATA_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        message: action.payload.message,
+      };
+    case UPDATE_EXPENSE_DATA_ERROR:
+      return { ...state, loading: false, error: action.error };
+    case DELETE_EXPENSE_DATA:
+      return state;
+    case DELETE_EXPENSE_DATA_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        message: action.payload.message,
+      };
+    case DELETE_EXPENSE_DATA_ERROR:
       return { ...state, loading: false, error: action.error };
     default:
       return state;

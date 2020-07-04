@@ -13,9 +13,8 @@ const fontSize12 = {
 
 const theme = createMuiTheme({
   palette: {
-    // primary: { light: '#A5668B', main: "#69306D", dark: '#0E103D' },
-    primary: { light: '#d3bcc0', main: "#e26d5c", dark: '#69306D' },
-    secondary: { light: '#613ba1', main: "#e26d5c", dark: '#4003a8' },
+    primary: { light: '#d3bcc0', main: '#e26d5c', dark: '#69306D' },
+    secondary: { light: '#613ba1', main: '#e26d5c', dark: '#4003a8' },
   },
   spacing: 4,
   overrides: {
@@ -23,12 +22,6 @@ const theme = createMuiTheme({
     MuiTextField: fontSize14,
     MuiInputBase: fontSize14,
     MuiButton: fontSize14,
-    MuiFormControl: {
-      root: {
-        margin: '1.6rem .4rem'
-      }
-    },
-    MuiTableCell: fontSize14,
     MuiTypography: {
       h6: {
         fontSize: '1.8rem',
@@ -36,22 +29,25 @@ const theme = createMuiTheme({
       },
       caption: {
         fontSize: '1.2rem',
-      }
+      },
     },
     MuiTableCell: {
       head: {
         color: '#e26d5c',
       },
-      root: fontSize14.root,
+      root: {
+        fontSize: '1.4rem',
+        padding: '0 .8rem',
+      },
     },
     MuiToolbar: fontSize14,
     MuiMenuItem: fontSize12,
-    TableStubCell:{
-      cell:{
-        display:'none',
-      }
+    MuiIconButton: {
+      colorInherit: {
+        color: '#e26d5c',
+      },
     },
-  }
+  },
 });
 
 export default theme;

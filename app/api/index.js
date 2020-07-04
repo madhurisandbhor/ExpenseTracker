@@ -3,4 +3,5 @@ export {
   getExpenseData,
   saveExpenseData,
   updateExpenseData,
+  deleteExpenseData,
 } from './expenseApi';

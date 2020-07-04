@@ -9,7 +9,7 @@ export const getExpenseList = params => {
     ...defaultConfig, // get defaultConfig and override them.
     url: `/expense?search=${params.searchText}&page=${params.page}&limit=${
       params.limit
-      }`,
+    }`,
     method: 'get',
   };
   return axios.request(config);
@@ -40,6 +40,15 @@ export const updateExpenseData = ({ data }) => {
     url: `/expense/${data.id}`,
     method: 'put',
     data,
+  };
+  return axios.request(config);
+};
+
+export const deleteExpenseData = ({ id }) => {
+  const config = {
+    ...defaultConfig,
+    url: `/expense/${id}`,
+    method: 'delete',
   };
   return axios.request(config);
 };

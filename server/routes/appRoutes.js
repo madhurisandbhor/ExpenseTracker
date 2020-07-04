@@ -7,13 +7,13 @@ module.exports = function (app) {
 
   // expenseList Routes
 
-    app.route('/api/expense/:expenseId')
+  app.route('/api/expense/:expenseId')
     .get(expenseList.readExpense)
-    .put(expenseList.updateExpense);
+    .put(expenseList.updateExpense)
+    .delete(expenseList.deleteExpense);
 
 
   app.route('/api/expense')
     .get(expenseList.listAllExpenses)
     .post(expenseList.addExpense);
-
 };

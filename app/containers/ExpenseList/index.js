@@ -15,16 +15,20 @@ import { useInjectReducer } from 'utils/injectReducer';
 import Paper from '@material-ui/core/Paper';
 import MaterialTable from 'material-table';
 import { TablePagination } from '@material-ui/core';
+import { withTheme } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import makeSelectExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import {
   loadExpenseList as loadExpenseListAction,
   saveExpenseData as saveExpenseDataAction,
+  updateExpenseData as updateExpenseDataAction,
+  deleteExpenseData as deleteExpenseDataAction,
 } from './actions';
 
 const Container = styled.div`
-  width: 80%;
+  width: 90%;
   margin: 2rem auto;
   font-size: 1.6rem;
 `;
@@ -33,6 +37,9 @@ export const ExpenseList = ({
   loadExpenseList,
   expenseList,
   saveExpenseData,
+  updateExpenseData,
+  deleteExpenseData,
+  theme,
 }) => {
   useInjectReducer({ key: 'expenseList', reducer });
   useInjectSaga({ key: 'expenseList', saga });
@@ -46,10 +53,41 @@ export const ExpenseList = ({
   const [currentPage, setCurrentPage] = useState(1);
 
   const columns = [
-    { field: 'expense_date', title: 'Expense Date' },
-    { field: 'description', title: 'Description' },
-    { field: 'category', title: 'Category' },
-    { field: 'amount', title: 'Amount' },
+    {
+      field: 'expense_date',
+      title: 'Expense Date',
+      width: 120,
+      render: rowData => (
+        <TextField
+          id="date"
+          type="date"
+          value={rowData.expense_date}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          InputProps={{
+            readOnly: true,
+            disableUnderline: true,
+          }}
+        />
+      ),
+      editComponent: props => (
+        <TextField
+          id="date"
+          type="date"
+          // eslint-disable-next-line react/prop-types
+          value={props.value}
+          // eslint-disable-next-line react/prop-types
+          onChange={e => props.onChange(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+        />
+      ),
+    },
+    { field: 'description', title: 'Description', width: 300 },
+    { field: 'category', title: 'Category', width: 150 },
+    { field: 'amount', title: 'Amount', width: 150 },
   ];
 
   const createData = item => ({
@@ -65,21 +103,59 @@ export const ExpenseList = ({
 
   const [rows, setRows] = useState([]);
 
-  // const onEditExpense = useCallback(expenseId => {
-  //   console.log('expense id:', expenseId);
-  //   props.history.push({
-  //     pathname: '/addExpenses',
-  //     params: {
-  //       formType: 'update',
-  //       expenseId,
-  //     },
-  //   });
-  // }, []);
+  const Pagination = prop => (
+    <TablePagination
+      {...prop}
+      count={totalCount}
+      page={currentPage - 1}
+      rowsPerPage={limit}
+      onChangePage={(e, page) => {
+        setCurrentPage(page + 1);
+      }}
+      onChangeRowsPerPage={event => {
+        setLimit(parseInt(event.target.value, 10));
+      }}
+    />
+  );
 
-  // const onDeleteExpense = useCallback(expenseId => {
-  //   console.log('expense id:', expenseId);
-  //   // rest.history.push('/addExpenses');
-  // }, []);
+  const onAdd = newData =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        const dataUpdate = [...rows];
+        dataUpdate.push(newData);
+        setRows([...dataUpdate]);
+        saveExpenseData(newData);
+        resolve();
+      }, 600);
+    });
+
+  const onDelete = oldData =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        const dataUpdate = [...rows];
+        dataUpdate.splice(dataUpdate.indexOf(oldData), 1);
+        setRows([...dataUpdate]);
+        deleteExpenseData(oldData.id);
+        resolve();
+      }, 600);
+    });
+
+  const onUpdate = (newData, oldData) =>
+    new Promise(resolve => {
+      setTimeout(() => {
+        const dataUpdate = [...rows];
+        const index = oldData.tableData.id;
+        dataUpdate[index] = newData;
+        setRows([...dataUpdate]);
+        updateExpenseData(newData);
+        resolve();
+      }, 1000);
+    });
+
+  const onSearchChange = search => {
+    setLoading(true);
+    setSearchText(search);
+  };
 
   useEffect(() => {
     setRows(formatterRows());
@@ -101,22 +177,6 @@ export const ExpenseList = ({
     setCurrentPage(1); // whenever search text changes, set current page to 1, and show records from start
   }, [searchText]);
 
-  const onSearchChange = search => {
-    setLoading(true);
-    setSearchText(search);
-  };
-  const onUpdate = (newData, oldData) =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const dataUpdate = [...rows];
-        const index = oldData.tableData.id;
-        dataUpdate[index] = newData;
-        setRows([...dataUpdate]);
-        saveExpenseData(newData);
-        resolve();
-      }, 1000);
-    });
-
   return (
     <Container>
       <Paper style={{ position: 'relative' }}>
@@ -124,6 +184,7 @@ export const ExpenseList = ({
           title=""
           columns={columns}
           data={rows}
+          rowsPerPageOptions={[5, 10, 15, 20]}
           isLoading={loading}
           onSearchChange={onSearchChange}
           components={{
@@ -145,6 +206,13 @@ export const ExpenseList = ({
           options={{
             emptyRowsWhenPaging: false,
             pageSize: 20,
+            actionsColumnIndex: -1,
+            actionsCellStyle: {
+              display: 'flex',
+              justifyContent: 'center',
+              width: '100%',
+            },
+            addRowPosition: 'first',
           }}
           localization={{
             body: {
@@ -152,29 +220,9 @@ export const ExpenseList = ({
             },
           }}
           editable={{
-            // onRowAdd: newData =>
-            //   new Promise(resolve => {
-            //     setTimeout(() => {
-            //       resolve();
-            //       setState(prevState => {
-            //         const data = [...prevState.data];
-            //         data.push(newData);
-            //         return { ...prevState, data };
-            //       });
-            //     }, 600);
-            //   }),
+            onRowAdd: onAdd,
             onRowUpdate: onUpdate,
-            // onRowDelete: oldData =>
-            //   new Promise(resolve => {
-            //     setTimeout(() => {
-            //       resolve();
-            //       setState(prevState => {
-            //         const data = [...prevState.data];
-            //         data.splice(data.indexOf(oldData), 1);
-            //         return { ...prevState, data };
-            //       });
-            //     }, 600);
-            //   }),
+            onRowDelete: onDelete,
           }}
         />
       </Paper>
@@ -186,6 +234,9 @@ ExpenseList.propTypes = {
   expenseList: PropTypes.object.isRequired,
   loadExpenseList: PropTypes.func.isRequired,
   saveExpenseData: PropTypes.func.isRequired,
+  updateExpenseData: PropTypes.func.isRequired,
+  deleteExpenseData: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -196,6 +247,8 @@ const mapDispatchToProps = dispatch => ({
   loadExpenseList: (page, limit, searchText) =>
     dispatch(loadExpenseListAction(page, limit, searchText)),
   saveExpenseData: data => dispatch(saveExpenseDataAction(data)),
+  updateExpenseData: data => dispatch(updateExpenseDataAction(data)),
+  deleteExpenseData: data => dispatch(deleteExpenseDataAction(data)),
 });
 
 const withConnect = connect(
@@ -206,4 +259,5 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  withTheme,
 )(ExpenseList);

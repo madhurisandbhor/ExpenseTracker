@@ -44,9 +44,10 @@ Expense.getExpenseList = function (page, limit, offset, searchText, handleRespon
         }
 
         if (!searchText) {
-            query = mysql.format('select * from expense limit ? offset ?', [LimitNum, startNum]);
+            query = mysql.format('select * from expense ORDER BY expense_date DESC limit ? offset ?', [LimitNum, startNum]);
         } else {
-            query = mysql.format('select * from expense where expense_date like ? or description like ? or category like ? or amount like ? limit ? offset ?',
+            query = mysql.format(
+                'select * from expense where expense_date like ? or description like ? or category like ? or amount like ? ORDER BY expense_date DESC limit ? offset ?',
                 [searchKeyword, searchKeyword, searchKeyword, searchKeyword, LimitNum, startNum]);
         }
 
@@ -70,13 +71,17 @@ Expense.addExpense = (newExpense, handleResponse) => {
 };
 
 Expense.getExpenseById = function (expenseId, handleResponse) {
-    connection.query("Select * from expense where id = ? ", expenseId, handleResponse);
+    connection.query("select * from expense where id = ? ", expenseId, handleResponse);
 };
 
 Expense.updateExpenseById = (id, updatedExpense, handleResponse) => {
     connection.query("update expense set description=?, amount=?, category=?, expense_date=? where id = ?",
         [updatedExpense.description, updatedExpense.amount, updatedExpense.category, updatedExpense.expense_date, id],
         handleResponse);
+};
+
+Expense.deleteExpenseById = function (expenseId, handleResponse) {
+    connection.query("delete from expense where id = ? ", expenseId, handleResponse);
 };
 
 module.exports = Expense;

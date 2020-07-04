@@ -6,61 +6,85 @@
 
 const Expense = require('../model/expenseModel');
 
-const responseCallback = (res, message, getById) => function (err, result) {
+const responseCallback = (res, callback) => function (err, result) {
     if (err) {
         console.log('Error:', err);
         res.status(500);
         res.send(err);
-    } else if (message) {
-        console.log('Message:', message);
-        res.send(message);
     }
     else if (result.length === 0)
         res.status(404).send('Not found');
-    else if (getById)
-        res.json(result[0]);
     else
-        res.json(result);
+        callback(res, result);
 };
+
+const handleListExpenses = (res, result) => {
+    res.json(result);
+}
+
+const handleGetExpenseById = (res, result) => {
+    res.json(result[0]);
+}
+
+const handleAdd = (res, result) => {
+    res.status(201).location(`/api/expense/${result.insertId}`);
+    res.end();
+}
+
+const handleUpdate = res => {
+    res.status(200).send('Expense updated.');
+}
+
+const handleDelete = res => {
+    res.status(200).send('Expense deleted.');
+}
 
 exports.listAllExpenses = (req, res) => {
     const searchText = req.query.search ? req.query.search : '';
     const page = req.query.page ? parseInt(req.query.page, 10) : '';
     const limit = req.query.limit ? parseInt(req.query.limit, 10) : '';
     const offset = limit ? (page - 1) * limit : '';
-    Expense.getExpenseList(page, limit, offset, searchText, responseCallback(res));
+    Expense.getExpenseList(page, limit, offset, searchText, responseCallback(res, handleListExpenses));
+}
+
+const validate = expense => {
+    const message = [];
+    if (!expense.amount)
+        message.push('amount');
+    if (!expense.description)
+        message.push('description');
+    if (!expense.expense_date)
+        message.push('expense_date');
+    if (message.length !== 0) {
+        message.unshift('Invalid');
+        return message.join(' ');
+    }
+    return message;
 }
 
 exports.addExpense = (req, res) => {
     const newExpense = new Expense(req.body);
-
-    if (!newExpense.description || !newExpense.expense_date) {
-        res.status(400).send({ error: true, message: 'Invalid description/date' });
-    }
-    else {
-        Expense.addExpense(newExpense, responseCallback(res, 'Expense is added'));
-    }
+    const errMessage = validate(newExpense);
+    if (errMessage.length !== 0)
+        res.status(400).send({ error: true, message: errMessage });
+    else Expense.addExpense(newExpense, responseCallback(res, handleAdd));
 };
 
 exports.readExpense = (req, res) => {
     const { expenseId } = req.params;
-    Expense.getExpenseById(expenseId, responseCallback(res, null, true));
+    Expense.getExpenseById(expenseId, responseCallback(res, handleGetExpenseById));
 };
 
 exports.updateExpense = (req, res) => {
     const updatedExpense = new Expense(req.body);
-    const message = [];
-    if (updatedExpense.amount === '')
-        message.push('amount');
-    if (updatedExpense.description === '')
-        message.push('description');
-    if (updatedExpense.expense_date === '')
-        message.push('expense-date');
-    if (message.length !== 0) {
-        message.unshift('Invalid');
-        const errMessage = message.join(' ');
+    const errMessage = validate(updatedExpense);
+    if (errMessage.length !== 0)
         res.status(400).send({ error: true, message: errMessage });
-    }
-    Expense.updateExpenseById(
-        req.params.expenseId, updatedExpense, responseCallback(res, 'Expense is updated'));
-}
+    else Expense.updateExpenseById(
+        req.params.expenseId, updatedExpense, responseCallback(res, handleUpdate));
+};
+
+exports.deleteExpense = (req, res) => {
+    const { expenseId } = req.params;
+    Expense.deleteExpenseById(expenseId, responseCallback(res, handleDelete));
+};

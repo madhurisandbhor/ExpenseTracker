@@ -11,6 +11,12 @@ import {
   SAVE_EXPENSE_DATA,
   SAVE_EXPENSE_DATA_SUCCESS,
   SAVE_EXPENSE_DATA_ERROR,
+  DELETE_EXPENSE_DATA,
+  DELETE_EXPENSE_DATA_SUCCESS,
+  DELETE_EXPENSE_DATA_ERROR,
+  UPDATE_EXPENSE_DATA,
+  UPDATE_EXPENSE_DATA_SUCCESS,
+  UPDATE_EXPENSE_DATA_ERROR,
 } from './constants';
 
 export const loadExpenseList = (page, limit, searchText) => ({
@@ -40,5 +46,35 @@ export const saveExpenseDataSuccess = message => ({
 
 export const saveExpenseDataError = error => ({
   type: SAVE_EXPENSE_DATA_ERROR,
+  error,
+});
+
+export const updateExpenseData = data => ({
+  type: UPDATE_EXPENSE_DATA,
+  params: { data },
+});
+
+export const updateExpenseDataSuccess = message => ({
+  type: UPDATE_EXPENSE_DATA_SUCCESS,
+  payload: { message },
+});
+
+export const updateExpenseDataError = error => ({
+  type: UPDATE_EXPENSE_DATA_ERROR,
+  error,
+});
+
+export const deleteExpenseData = id => ({
+  type: DELETE_EXPENSE_DATA,
+  params: { id },
+});
+
+export const deleteExpenseDataSuccess = message => ({
+  type: DELETE_EXPENSE_DATA_SUCCESS,
+  payload: { message },
+});
+
+export const deleteExpenseDataError = error => ({
+  type: DELETE_EXPENSE_DATA_ERROR,
   error,
 });
