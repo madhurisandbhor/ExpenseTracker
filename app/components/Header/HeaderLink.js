@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const activeClassName = 'active';
 
 export default styled(NavLink).attrs({
-  activeClassName: activeClassName,
+  activeClassName,
 })`
   display: inline-flex;
   padding: .8rem 2rem;
@@ -27,6 +27,6 @@ export default styled(NavLink).attrs({
   }
   &:active, &.${activeClassName} {
     background: ${props => props.theme.palette.primary.main};
-    color: #fff;
+    color: ${props => props.theme.tracker.white};
   }
 `;

@@ -12,11 +12,17 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+
 import Paper from '@material-ui/core/Paper';
 import MaterialTable from 'material-table';
 import { TablePagination } from '@material-ui/core';
-import { withTheme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
+import { withStyles } from '@material-ui/core/styles';
+
+import MessageBar from 'components/MessageBar';
 import makeSelectExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -25,6 +31,7 @@ import {
   saveExpenseData as saveExpenseDataAction,
   updateExpenseData as updateExpenseDataAction,
   deleteExpenseData as deleteExpenseDataAction,
+  clearData as clearDataAction,
 } from './actions';
 
 const Container = styled.div`
@@ -33,13 +40,19 @@ const Container = styled.div`
   font-size: 1.6rem;
 `;
 
+const ReadOnlySelect = withStyles(() => ({
+  icon: {
+    // display: 'none',
+  },
+}))(Select);
+
 export const ExpenseList = ({
   loadExpenseList,
   expenseList,
   saveExpenseData,
   updateExpenseData,
   deleteExpenseData,
-  theme,
+  clearData,
 }) => {
   useInjectReducer({ key: 'expenseList', reducer });
   useInjectSaga({ key: 'expenseList', saga });
@@ -51,6 +64,16 @@ export const ExpenseList = ({
   const [limit, setLimit] = useState(5);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState('info');
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
 
   const columns = [
     {
@@ -62,31 +85,68 @@ export const ExpenseList = ({
           id="date"
           type="date"
           value={rowData.expense_date}
-          InputLabelProps={{
-            shrink: true,
-          }}
           InputProps={{
             readOnly: true,
             disableUnderline: true,
           }}
         />
       ),
-      editComponent: props => (
+      // eslint-disable-next-line react/prop-types
+      editComponent: ({ value = '', ...props }) => (
         <TextField
           id="date"
           type="date"
           // eslint-disable-next-line react/prop-types
-          value={props.value}
+          value={value}
           // eslint-disable-next-line react/prop-types
           onChange={e => props.onChange(e.target.value)}
-          InputLabelProps={{
-            shrink: true,
-          }}
         />
       ),
     },
     { field: 'description', title: 'Description', width: 300 },
-    { field: 'category', title: 'Category', width: 150 },
+    {
+      field: 'category',
+      title: 'Category',
+      width: 150,
+      render: rowData => (
+        <ReadOnlySelect
+          id="category"
+          value={rowData.category}
+          style={{ width: '20ch' }}
+          inputProps={{
+            readOnly: true,
+            disableUnderline: true,
+          }}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value="food">Food</MenuItem>
+          <MenuItem value="clothing">Clothing</MenuItem>
+          <MenuItem value="bills">Bills</MenuItem>
+          <MenuItem value="others">Others</MenuItem>
+        </ReadOnlySelect>
+      ),
+      // eslint-disable-next-line react/prop-types
+      editComponent: ({ value = '', ...props }) => (
+        <Select
+          id="category"
+          style={{ width: '20ch' }}
+          // eslint-disable-next-line react/prop-types
+          value={value}
+          // eslint-disable-next-line react/prop-types
+          onChange={e => props.onChange(e.target.value)}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value="food">Food</MenuItem>
+          <MenuItem value="clothing">Clothing</MenuItem>
+          <MenuItem value="bills">Bills</MenuItem>
+          <MenuItem value="others">Others</MenuItem>
+        </Select>
+      ),
+    },
     { field: 'amount', title: 'Amount', width: 150 },
   ];
 
@@ -103,30 +163,42 @@ export const ExpenseList = ({
 
   const [rows, setRows] = useState([]);
 
-  const Pagination = prop => (
-    <TablePagination
-      {...prop}
-      count={totalCount}
-      page={currentPage - 1}
-      rowsPerPage={limit}
-      onChangePage={(e, page) => {
-        setCurrentPage(page + 1);
-      }}
-      onChangeRowsPerPage={event => {
-        setLimit(parseInt(event.target.value, 10));
-      }}
-    />
-  );
+  const clear = () => {
+    setMessage('');
+    setOpen(false);
+    clearData();
+  };
+
+  const validate = newData => {
+    const msg = [];
+    if (!newData.amount) msg.push('amount');
+    if (!newData.description) msg.push('description');
+    if (!newData.expense_date) msg.push('expense_date');
+    if (msg.length !== 0) {
+      msg.unshift('Invalid');
+      return msg.join(' ');
+    }
+    return msg;
+  };
 
   const onAdd = newData =>
-    new Promise(resolve => {
+    new Promise((resolve, reject) => {
       setTimeout(() => {
+        const msg = validate(newData);
+        if (msg.length !== 0) {
+          setMessage(msg);
+          setOpen(true);
+          setSeverity('error');
+          return reject();
+        }
         const dataUpdate = [...rows];
         dataUpdate.push(newData);
         setRows([...dataUpdate]);
         saveExpenseData(newData);
-        resolve();
+        return resolve();
       }, 600);
+    }).then(() => {
+      loadExpenseList(currentPage, limit, searchText);
     });
 
   const onDelete = oldData =>
@@ -138,18 +210,29 @@ export const ExpenseList = ({
         deleteExpenseData(oldData.id);
         resolve();
       }, 600);
+    }).then(() => {
+      loadExpenseList(currentPage, limit, searchText);
     });
 
   const onUpdate = (newData, oldData) =>
-    new Promise(resolve => {
+    new Promise((resolve, reject) => {
       setTimeout(() => {
+        const msg = validate(newData);
+        if (msg.length !== 0) {
+          setMessage(msg);
+          setOpen(true);
+          setSeverity('error');
+          return reject();
+        }
         const dataUpdate = [...rows];
         const index = oldData.tableData.id;
         dataUpdate[index] = newData;
         setRows([...dataUpdate]);
         updateExpenseData(newData);
-        resolve();
-      }, 1000);
+        return resolve();
+      }, 600);
+    }).then(() => {
+      loadExpenseList(currentPage, limit, searchText);
     });
 
   const onSearchChange = search => {
@@ -158,24 +241,43 @@ export const ExpenseList = ({
   };
 
   useEffect(() => {
-    setRows(formatterRows());
-    setLoading(expenseList.loading);
-    setTotalCount(expenseList.info.totalCount);
-  }, [expenseList.loading]);
+    if (!expenseList.loading) {
+      setRows(formatterRows());
+      setLoading(expenseList.loading);
+      setTotalCount(expenseList.info.totalCount);
+    }
+  }, [expenseList.list]);
+
+  useEffect(() => {
+    if (expenseList.error || expenseList.message) {
+      const msg = expenseList.error ? expenseList.error : expenseList.message;
+      const alertType = expenseList.error ? 'error' : 'success';
+      setMessage(msg);
+      setOpen(true);
+      setSeverity(alertType);
+    } else {
+      setMessage('');
+      setOpen(false);
+    }
+  }, [expenseList.error, expenseList.message]);
+
+  useEffect(() => {
+    setCurrentPage(1); // whenever search text changes, set current page to 1, and show records from start
+  }, [searchText]);
 
   useEffect(() => {
     if (typingTimeout) clearTimeout(typingTimeout);
     setTypingTimeout(
       setTimeout(() => {
-        setLoading(true);
         loadExpenseList(currentPage, limit, searchText);
       }, 500),
     );
   }, [currentPage, searchText, limit]);
 
   useEffect(() => {
-    setCurrentPage(1); // whenever search text changes, set current page to 1, and show records from start
-  }, [searchText]);
+    setLoading(true);
+    return clear();
+  }, []);
 
   return (
     <Container>
@@ -216,7 +318,9 @@ export const ExpenseList = ({
           }}
           localization={{
             body: {
-              emptyDataSourceMessage: '',
+              emptyDataSourceMessage: !searchText
+                ? ''
+                : 'No records to display',
             },
           }}
           editable={{
@@ -226,6 +330,19 @@ export const ExpenseList = ({
           }}
         />
       </Paper>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <MessageBar onClose={handleClose} severity={severity}>
+          {message}
+        </MessageBar>
+      </Snackbar>
     </Container>
   );
 };
@@ -236,7 +353,7 @@ ExpenseList.propTypes = {
   saveExpenseData: PropTypes.func.isRequired,
   updateExpenseData: PropTypes.func.isRequired,
   deleteExpenseData: PropTypes.func.isRequired,
-  theme: PropTypes.object.isRequired,
+  clearData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -249,6 +366,7 @@ const mapDispatchToProps = dispatch => ({
   saveExpenseData: data => dispatch(saveExpenseDataAction(data)),
   updateExpenseData: data => dispatch(updateExpenseDataAction(data)),
   deleteExpenseData: data => dispatch(deleteExpenseDataAction(data)),
+  clearData: () => dispatch(clearDataAction()),
 });
 
 const withConnect = connect(
@@ -259,5 +377,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-  withTheme,
 )(ExpenseList);

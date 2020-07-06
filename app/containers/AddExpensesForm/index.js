@@ -23,7 +23,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
 import CenteredSection from 'components/CenteredSection';
 import makeSelectAddExpensesForm from './selectors';
 import saga from './saga';
@@ -38,7 +37,7 @@ const Wrapper = styled.div`
   margin: 2rem auto;
   padding: 2rem;
   width: 50%;
-  background-color: #fff;
+  background-color: ${props => props.theme.tracker.white};
   border-radius: 0.4rem;
 `;
 
@@ -56,7 +55,7 @@ const Section = styled(CenteredSection)`
 const ButtonWrapper = withStyles(theme => ({
   root: {
     width: '20ch',
-    color: '#fff',
+    color: theme.tracker.white,
     background: theme.palette.primary.main,
     margin: '.8rem',
     '&:hover': {
@@ -64,17 +63,6 @@ const ButtonWrapper = withStyles(theme => ({
     },
   },
 }))(Button);
-
-const MuiAlertWrapper = withStyles(theme => ({
-  root: {
-    fontSize: '1.4rem',
-    backgroundColor: theme.palette.primary.dark,
-  },
-}))(MuiAlert);
-
-const Alert = props => (
-  <MuiAlertWrapper elevation={6} variant="filled" {...props} />
-);
 
 export function AddExpensesForm({
   loadExpenseData,

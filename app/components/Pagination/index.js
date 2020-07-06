@@ -28,7 +28,7 @@ const Btn = withStyles(theme => ({
     boxShadow: '0 0.5rem 1rem grey',
     fontSize: '3rem',
     fontWeight: 'bold',
-    color: "#fff",
+    color: theme.tracker.white,
     borderRadius: '50%',
     borderWidth: 0,
     textAlign: 'center',

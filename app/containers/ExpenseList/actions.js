@@ -17,6 +17,7 @@ import {
   UPDATE_EXPENSE_DATA,
   UPDATE_EXPENSE_DATA_SUCCESS,
   UPDATE_EXPENSE_DATA_ERROR,
+  CLEAR_DATA,
 } from './constants';
 
 export const loadExpenseList = (page, limit, searchText) => ({
@@ -77,4 +78,8 @@ export const deleteExpenseDataSuccess = message => ({
 export const deleteExpenseDataError = error => ({
   type: DELETE_EXPENSE_DATA_ERROR,
   error,
+});
+
+export const clearData = () => ({
+  type: CLEAR_DATA,
 });

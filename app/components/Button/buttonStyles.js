@@ -19,7 +19,7 @@ const buttonStyles = css`
 
   &:active {
     background: #41addd;
-    color: #fff;
+    color: ${props => props.theme.tracker.white};
   }
 `;
 

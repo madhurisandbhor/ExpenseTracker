@@ -24,3 +24,5 @@ export const UPDATE_EXPENSE_DATA_SUCCESS =
   'app/ExpenseList/UPDATE_EXPENSE_DATA_SUCCESS';
 export const UPDATE_EXPENSE_DATA_ERROR =
   'app/ExpenseList/UPDATE_EXPENSE_DATA_ERROR';
+
+export const CLEAR_DATA = 'app/ExpenseList/CLEAR_DATA';

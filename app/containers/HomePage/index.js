@@ -4,8 +4,8 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import React, { useEffect, memo } from 'react';
-import PropTypes from 'prop-types';
+import React, { memo } from 'react';
+// import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -14,35 +14,27 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import {
-  makeSelectRepos,
-  makeSelectLoading,
-  makeSelectError,
-} from 'containers/App/selectors';
 
-import Wrapper from './Wrapper';
-import { loadRepos } from '../App/actions';
-import { changeUsername } from './actions';
-import { makeSelectUsername } from './selectors';
-import reducer from './reducer';
-import saga from './saga';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
+import Wrapper from './Wrapper';
+import reducer from './reducer';
+import saga from './saga';
 
 const key = 'home';
 
 const Section = styled.div`
   width: 20%;
   background: ${props => props.theme.palette.primary.main};
-  color: #fff;
+  color: ${props => props.theme.tracker.white};
 `;
 
 const SectionItem = styled.div`
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: space-between;
-  padding: .8rem;
+  padding: 0.8rem;
   &:hover {
     background: ${props => props.theme.palette.primary.light}; // #6298a6;
   }
@@ -54,30 +46,29 @@ const Container = styled.div`
 `;
 
 const Info = styled.div`
-  padding: .8rem;
+  padding: 0.8rem;
 `;
 
 const AddBtnWrapper = styled.div`
   position: absolute;
   bottom: 2rem;
   right: 5rem;
-  display:flex;
+  display: flex;
   align-items: center;
 `;
 
 const AddText = styled.span`
-  // color: ${props => props.theme.palette.secondary.dark};
-  color: #fff;
+  color: ${props => props.theme.tracker.white};
   margin-right: 1.5rem;
-  order:0;
-  opacity:0;
+  order: 0;
+  opacity: 0;
   visibility: hidden;
   transition: visibility 0s, opacity 0.5s linear;
 `;
 
 const IconButtonWrapper = withStyles(theme => ({
   root: {
-    color: '#fff',
+    color: theme.tracker.white,
     order: 1,
     background: theme.palette.primary.main,
     '&:hover': {
@@ -90,46 +81,32 @@ const IconButtonWrapper = withStyles(theme => ({
   },
 }))(IconButton);
 
-export function HomePage({
-  username, ...rest
-}) {
+export function HomePage() {
   // let history = useHistory();
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
-  useEffect(() => {
-    // When initial state username is not null, submit the form to load repos
-    if (username && username.trim().length > 0) onSubmitForm();
-  }, []);
-
   const onAddExpense = () => {
-    rest.history.push({
-      pathname: '/addExpenses',
-      params: {
-        formType: 'add',
-      }
-    });
-  }
-
-  const onShowAllExpenses = () => {
-    rest.history.push('/expensesList');
-  }
+    // rest.history.push({
+    //   pathname: '/addExpenses',
+    //   params: {
+    //     formType: 'add',
+    //   },
+    // });
+  };
 
   return (
     <article>
       <Helmet>
         <title>Home Page</title>
-        <meta
-          name="description"
-          content="Expense tracker application"
-        />
+        <meta name="description" content="Expense tracker application" />
       </Helmet>
       <Wrapper>
         <AddBtnWrapper>
           <IconButtonWrapper aria-label="add expenses" onClick={onAddExpense}>
             <AddIcon fontSize="large" />
           </IconButtonWrapper>
-          <AddText className='add_text'>Add New Expense</AddText>
+          <AddText className="add_text">Add New Expense</AddText>
         </AddBtnWrapper>
         <Container>
           <Info>Your total expenses this year : €8900+ Rs.456 </Info>
@@ -137,34 +114,16 @@ export function HomePage({
           <Info>Prasad owes you €1560 </Info>
         </Container>
       </Wrapper>
-    </article >
+    </article>
   );
 }
 
-HomePage.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  repos: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-  onSubmitForm: PropTypes.func,
-  username: PropTypes.string,
-  onChangeUsername: PropTypes.func,
-};
+HomePage.propTypes = {};
 
-const mapStateToProps = createStructuredSelector({
-  repos: makeSelectRepos(),
-  username: makeSelectUsername(),
-  loading: makeSelectLoading(),
-  error: makeSelectError(),
-});
+const mapStateToProps = createStructuredSelector({});
 
 export function mapDispatchToProps(dispatch) {
-  return {
-    onChangeUsername: evt => dispatch(changeUsername(evt.target.value)),
-    onSubmitForm: evt => {
-      if (evt !== undefined && evt.preventDefault) evt.preventDefault();
-      dispatch(loadRepos());
-    },
-  };
+  return {};
 }
 
 const withConnect = connect(

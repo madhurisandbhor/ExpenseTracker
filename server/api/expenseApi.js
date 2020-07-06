@@ -10,7 +10,7 @@ const responseCallback = (res, callback) => function (err, result) {
     if (err) {
         console.log('Error:', err);
         res.status(500);
-        res.send(err);
+        res.send(err.sqlMessage);
     }
     else if (result.length === 0)
         res.status(404).send('Not found');
@@ -27,7 +27,7 @@ const handleGetExpenseById = (res, result) => {
 }
 
 const handleAdd = (res, result) => {
-    res.status(201).location(`/api/expense/${result.insertId}`);
+    res.status(201).location(`/api/expense/${result.insertId}`).send('Expense added.');
     res.end();
 }
 
@@ -66,7 +66,7 @@ exports.addExpense = (req, res) => {
     const newExpense = new Expense(req.body);
     const errMessage = validate(newExpense);
     if (errMessage.length !== 0)
-        res.status(400).send({ error: true, message: errMessage });
+        res.status(400).send(errMessage);
     else Expense.addExpense(newExpense, responseCallback(res, handleAdd));
 };
 
@@ -79,7 +79,7 @@ exports.updateExpense = (req, res) => {
     const updatedExpense = new Expense(req.body);
     const errMessage = validate(updatedExpense);
     if (errMessage.length !== 0)
-        res.status(400).send({ error: true, message: errMessage });
+        res.status(400).send(errMessage);
     else Expense.updateExpenseById(
         req.params.expenseId, updatedExpense, responseCallback(res, handleUpdate));
 };

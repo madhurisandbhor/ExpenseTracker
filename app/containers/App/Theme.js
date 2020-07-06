@@ -17,6 +17,9 @@ const theme = createMuiTheme({
     secondary: { light: '#613ba1', main: '#e26d5c', dark: '#4003a8' },
   },
   spacing: 4,
+  tracker: {
+    white: '#fff',
+  },
   overrides: {
     MuiInputLabel: fontSize14,
     MuiTextField: fontSize14,
@@ -34,10 +37,17 @@ const theme = createMuiTheme({
     MuiTableCell: {
       head: {
         color: '#e26d5c',
+        padding: '.8rem',
+        '&:first-child': {
+          paddingLeft: '1.6rem',
+        },
       },
       root: {
         fontSize: '1.4rem',
         padding: '0 .8rem',
+        '&:first-child': {
+          paddingLeft: '1.6rem',
+        },
       },
     },
     MuiToolbar: fontSize14,
@@ -47,6 +57,7 @@ const theme = createMuiTheme({
         color: '#e26d5c',
       },
     },
+    MuiSnackbarContent: fontSize12,
   },
 });
 

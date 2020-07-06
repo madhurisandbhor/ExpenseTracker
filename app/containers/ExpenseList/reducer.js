@@ -16,6 +16,7 @@ import {
   DELETE_EXPENSE_DATA,
   DELETE_EXPENSE_DATA_SUCCESS,
   DELETE_EXPENSE_DATA_ERROR,
+  CLEAR_DATA,
 } from './constants';
 
 export const initialState = {
@@ -23,6 +24,7 @@ export const initialState = {
   error: '',
   list: [],
   searchText: '',
+  message: '',
   info: {
     totalCount: 0,
     pages: 1,
@@ -46,7 +48,11 @@ const expenseListReducer = (state = initialState, action) => {
     case LOAD_EXPENSE_LIST_ERROR:
       return { ...state, loading: false, error: action.error };
     case SAVE_EXPENSE_DATA:
-      return state;
+      return {
+        ...state,
+        message: initialState.message,
+        error: initialState.error,
+      };
     case SAVE_EXPENSE_DATA_SUCCESS:
       return {
         ...state,
@@ -54,9 +60,19 @@ const expenseListReducer = (state = initialState, action) => {
         message: action.payload.message,
       };
     case SAVE_EXPENSE_DATA_ERROR:
-      return { ...state, loading: false, error: action.error };
+      return {
+        ...state,
+        loading: false,
+        error: action.error.response.data,
+        message: initialState.message,
+      };
     case UPDATE_EXPENSE_DATA:
-      return state;
+      return {
+        ...state,
+        loading: true,
+        message: initialState.message,
+        error: initialState.error,
+      };
     case UPDATE_EXPENSE_DATA_SUCCESS:
       return {
         ...state,
@@ -64,9 +80,19 @@ const expenseListReducer = (state = initialState, action) => {
         message: action.payload.message,
       };
     case UPDATE_EXPENSE_DATA_ERROR:
-      return { ...state, loading: false, error: action.error };
+      return {
+        ...state,
+        loading: false,
+        error: action.error.response.data,
+        message: initialState.message,
+      };
     case DELETE_EXPENSE_DATA:
-      return state;
+      return {
+        ...state,
+        loading: true,
+        message: initialState.message,
+        error: initialState.error,
+      };
     case DELETE_EXPENSE_DATA_SUCCESS:
       return {
         ...state,
@@ -74,7 +100,20 @@ const expenseListReducer = (state = initialState, action) => {
         message: action.payload.message,
       };
     case DELETE_EXPENSE_DATA_ERROR:
-      return { ...state, loading: false, error: action.error };
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+        message: initialState.message,
+      };
+    case CLEAR_DATA:
+      return {
+        ...state,
+        loading: initialState.loading,
+        error: initialState.error,
+        list: initialState.list,
+        message: initialState.message,
+      };
     default:
       return state;
   }
