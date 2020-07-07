@@ -14,7 +14,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
 import Paper from '@material-ui/core/Paper';
-import MaterialTable from 'material-table';
+import MaterialTable, { MTableToolbar } from 'material-table';
 import { TablePagination } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -23,6 +23,7 @@ import Select from '@material-ui/core/Select';
 import { withStyles } from '@material-ui/core/styles';
 
 import MessageBar from 'components/MessageBar';
+import Filter from 'components/Filter';
 import makeSelectExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -115,7 +116,6 @@ export const ExpenseList = ({
           style={{ width: '20ch' }}
           inputProps={{
             readOnly: true,
-            disableUnderline: true,
           }}
         >
           <MenuItem value="">
@@ -154,7 +154,7 @@ export const ExpenseList = ({
     id: item.id,
     expense_date: item.expense_date,
     description: item.description,
-    category: item.category ? item.category : '-',
+    category: item.category,
     amount: item.amount,
   });
 
@@ -240,6 +240,23 @@ export const ExpenseList = ({
     setSearchText(search);
   };
 
+  const onChangeFilter = (
+    categoriesSelected,
+    fromDate,
+    toDate,
+    fromAmount,
+    toAmount,
+  ) => {
+    console.log(categoriesSelected, fromDate, toDate, fromAmount, toAmount);
+  };
+
+  const CustomFilter = props => (
+    <div>
+      <MTableToolbar {...props} />
+      <Filter onChangeFilter={onChangeFilter} />
+    </div>
+  );
+
   useEffect(() => {
     if (!expenseList.loading) {
       setRows(formatterRows());
@@ -304,6 +321,7 @@ export const ExpenseList = ({
                 }}
               />
             ),
+            Toolbar: props => <CustomFilter {...props} />,
           }}
           options={{
             emptyRowsWhenPaging: false,

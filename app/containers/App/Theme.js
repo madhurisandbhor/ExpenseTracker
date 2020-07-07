@@ -24,7 +24,13 @@ const theme = createMuiTheme({
     MuiInputLabel: fontSize14,
     MuiTextField: fontSize14,
     MuiInputBase: fontSize14,
-    MuiButton: fontSize14,
+    MuiChip: fontSize12,
+    MuiButton: {
+      root: {
+        fontSize: '1.4rem',
+        color:'#69306D',
+      },
+    },
     MuiTypography: {
       h6: {
         fontSize: '1.8rem',
@@ -54,7 +60,7 @@ const theme = createMuiTheme({
     MuiMenuItem: fontSize12,
     MuiIconButton: {
       colorInherit: {
-        color: '#e26d5c',
+        color: '#69306D',
       },
     },
     MuiSnackbarContent: fontSize12,
