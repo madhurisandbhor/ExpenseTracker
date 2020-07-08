@@ -22,17 +22,42 @@ const info = {
     prev: '',
 };
 
-Expense.getExpenseList = function (page, limit, offset, searchText, handleResponse) {
+Expense.getExpenseList = function (page, limit, offset, searchText, fromDate, toDate, fromAmount, toAmount, handleResponse) {
     let startNum = 0;
-    let LimitNum = 10;
+    let limitNum = 10;
     let totalCount = 0;
 
-    const totalRecordsQuery = "Select count(*) as TotalCount from expense";
-    const searchKeyword = `%${searchText}%`;
-    const searchRecordsQuery = mysql.format('select count(*) as TotalCount from expense where expense_date like ? or description like ? or category like ? or amount like ?',
-        [searchKeyword, searchKeyword, searchKeyword, searchKeyword]);
+    let queryToAppend = '';
+    if (fromDate || toDate || searchText || toAmount || fromAmount) {
+        queryToAppend += ` WHERE `;
 
-    let query = searchText ? searchRecordsQuery : totalRecordsQuery;
+        if (searchText) {
+            queryToAppend += `description like '%${searchText}%'`;
+        }
+
+        if (fromDate || toDate) {
+            if (searchText)
+                queryToAppend += ` AND `;
+            if (fromDate && toDate)
+                queryToAppend += `expense_date BETWEEN '${fromDate}' and '${toDate}'`;
+            else if (fromDate || toDate)
+                queryToAppend += `expense_date='${fromDate || toDate}'`;
+        }
+
+        if (fromAmount !== 0 || toAmount !== 0) {
+            if (fromDate || toDate || searchText)
+                queryToAppend += ' AND ';
+            if (fromAmount !== 0 && toAmount !== 0)
+                queryToAppend += `amount BETWEEN ${fromAmount} and ${toAmount}`;
+            else if (fromAmount !== 0 || toAmount !== 0)
+                queryToAppend += `amount=${fromAmount || toAmount}`;
+        }
+    }
+
+    const totalRecordsQuery = "SELECT count(*) as TotalCount from expense";
+
+    let query = totalRecordsQuery + queryToAppend;
+
     connection.query(query, function (err, rows) {
         if (err) {
             return err;
@@ -40,16 +65,13 @@ Expense.getExpenseList = function (page, limit, offset, searchText, handleRespon
         totalCount = rows[0].TotalCount
         if (offset !== '' || limit !== '') {
             startNum = offset;
-            LimitNum = limit;
+            limitNum = limit;
         }
 
-        if (!searchText) {
-            query = mysql.format('select * from expense ORDER BY expense_date DESC limit ? offset ?', [LimitNum, startNum]);
-        } else {
-            query = mysql.format(
-                'select * from expense where expense_date like ? or description like ? or category like ? or amount like ? ORDER BY expense_date DESC limit ? offset ?',
-                [searchKeyword, searchKeyword, searchKeyword, searchKeyword, LimitNum, startNum]);
-        }
+        const limitQuery = 'SELECT * from expense';
+        query = limitQuery + queryToAppend;
+
+        query += ` ORDER BY expense_date DESC LIMIT ${limitNum} OFFSET ${startNum}`;
 
         connection.query(query, function (err, rows) {
             if (err) {
@@ -57,9 +79,9 @@ Expense.getExpenseList = function (page, limit, offset, searchText, handleRespon
             }
             else {
                 info.totalCount = totalCount;
-                info.pages = Math.ceil(info.totalCount / LimitNum);
-                info.next = page < info.pages ? `http://localhost:4000/api/expense/?page=${page + 1}&limit=${LimitNum}&search=${searchText}` : '';
-                info.prev = page > 1 ? `http://localhost:4000/api/expense/?page=${page - 1}&limit=${LimitNum}&search=${searchText}` : '';
+                info.pages = Math.ceil(info.totalCount / limitNum);
+                info.next = page < info.pages ? `http://localhost:4000/api/expense/?page=${page + 1}&limit=${limitNum}&search=${searchText}` : '';
+                info.prev = page > 1 ? `http://localhost:4000/api/expense/?page=${page - 1}&limit=${limitNum}&search=${searchText}` : '';
                 handleResponse(null, { "info": info, "result": rows });
             }
         });
@@ -67,21 +89,21 @@ Expense.getExpenseList = function (page, limit, offset, searchText, handleRespon
 }
 
 Expense.addExpense = (newExpense, handleResponse) => {
-    connection.query("insert into expense set ?", newExpense, handleResponse);
+    connection.query("INSERT into expense set ?", newExpense, handleResponse);
 };
 
 Expense.getExpenseById = function (expenseId, handleResponse) {
-    connection.query("select * from expense where id = ? ", expenseId, handleResponse);
+    connection.query("SELECT * from expense where id = ? ", expenseId, handleResponse);
 };
 
 Expense.updateExpenseById = (id, updatedExpense, handleResponse) => {
-    connection.query("update expense set description=?, amount=?, category=?, expense_date=? where id = ?",
+    connection.query("UPDATE expense set description=?, amount=?, category=?, expense_date=? where id = ?",
         [updatedExpense.description, updatedExpense.amount, updatedExpense.category, updatedExpense.expense_date, id],
         handleResponse);
 };
 
 Expense.deleteExpenseById = function (expenseId, handleResponse) {
-    connection.query("delete from expense where id = ? ", expenseId, handleResponse);
+    connection.query("DELETE from expense where id = ? ", expenseId, handleResponse);
 };
 
 module.exports = Expense;

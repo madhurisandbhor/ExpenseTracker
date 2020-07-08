@@ -1,15 +1,22 @@
 import axios from 'axios';
 import { defaultConfig } from './constants';
 
-export const getExpenseList = params => {
+export const getExpenseList = ({
+  searchText,
+  page,
+  limit,
+  fromDate,
+  toDate,
+  fromAmount,
+  toAmount,
+}) => {
   // const params = new URLSearchParams();
   // params.append('search', searchText);
 
   const config = {
     ...defaultConfig, // get defaultConfig and override them.
-    url: `/expense?search=${params.searchText}&page=${params.page}&limit=${
-      params.limit
-    }`,
+    url: `/expense?search=${searchText}&page=${page}&limit=${limit}
+    &fromDate=${fromDate}&toDate=${toDate}&fromAmount=${fromAmount}&toAmount=${toAmount}`,
     method: 'get',
   };
   return axios.request(config);

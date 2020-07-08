@@ -27,8 +27,8 @@ const theme = createMuiTheme({
     MuiChip: fontSize12,
     MuiButton: {
       root: {
-        fontSize: '1.4rem',
-        color:'#69306D',
+        fontSize: '1.2rem',
+        color: '#69306D',
       },
     },
     MuiTypography: {

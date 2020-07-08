@@ -20,9 +20,17 @@ import {
   CLEAR_DATA,
 } from './constants';
 
-export const loadExpenseList = (page, limit, searchText) => ({
+export const loadExpenseList = (
+  page,
+  limit,
+  searchText,
+  fromDate,
+  toDate,
+  fromAmount,
+  toAmount,
+) => ({
   type: LOAD_EXPENSE_LIST,
-  params: { page, limit, searchText },
+  params: { page, limit, searchText, fromDate, toDate, fromAmount, toAmount },
 });
 
 export const loadExpenseListSuccess = data => ({

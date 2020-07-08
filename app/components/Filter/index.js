@@ -53,24 +53,44 @@ const categories = [
   { title: 'Others', value: 'others' },
 ];
 
-const Filter = ({ onChangeFilter }) => {
-  const [categoriesSelected, setCategoriesSelected] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [fromAmount, setFromAmount] = useState(0);
-  const [toAmount, setToAmount] = useState(0);
-
-  // useEffect(() => {
-  //   onChangeFilter(categoriesSelected, fromDate, toDate, fromAmount, toAmount);
-  // }, [categoriesSelected, fromDate, toDate, fromAmount, toAmount]);
+const Filter = ({
+  categoriesSelected,
+  fromDate,
+  toDate,
+  fromAmount,
+  toAmount,
+  onChangeFilter,
+}) => {
+  const [ipFromDate, setIpFromDate] = useState(fromDate);
+  const [ipToDate, setIpToDate] = useState(toDate);
+  const [ipFromAmount, setIpFromAmount] = useState(fromAmount);
+  const [ipToAmount, setIpToAmount] = useState(toAmount);
+  const [ipCategoriesSelected, setIpCategoriesSelected] = useState(
+    categoriesSelected,
+  );
 
   const onApply = () => {
-    onChangeFilter(categoriesSelected, fromDate, toDate, fromAmount, toAmount);
+    onChangeFilter(
+      ipFromDate,
+      ipToDate,
+      ipFromAmount,
+      ipToAmount,
+      ipCategoriesSelected,
+    );
+  };
+
+  const onClear = () => {
+    setIpCategoriesSelected([]);
+    setIpFromDate('');
+    setIpToDate('');
+    setIpFromAmount(0);
+    setIpToAmount(0);
+    onApply();
   };
 
   return (
     <Wrapper>
-      <FilterLabel>Filters</FilterLabel>
+      {/* <FilterLabel>Filters</FilterLabel> */}
       <MuiAutocomplete
         multiple
         limitTags={1}
@@ -78,7 +98,8 @@ const Filter = ({ onChangeFilter }) => {
         id="category-filter"
         options={categories}
         getOptionLabel={option => option.title}
-        onChange={(event, value) => setCategoriesSelected(value)}
+        value={ipCategoriesSelected}
+        onChange={(event, value) => setIpCategoriesSelected(value)}
         renderInput={params => (
           <TextField {...params} variant="outlined" label="Category" />
         )}
@@ -90,8 +111,8 @@ const Filter = ({ onChangeFilter }) => {
         InputLabelProps={{
           shrink: true,
         }}
-        value={fromDate}
-        onChange={e => setFromDate(e.target.value)}
+        value={ipFromDate}
+        onChange={e => setIpFromDate(e.target.value)}
       />
       <TxtField
         id="toDate"
@@ -100,29 +121,39 @@ const Filter = ({ onChangeFilter }) => {
         InputLabelProps={{
           shrink: true,
         }}
-        value={toDate}
-        onChange={e => setToDate(e.target.value)}
+        value={ipToDate}
+        onChange={e => setIpToDate(e.target.value)}
       />
       <TxtField
         id="amountFrom"
         label="Amount from"
         type="number"
-        value={fromAmount}
-        onChange={e => setFromAmount(e.target.value)}
+        value={ipFromAmount}
+        onChange={e => setIpFromAmount(e.target.value)}
       />
       <TxtField
         id="amountTo"
         label="Amount To"
         type="number"
-        value={toAmount}
-        onChange={e => setToAmount(e.target.value)}
+        value={ipToAmount}
+        onChange={e => setIpToAmount(e.target.value)}
       />
-      <Button variant="outlined" onClick={onApply}>Apply</Button>
+      <Button variant="outlined" onClick={onApply}>
+        Apply
+      </Button>
+      <Button variant="outlined" onClick={onClear}>
+        Clear
+      </Button>
     </Wrapper>
   );
 };
 
 Filter.propTypes = {
+  categoriesSelected: PropTypes.array,
+  fromDate: PropTypes.string,
+  toDate: PropTypes.string,
+  fromAmount: PropTypes.number,
+  toAmount: PropTypes.number,
   onChangeFilter: PropTypes.func.isRequired,
 };
 

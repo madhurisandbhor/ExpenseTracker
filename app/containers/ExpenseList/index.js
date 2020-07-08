@@ -24,6 +24,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import MessageBar from 'components/MessageBar';
 import Filter from 'components/Filter';
+import { setDate } from 'date-fns/esm';
 import makeSelectExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -68,6 +69,11 @@ export const ExpenseList = ({
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState('info');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
+  const [fromAmount, setFromAmount] = useState(0);
+  const [toAmount, setToAmount] = useState(0);
+  const [categoriesSelected, setCategoriesSelected] = useState([]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -241,21 +247,36 @@ export const ExpenseList = ({
   };
 
   const onChangeFilter = (
-    categoriesSelected,
-    fromDate,
-    toDate,
-    fromAmount,
-    toAmount,
+    ipFromDate,
+    ipToDate,
+    ipFromAmount,
+    ipToAmount,
+    ipCategoriesSelected,
   ) => {
-    console.log(categoriesSelected, fromDate, toDate, fromAmount, toAmount);
+    setCategoriesSelected(ipCategoriesSelected);
+    setFromDate(ipFromDate);
+    setToDate(ipToDate);
+    setFromAmount(ipFromAmount);
+    setToAmount(ipToAmount);
   };
 
-  const CustomFilter = props => (
-    <div>
-      <MTableToolbar {...props} />
-      <Filter onChangeFilter={onChangeFilter} />
-    </div>
-  );
+  const CustomFilter = props => {
+    const params = {
+      categoriesSelected,
+      fromDate,
+      toDate,
+      fromAmount,
+      toAmount,
+      onChangeFilter,
+    };
+
+    return (
+      <div>
+        <MTableToolbar {...props} />
+        <Filter {...params} />
+      </div>
+    );
+  };
 
   useEffect(() => {
     if (!expenseList.loading) {
@@ -286,10 +307,18 @@ export const ExpenseList = ({
     if (typingTimeout) clearTimeout(typingTimeout);
     setTypingTimeout(
       setTimeout(() => {
-        loadExpenseList(currentPage, limit, searchText);
+        loadExpenseList(
+          currentPage,
+          limit,
+          searchText,
+          fromDate,
+          toDate,
+          fromAmount,
+          toAmount,
+        );
       }, 500),
     );
-  }, [currentPage, searchText, limit]);
+  }, [currentPage, searchText, limit, fromDate, toDate, fromAmount, toAmount]);
 
   useEffect(() => {
     setLoading(true);
@@ -336,9 +365,10 @@ export const ExpenseList = ({
           }}
           localization={{
             body: {
-              emptyDataSourceMessage: !searchText
-                ? ''
-                : 'No records to display',
+              emptyDataSourceMessage:
+                !searchText && !fromDate && !toDate && !fromAmount && !toAmount
+                  ? ''
+                  : 'No records to display',
             },
           }}
           editable={{
@@ -379,8 +409,26 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadExpenseList: (page, limit, searchText) =>
-    dispatch(loadExpenseListAction(page, limit, searchText)),
+  loadExpenseList: (
+    page,
+    limit,
+    searchText,
+    fromDate,
+    toDate,
+    fromAmount,
+    toAmount,
+  ) =>
+    dispatch(
+      loadExpenseListAction(
+        page,
+        limit,
+        searchText,
+        fromDate,
+        toDate,
+        fromAmount,
+        toAmount,
+      ),
+    ),
   saveExpenseData: data => dispatch(saveExpenseDataAction(data)),
   updateExpenseData: data => dispatch(updateExpenseDataAction(data)),
   deleteExpenseData: data => dispatch(deleteExpenseDataAction(data)),
