@@ -85,7 +85,7 @@ const Filter = ({
     setIpToDate('');
     setIpFromAmount(0);
     setIpToAmount(0);
-    onApply();
+    onChangeFilter('', '', 0, 0, []);
   };
 
   return (

@@ -22,30 +22,51 @@ const info = {
     prev: '',
 };
 
-Expense.getExpenseList = function (page, limit, offset, searchText, fromDate, toDate, fromAmount, toAmount, handleResponse) {
+Expense.getExpenseList = function (
+    page,
+    limit,
+    offset,
+    searchText,
+    fromDate,
+    toDate,
+    fromAmount,
+    toAmount,
+    categories,
+    handleResponse) {
+
     let startNum = 0;
     let limitNum = 10;
     let totalCount = 0;
+    let multiConditionFlag = false;
 
     let queryToAppend = '';
-    if (fromDate || toDate || searchText || toAmount || fromAmount) {
+    if (fromDate || toDate || searchText || toAmount || fromAmount || categories) {
         queryToAppend += ` WHERE `;
 
         if (searchText) {
             queryToAppend += `description like '%${searchText}%'`;
+            multiConditionFlag = true;
+        }
+
+        if (categories) {
+            if (multiConditionFlag)
+                queryToAppend += ` AND `;
+            queryToAppend += `category IN (${categories})`;
+            multiConditionFlag = true;
         }
 
         if (fromDate || toDate) {
-            if (searchText)
+            if (multiConditionFlag)
                 queryToAppend += ` AND `;
             if (fromDate && toDate)
                 queryToAppend += `expense_date BETWEEN '${fromDate}' and '${toDate}'`;
             else if (fromDate || toDate)
                 queryToAppend += `expense_date='${fromDate || toDate}'`;
+            multiConditionFlag = true;
         }
 
         if (fromAmount !== 0 || toAmount !== 0) {
-            if (fromDate || toDate || searchText)
+            if (multiConditionFlag)
                 queryToAppend += ' AND ';
             if (fromAmount !== 0 && toAmount !== 0)
                 queryToAppend += `amount BETWEEN ${fromAmount} and ${toAmount}`;
@@ -60,9 +81,9 @@ Expense.getExpenseList = function (page, limit, offset, searchText, fromDate, to
 
     connection.query(query, function (err, rows) {
         if (err) {
-            return err;
+            handleResponse(err, null);
         }
-        totalCount = rows[0].TotalCount
+        totalCount = rows[0].TotalCount;
         if (offset !== '' || limit !== '') {
             startNum = offset;
             limitNum = limit;

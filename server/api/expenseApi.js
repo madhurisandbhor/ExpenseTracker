@@ -48,7 +48,13 @@ exports.listAllExpenses = (req, res) => {
     const toDate = req.query.toDate ? req.query.toDate : '';
     const fromAmount = req.query.fromAmount ? parseInt(req.query.fromAmount, 10) : '';
     const toAmount = req.query.toAmount ? parseInt(req.query.toAmount, 10) : '';
-    Expense.getExpenseList(page, limit, offset, searchText, fromDate, toDate, fromAmount, toAmount, responseCallback(res, handleListExpenses));
+    const categories = 
+    req.query.categories ? 
+    req.query.categories
+        .split(',')
+        .map(word => `'${word.trim()}'`)
+        .join(',') : '';
+    Expense.getExpenseList(page, limit, offset, searchText, fromDate, toDate, fromAmount, toAmount, categories, responseCallback(res, handleListExpenses));
 }
 
 const validate = expense => {

@@ -24,7 +24,6 @@ import { withStyles } from '@material-ui/core/styles';
 
 import MessageBar from 'components/MessageBar';
 import Filter from 'components/Filter';
-import { setDate } from 'date-fns/esm';
 import makeSelectExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -47,6 +46,14 @@ const ReadOnlySelect = withStyles(() => ({
     // display: 'none',
   },
 }))(Select);
+
+const categories = [
+  { title: 'None', value: 'none' },
+  { title: 'Bills', value: 'bills' },
+  { title: 'Food', value: 'food' },
+  { title: 'Clothing', value: 'clothing' },
+  { title: 'Others', value: 'others' },
+];
 
 export const ExpenseList = ({
   loadExpenseList,
@@ -73,7 +80,8 @@ export const ExpenseList = ({
   const [toDate, setToDate] = useState('');
   const [fromAmount, setFromAmount] = useState(0);
   const [toAmount, setToAmount] = useState(0);
-  const [categoriesSelected, setCategoriesSelected] = useState([]);
+  const [categoriesSelected, setCategoriesSelected] = useState();
+  const [categoriesToSend, setCategoriesToSend] = useState([]);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -124,17 +132,15 @@ export const ExpenseList = ({
             readOnly: true,
           }}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="food">Food</MenuItem>
-          <MenuItem value="clothing">Clothing</MenuItem>
-          <MenuItem value="bills">Bills</MenuItem>
-          <MenuItem value="others">Others</MenuItem>
+          {categories.map(item => (
+            <MenuItem key={item.title} value={item.value}>
+              {item.title}
+            </MenuItem>
+          ))}
         </ReadOnlySelect>
       ),
       // eslint-disable-next-line react/prop-types
-      editComponent: ({ value = '', ...props }) => (
+      editComponent: ({ value = 'none', ...props }) => (
         <Select
           id="category"
           style={{ width: '20ch' }}
@@ -143,13 +149,11 @@ export const ExpenseList = ({
           // eslint-disable-next-line react/prop-types
           onChange={e => props.onChange(e.target.value)}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="food">Food</MenuItem>
-          <MenuItem value="clothing">Clothing</MenuItem>
-          <MenuItem value="bills">Bills</MenuItem>
-          <MenuItem value="others">Others</MenuItem>
+          {categories.map(item => (
+            <MenuItem key={item.title} value={item.value}>
+              {item.title}
+            </MenuItem>
+          ))}
         </Select>
       ),
     },
@@ -254,6 +258,8 @@ export const ExpenseList = ({
     ipCategoriesSelected,
   ) => {
     setCategoriesSelected(ipCategoriesSelected);
+    const categoriestoSend = ipCategoriesSelected.map(item => item.value);
+    setCategoriesToSend(categoriestoSend);
     setFromDate(ipFromDate);
     setToDate(ipToDate);
     setFromAmount(ipFromAmount);
@@ -315,10 +321,20 @@ export const ExpenseList = ({
           toDate,
           fromAmount,
           toAmount,
+          categoriesToSend,
         );
       }, 500),
     );
-  }, [currentPage, searchText, limit, fromDate, toDate, fromAmount, toAmount]);
+  }, [
+    currentPage,
+    searchText,
+    limit,
+    fromDate,
+    toDate,
+    fromAmount,
+    toAmount,
+    categoriesToSend,
+  ]);
 
   useEffect(() => {
     setLoading(true);
@@ -417,6 +433,7 @@ const mapDispatchToProps = dispatch => ({
     toDate,
     fromAmount,
     toAmount,
+    categoriesSelected,
   ) =>
     dispatch(
       loadExpenseListAction(
@@ -427,6 +444,7 @@ const mapDispatchToProps = dispatch => ({
         toDate,
         fromAmount,
         toAmount,
+        categoriesSelected,
       ),
     ),
   saveExpenseData: data => dispatch(saveExpenseDataAction(data)),

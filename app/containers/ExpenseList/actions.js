@@ -28,9 +28,19 @@ export const loadExpenseList = (
   toDate,
   fromAmount,
   toAmount,
+  categoriesSelected,
 ) => ({
   type: LOAD_EXPENSE_LIST,
-  params: { page, limit, searchText, fromDate, toDate, fromAmount, toAmount },
+  params: {
+    page,
+    limit,
+    searchText,
+    fromDate,
+    toDate,
+    fromAmount,
+    toAmount,
+    categoriesSelected,
+  },
 });
 
 export const loadExpenseListSuccess = data => ({
