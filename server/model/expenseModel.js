@@ -5,7 +5,6 @@
 /* eslint-disable func-names */
 
 
-const mysql = require('mysql');
 const connection = require('./db');
 
 const Expense = function (expense) {
@@ -23,15 +22,15 @@ const info = {
 };
 
 Expense.getExpenseList = function (
-    page,
-    limit,
-    offset,
-    searchText,
-    fromDate,
-    toDate,
-    fromAmount,
-    toAmount,
-    categories,
+    { page,
+        limit,
+        offset,
+        searchText,
+        fromDate,
+        toDate,
+        fromAmount,
+        toAmount,
+        categories },
     handleResponse) {
 
     let startNum = 0;

@@ -3,21 +3,18 @@ import { defaultConfig } from './constants';
 
 export const getExpenseList = ({
   searchText,
-  page,
+  currentPage,
   limit,
   fromDate,
   toDate,
   fromAmount,
   toAmount,
-  categoriesSelected,
+  categoriesToSend,
 }) => {
-  // const params = new URLSearchParams();
-  // params.append('search', searchText);
-
   const config = {
     ...defaultConfig, // get defaultConfig and override them.
-    url: `/expense?search=${searchText}&page=${page}&limit=${limit}
-    &fromDate=${fromDate}&toDate=${toDate}&fromAmount=${fromAmount}&toAmount=${toAmount}&categories=${categoriesSelected}`,
+    url: `/expense?search=${searchText}&page=${currentPage}&limit=${limit}
+    &fromDate=${fromDate}&toDate=${toDate}&fromAmount=${fromAmount}&toAmount=${toAmount}&categories=${categoriesToSend}`,
     method: 'get',
   };
   return axios.request(config);

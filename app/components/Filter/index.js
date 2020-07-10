@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState, useEffect } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
@@ -18,11 +18,6 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 0 1.6rem;
   margin-bottom: 0.8rem;
-`;
-
-const FilterLabel = styled.span`
-  margin-right: 2rem;
-  color: ${props => props.theme.palette.primary.dark};
 `;
 
 const TxtField = withStyles(() => ({
@@ -90,7 +85,6 @@ const Filter = ({
 
   return (
     <Wrapper>
-      {/* <FilterLabel>Filters</FilterLabel> */}
       <MuiAutocomplete
         multiple
         limitTags={1}

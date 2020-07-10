@@ -13,17 +13,10 @@ import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 
-import Paper from '@material-ui/core/Paper';
-import MaterialTable, { MTableToolbar } from 'material-table';
-import { TablePagination } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
-import Snackbar from '@material-ui/core/Snackbar';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import { withStyles } from '@material-ui/core/styles';
-
-import MessageBar from 'components/MessageBar';
-import Filter from 'components/Filter';
+import CustomMaterialTable from './CustomMaterialTable';
 import makeSelectExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -40,12 +33,6 @@ const Container = styled.div`
   margin: 2rem auto;
   font-size: 1.6rem;
 `;
-
-const ReadOnlySelect = withStyles(() => ({
-  icon: {
-    // display: 'none',
-  },
-}))(Select);
 
 const categories = [
   { title: 'None', value: 'none' },
@@ -80,9 +67,12 @@ export const ExpenseList = ({
   const [toDate, setToDate] = useState('');
   const [fromAmount, setFromAmount] = useState(0);
   const [toAmount, setToAmount] = useState(0);
-  const [categoriesSelected, setCategoriesSelected] = useState();
+  const [categoriesSelected, setCategoriesSelected] = useState([]);
   const [categoriesToSend, setCategoriesToSend] = useState([]);
-
+  const emptyDataSrcMsg =
+    !searchText && !fromDate && !toDate && !fromAmount && !toAmount
+      ? ''
+      : 'No records to display';
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -95,6 +85,9 @@ export const ExpenseList = ({
       field: 'expense_date',
       title: 'Expense Date',
       width: 120,
+      cellStyle: {
+        fontSize: '1.4rem',
+      },
       render: rowData => (
         <TextField
           id="date"
@@ -118,13 +111,35 @@ export const ExpenseList = ({
         />
       ),
     },
-    { field: 'description', title: 'Description', width: 300 },
+    {
+      field: 'description',
+      title: 'Description',
+      width: 300,
+      cellStyle: {
+        fontSize: '1.4rem',
+      },
+      // eslint-disable-next-line react/prop-types
+      editComponent: ({ value = '', ...props }) => (
+        <TextField
+          id="description"
+          fullWidth
+          multiline
+          // eslint-disable-next-line react/prop-types
+          value={value}
+          // eslint-disable-next-line react/prop-types
+          onChange={e => props.onChange(e.target.value)}
+        />
+      ),
+    },
     {
       field: 'category',
       title: 'Category',
       width: 150,
+      cellStyle: {
+        fontSize: '1.4rem',
+      },
       render: rowData => (
-        <ReadOnlySelect
+        <Select
           id="category"
           value={rowData.category}
           style={{ width: '20ch' }}
@@ -137,7 +152,7 @@ export const ExpenseList = ({
               {item.title}
             </MenuItem>
           ))}
-        </ReadOnlySelect>
+        </Select>
       ),
       // eslint-disable-next-line react/prop-types
       editComponent: ({ value = 'none', ...props }) => (
@@ -157,7 +172,14 @@ export const ExpenseList = ({
         </Select>
       ),
     },
-    { field: 'amount', title: 'Amount', width: 150 },
+    {
+      field: 'amount',
+      title: 'Amount',
+      width: 150,
+      cellStyle: {
+        fontSize: '1.4rem',
+      },
+    },
   ];
 
   const createData = item => ({
@@ -208,7 +230,16 @@ export const ExpenseList = ({
         return resolve();
       }, 600);
     }).then(() => {
-      loadExpenseList(currentPage, limit, searchText);
+      loadExpenseList({
+        currentPage,
+        limit,
+        searchText,
+        fromDate,
+        toDate,
+        fromAmount,
+        toAmount,
+        categoriesToSend,
+      });
     });
 
   const onDelete = oldData =>
@@ -221,7 +252,16 @@ export const ExpenseList = ({
         resolve();
       }, 600);
     }).then(() => {
-      loadExpenseList(currentPage, limit, searchText);
+      loadExpenseList({
+        currentPage,
+        limit,
+        searchText,
+        fromDate,
+        toDate,
+        fromAmount,
+        toAmount,
+        categoriesToSend,
+      });
     });
 
   const onUpdate = (newData, oldData) =>
@@ -242,13 +282,17 @@ export const ExpenseList = ({
         return resolve();
       }, 600);
     }).then(() => {
-      loadExpenseList(currentPage, limit, searchText);
+      loadExpenseList({
+        currentPage,
+        limit,
+        searchText,
+        fromDate,
+        toDate,
+        fromAmount,
+        toAmount,
+        categoriesToSend,
+      });
     });
-
-  const onSearchChange = search => {
-    setLoading(true);
-    setSearchText(search);
-  };
 
   const onChangeFilter = (
     ipFromDate,
@@ -257,6 +301,7 @@ export const ExpenseList = ({
     ipToAmount,
     ipCategoriesSelected,
   ) => {
+    setLoading(true);
     setCategoriesSelected(ipCategoriesSelected);
     const categoriestoSend = ipCategoriesSelected.map(item => item.value);
     setCategoriesToSend(categoriestoSend);
@@ -264,24 +309,6 @@ export const ExpenseList = ({
     setToDate(ipToDate);
     setFromAmount(ipFromAmount);
     setToAmount(ipToAmount);
-  };
-
-  const CustomFilter = props => {
-    const params = {
-      categoriesSelected,
-      fromDate,
-      toDate,
-      fromAmount,
-      toAmount,
-      onChangeFilter,
-    };
-
-    return (
-      <div>
-        <MTableToolbar {...props} />
-        <Filter {...params} />
-      </div>
-    );
   };
 
   useEffect(() => {
@@ -313,7 +340,8 @@ export const ExpenseList = ({
     if (typingTimeout) clearTimeout(typingTimeout);
     setTypingTimeout(
       setTimeout(() => {
-        loadExpenseList(
+        setLoading(true);
+        loadExpenseList({
           currentPage,
           limit,
           searchText,
@@ -322,7 +350,7 @@ export const ExpenseList = ({
           fromAmount,
           toAmount,
           categoriesToSend,
-        );
+        });
       }, 500),
     );
   }, [
@@ -341,72 +369,39 @@ export const ExpenseList = ({
     return clear();
   }, []);
 
+  const filterParams = {
+    categoriesSelected,
+    fromDate,
+    toDate,
+    fromAmount,
+    toAmount,
+    onChangeFilter,
+  };
+
+  const MatTableParams = {
+    columns,
+    rows,
+    loading,
+    setSearchText,
+    emptyDataSrcMsg,
+    onAdd,
+    onUpdate,
+    onDelete,
+    open,
+    handleClose,
+    severity,
+    message,
+    filterParams,
+    totalCount,
+    currentPage,
+    limit,
+    setCurrentPage,
+    setLimit,
+  };
+
   return (
     <Container>
-      <Paper style={{ position: 'relative' }}>
-        <MaterialTable
-          title=""
-          columns={columns}
-          data={rows}
-          rowsPerPageOptions={[5, 10, 15, 20]}
-          isLoading={loading}
-          onSearchChange={onSearchChange}
-          components={{
-            Pagination: prop => (
-              <TablePagination
-                {...prop}
-                count={totalCount}
-                page={currentPage - 1}
-                rowsPerPage={limit}
-                onChangePage={(e, page) => {
-                  setCurrentPage(page + 1);
-                }}
-                onChangeRowsPerPage={event => {
-                  setLimit(parseInt(event.target.value, 10));
-                }}
-              />
-            ),
-            Toolbar: props => <CustomFilter {...props} />,
-          }}
-          options={{
-            emptyRowsWhenPaging: false,
-            pageSize: 20,
-            actionsColumnIndex: -1,
-            actionsCellStyle: {
-              display: 'flex',
-              justifyContent: 'center',
-              width: '100%',
-            },
-            addRowPosition: 'first',
-          }}
-          localization={{
-            body: {
-              emptyDataSourceMessage:
-                !searchText && !fromDate && !toDate && !fromAmount && !toAmount
-                  ? ''
-                  : 'No records to display',
-            },
-          }}
-          editable={{
-            onRowAdd: onAdd,
-            onRowUpdate: onUpdate,
-            onRowDelete: onDelete,
-          }}
-        />
-      </Paper>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-      >
-        <MessageBar onClose={handleClose} severity={severity}>
-          {message}
-        </MessageBar>
-      </Snackbar>
+      <CustomMaterialTable {...MatTableParams} />
     </Container>
   );
 };
@@ -425,28 +420,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadExpenseList: (
-    page,
-    limit,
-    searchText,
-    fromDate,
-    toDate,
-    fromAmount,
-    toAmount,
-    categoriesSelected,
-  ) =>
-    dispatch(
-      loadExpenseListAction(
-        page,
-        limit,
-        searchText,
-        fromDate,
-        toDate,
-        fromAmount,
-        toAmount,
-        categoriesSelected,
-      ),
-    ),
+  loadExpenseList: params => dispatch(loadExpenseListAction(params)),
   saveExpenseData: data => dispatch(saveExpenseDataAction(data)),
   updateExpenseData: data => dispatch(updateExpenseDataAction(data)),
   deleteExpenseData: data => dispatch(deleteExpenseDataAction(data)),

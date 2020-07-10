@@ -23,7 +23,12 @@ const theme = createMuiTheme({
   overrides: {
     MuiInputLabel: fontSize14,
     MuiTextField: fontSize14,
-    MuiInputBase: fontSize14,
+    MuiInputBase: {
+      root: {
+        fontSize: '1.4rem',
+        fontFamily: 'Lora, sans-serif',
+      },
+    },
     MuiChip: fontSize12,
     MuiButton: {
       root: {

@@ -40,21 +40,25 @@ const handleDelete = res => {
 }
 
 exports.listAllExpenses = (req, res) => {
-    const searchText = req.query.search ? req.query.search : '';
     const page = req.query.page ? parseInt(req.query.page, 10) : '';
     const limit = req.query.limit ? parseInt(req.query.limit, 10) : '';
-    const offset = limit ? (page - 1) * limit : '';
-    const fromDate = req.query.fromDate ? req.query.fromDate : '';
-    const toDate = req.query.toDate ? req.query.toDate : '';
-    const fromAmount = req.query.fromAmount ? parseInt(req.query.fromAmount, 10) : '';
-    const toAmount = req.query.toAmount ? parseInt(req.query.toAmount, 10) : '';
-    const categories = 
-    req.query.categories ? 
-    req.query.categories
-        .split(',')
-        .map(word => `'${word.trim()}'`)
-        .join(',') : '';
-    Expense.getExpenseList(page, limit, offset, searchText, fromDate, toDate, fromAmount, toAmount, categories, responseCallback(res, handleListExpenses));
+    const params = {
+        page,
+        searchText: req.query.search ? req.query.search : '',
+        limit,
+        offset: limit ? (page - 1) * limit : '',
+        fromDate: req.query.fromDate ? req.query.fromDate : '',
+        toDate: req.query.toDate ? req.query.toDate : '',
+        fromAmount: req.query.fromAmount ? parseInt(req.query.fromAmount, 10) : '',
+        toAmount: req.query.toAmount ? parseInt(req.query.toAmount, 10) : '',
+        categories:
+            req.query.categories ?
+                req.query.categories
+                    .split(',')
+                    .map(word => `'${word.trim()}'`)
+                    .join(',') : '',
+    };
+    Expense.getExpenseList(params, responseCallback(res, handleListExpenses));
 }
 
 const validate = expense => {
