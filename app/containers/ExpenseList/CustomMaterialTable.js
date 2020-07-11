@@ -19,7 +19,7 @@ export const CustomMaterialTable = ({
   columns = [],
   rows = [],
   loading,
-  setSearchText,
+  onSearch,
   emptyDataSrcMsg,
   onAdd,
   onUpdate,
@@ -35,8 +35,6 @@ export const CustomMaterialTable = ({
   setCurrentPage,
   setLimit,
 }) => {
-  const [typingTimeout, setTypingTimeout] = useState(0);
-
   const CustomFilter = props => (
     <div>
       <MTableToolbar {...props} />
@@ -59,15 +57,6 @@ export const CustomMaterialTable = ({
     />
   );
 
-  const onSearch = value => {
-    if (typingTimeout) clearTimeout(typingTimeout);
-    setTypingTimeout(
-      setTimeout(() => {
-        setSearchText(value);
-      }, 1000),
-    );
-  };
-
   return (
     <>
       <Paper style={{ position: 'relative' }}>
@@ -77,7 +66,7 @@ export const CustomMaterialTable = ({
           data={rows}
           rowsPerPageOptions={[5, 10, 15, 20]}
           isLoading={loading}
-          onSearchChange={value => onSearch(value)}
+          onSearchChange={onSearch}
           components={{
             Pagination: props => <CustomPagination {...props} />,
             Toolbar: props => <CustomFilter {...props} />,
@@ -92,6 +81,7 @@ export const CustomMaterialTable = ({
               width: '100%',
             },
             addRowPosition: 'first',
+            searchAutoFocus: true,
           }}
           localization={{
             body: {
@@ -126,7 +116,7 @@ CustomMaterialTable.propTypes = {
   columns: PropTypes.array.isRequired,
   rows: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  setSearchText: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
   emptyDataSrcMsg: PropTypes.string.isRequired,
   onAdd: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,

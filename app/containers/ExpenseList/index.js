@@ -69,10 +69,7 @@ export const ExpenseList = ({
   const [toAmount, setToAmount] = useState(0);
   const [categoriesSelected, setCategoriesSelected] = useState([]);
   const [categoriesToSend, setCategoriesToSend] = useState([]);
-  const emptyDataSrcMsg =
-    !searchText && !fromDate && !toDate && !fromAmount && !toAmount
-      ? ''
-      : 'No records to display';
+  const [emptyDataSrcMsg, setEmptyDataSrcMsg] = useState('');
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -311,11 +308,26 @@ export const ExpenseList = ({
     setToAmount(ipToAmount);
   };
 
+  const onSearch = value => {
+    setSearchText(value);
+  };
+
   useEffect(() => {
     if (!expenseList.loading) {
       setRows(formatterRows());
       setLoading(expenseList.loading);
       setTotalCount(expenseList.info.totalCount);
+      const emptyDataMsg =
+        !searchText &&
+        !fromDate &&
+        !toDate &&
+        fromAmount === 0 &&
+        toAmount === 0 &&
+        categoriesToSend.length === 0 &&
+        expenseList.list.length !== 0
+          ? ''
+          : 'No records to display';
+      setEmptyDataSrcMsg(emptyDataMsg);
     }
   }, [expenseList.list]);
 
@@ -382,7 +394,7 @@ export const ExpenseList = ({
     columns,
     rows,
     loading,
-    setSearchText,
+    onSearch,
     emptyDataSrcMsg,
     onAdd,
     onUpdate,
