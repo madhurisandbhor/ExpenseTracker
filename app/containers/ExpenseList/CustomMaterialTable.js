@@ -59,9 +59,9 @@ export const CustomMaterialTable = ({
 
   return (
     <>
-      <Paper style={{ position: 'relative' }}>
+      <Paper>
         <MaterialTable
-          title=""
+          title="Expense List"
           columns={columns}
           data={rows}
           rowsPerPageOptions={[5, 10, 15, 20]}

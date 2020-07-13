@@ -6,8 +6,8 @@ import img2 from './images/calculator.jpg';
 const GlobalStyle = createGlobalStyle`
   html,
   body {
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     line-height: 1.5;
   }
 
@@ -24,6 +24,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Lora', sans-serif;
     font-weight: 300;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -31,8 +32,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   #app {
-    min-height: 100%;
-    min-width: 100%;
+    min-height: 100vh;
+    min-width: 100vw;
     font-size: 1.6rem;
    
     // background: linear-gradient(90deg, rgba(213,190,174,1) 0%, rgba(171,126,112,1) 84%);
@@ -40,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
     // background: url(${img1}) no-repeat center center fixed;    
     // background-size: cover;
     // background-position: bottom;
-    background:lightblue;
+    background:lightgrey;
   }
 
   p,

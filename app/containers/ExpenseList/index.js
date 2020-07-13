@@ -28,12 +28,6 @@ import {
   clearData as clearDataAction,
 } from './actions';
 
-const Container = styled.div`
-  width: 90%;
-  margin: 2rem auto;
-  font-size: 1.6rem;
-`;
-
 const categories = [
   { title: 'None', value: 'none' },
   { title: 'Bills', value: 'bills' },
@@ -411,11 +405,7 @@ export const ExpenseList = ({
     setLimit,
   };
 
-  return (
-    <Container>
-      <CustomMaterialTable {...MatTableParams} />
-    </Container>
-  );
+  return <CustomMaterialTable {...MatTableParams} />;
 };
 
 ExpenseList.propTypes = {

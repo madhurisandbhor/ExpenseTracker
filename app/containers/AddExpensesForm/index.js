@@ -145,10 +145,7 @@ export function AddExpensesForm({
     <>
       <Wrapper>
         <Section>
-          {formType === 'add' && <FormattedMessage {...messages.addHeader} />}
-          {formType !== 'add' && (
-            <FormattedMessage {...messages.updateHeader} />
-          )}
+          <FormattedMessage {...messages.addHeader} />
         </Section>
         <form onSubmit={onSubmit}>
           <FieldWrapper>

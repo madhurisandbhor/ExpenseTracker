@@ -8,6 +8,10 @@ export default styled.header`
   align-items: center;
   margin: 0;
   height: 6rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
   box-shadow: 0 0.4rem 0.8rem 0 rgba(0, 0, 0, 0.2);
   background-color: ${props => props.theme.tracker.white};
   @media (max-width: 768px) {

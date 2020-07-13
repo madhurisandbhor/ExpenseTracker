@@ -18,9 +18,13 @@ import { useInjectSaga } from 'utils/injectSaga';
 import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+
 import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
+
+import ExpenseList from '../ExpenseList/Loadable';
 
 const key = 'home';
 
@@ -40,9 +44,15 @@ const SectionItem = styled.div`
   }
 `;
 
-const Container = styled.div`
+const TopContainer = styled.div`
   color: ${props => props.theme.palette.primary.dark};
-  padding: 2rem;
+  // padding: 2rem;
+  height: 30%;
+  margin-bottom: 1rem;
+`;
+
+const BottomContainer = styled.div`
+  height: 60%;
 `;
 
 const Info = styled.div`
@@ -66,34 +76,25 @@ const AddText = styled.span`
   transition: visibility 0s, opacity 0.5s linear;
 `;
 
-const IconButtonWrapper = withStyles(theme => ({
-  root: {
-    color: theme.tracker.white,
-    order: 1,
-    background: theme.palette.primary.main,
-    '&:hover': {
-      background: theme.palette.primary.dark,
-    },
-    '&:hover + .add_text': {
-      opacity: 1,
-      visibility: 'visible',
-    },
-  },
-}))(IconButton);
+// const IconButtonWrapper = withStyles(theme => ({
+//   root: {
+//     color: theme.tracker.white,
+//     order: 1,
+//     background: theme.palette.primary.main,
+//     '&:hover': {
+//       background: theme.palette.primary.dark,
+//     },
+//     '&:hover + .add_text': {
+//       opacity: 1,
+//       visibility: 'visible',
+//     },
+//   },
+// }))(IconButton);
 
 export function HomePage() {
   // let history = useHistory();
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
-
-  const onAddExpense = () => {
-    // rest.history.push({
-    //   pathname: '/addExpenses',
-    //   params: {
-    //     formType: 'add',
-    //   },
-    // });
-  };
 
   return (
     <article>
@@ -102,17 +103,16 @@ export function HomePage() {
         <meta name="description" content="Expense tracker application" />
       </Helmet>
       <Wrapper>
-        <AddBtnWrapper>
-          <IconButtonWrapper aria-label="add expenses" onClick={onAddExpense}>
-            <AddIcon fontSize="large" />
-          </IconButtonWrapper>
-          <AddText className="add_text">Add New Expense</AddText>
-        </AddBtnWrapper>
-        <Container>
-          <Info>Your total expenses this year : €8900+ Rs.456 </Info>
-          <Info>You owe Rs.67 to Prasad</Info>
-          <Info>Prasad owes you €1560 </Info>
-        </Container>
+        <TopContainer>
+          <Paper>
+            <Info>Your total expenses this year : €8900+ Rs.456 </Info>
+            <Info>You owe Rs.67 to Prasad</Info>
+            <Info>Prasad owes you €1560 </Info>
+          </Paper>
+        </TopContainer>
+        <BottomContainer>
+          <ExpenseList />
+        </BottomContainer>
       </Wrapper>
     </article>
   );
