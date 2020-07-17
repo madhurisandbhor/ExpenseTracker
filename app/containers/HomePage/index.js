@@ -23,7 +23,7 @@ import Paper from '@material-ui/core/Paper';
 import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
-
+import HomeTopContainer from './HomeTopContainer/Loadable';
 import ExpenseList from '../ExpenseList/Loadable';
 
 const key = 'home';
@@ -47,7 +47,7 @@ const SectionItem = styled.div`
 const TopContainer = styled.div`
   color: ${props => props.theme.palette.primary.dark};
   // padding: 2rem;
-  height: 30%;
+  height: 40%;
   margin-bottom: 1rem;
 `;
 
@@ -110,8 +110,10 @@ export function HomePage() {
             <Info>Prasad owes you €1560 </Info>
           </Paper>
         </TopContainer>
+
         <BottomContainer>
-          <ExpenseList />
+          <HomeTopContainer />
+          {/* <ExpenseList /> */}
         </BottomContainer>
       </Wrapper>
     </article>
