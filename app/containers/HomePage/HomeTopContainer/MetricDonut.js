@@ -4,7 +4,7 @@
  *
  */
 
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import DoughnutWidget from 'components/DoughnutWidget';
@@ -14,6 +14,7 @@ import styled from 'styled-components';
 
 const MetricDonutContainer = styled.div`
   position: relative;
+  margin-top: 20px;
 `;
 
 const DonutTitleContainer = styled.div`
@@ -23,17 +24,21 @@ const DonutTitleContainer = styled.div`
   justify-content: center;
   align-items: center;
   left: 36%;
-  top: 23%;
+  top: 35%;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.6);
 `;
 
 export const getAvailabilityDoughnutData = (data, theme) => ({
-  labels: ['Red', 'Yellow', 'Blue'],
+  labels: ['Food', 'Shopping', 'Others'],
   // calculateTotal(data) > 0 ? getLabels(data) : ['No data'],
   data: [10, 20, 30],
   // calculateTotal(data) > 0 ? getData(data) : [1],
-  colors: ['red', 'yellow', 'blue'],
+  colors: [
+    theme.palette.primary.main,
+    theme.palette.primary.dark,
+    theme.palette.primary.light,
+  ],
 });
 
 const getData = data => Object.values(data).map(item => round2decimals(item));
@@ -80,8 +85,8 @@ const MetricDonut = ({
 }) => (
   <MetricDonutContainer>
     <DonutTitleContainer>
-      <div>AVAILABILITY</div>
-      <div>STATUS</div>
+      <div>Monthly</div>
+      <div>DISTRIBUTION</div>
     </DonutTitleContainer>
     <DoughnutWidget
       {...rest}
@@ -102,4 +107,4 @@ MetricDonut.propTypes = {
   // doughnutData: PropTypes.object.isRequired,
 };
 
-export default withTheme(MetricDonut);
+export default (memo, withTheme)(MetricDonut);

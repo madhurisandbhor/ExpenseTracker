@@ -108,6 +108,7 @@ export function HomePage() {
             <Info>Your total expenses this year : €8900+ Rs.456 </Info>
             <Info>You owe Rs.67 to Prasad</Info>
             <Info>Prasad owes you €1560 </Info>
+            <Info>click here to... </Info>
           </Paper>
         </TopContainer>
 

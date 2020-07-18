@@ -69,6 +69,11 @@ const theme = createMuiTheme({
       },
     },
     MuiSnackbarContent: fontSize12,
+    MuiTooltip: {
+      tooltip: {
+        fontSize: '1rem',
+      },
+    },
   },
 });
 

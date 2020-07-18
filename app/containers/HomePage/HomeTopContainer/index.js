@@ -8,10 +8,8 @@ import React, { memo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-
 import Card from '@material-ui/core/Card/Card';
+
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -23,6 +21,7 @@ import reducer from './reducer';
 import saga from './saga';
 import MetricDonut from './MetricDonut';
 import ExpensePerDayWidget from './ExpensePerDayWidget';
+import ExpenseBySelect from './ExpenseBySelect';
 
 const TopWidgetsContainer = styled.div`
   display: flex;
@@ -37,17 +36,11 @@ const MetricDonutTitle = styled.div`
   color: rgba(0, 0, 0, 0.65);
 `;
 
-const ExpenseByWrapper = styled.span`
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-`;
-
 const WidgetCard = withStyles(theme => ({
   root: {
     position: 'relative',
     padding: '30px 20px 20px 20px',
-    height: '250px',
+    height: '300px',
     width: '468px',
     display: 'flex',
     flexDirection: 'column',
@@ -67,7 +60,7 @@ const HomeTopContainer = () => {
   }, []);
 
   const percentage = [10, 20, 30];
-  const [expenseBy, setExpenseBy] = useState('monthly');
+  const [expenseBy, setExpenseBy] = useState('yearly');
 
   const expenseDataPerYear = {
     2020: 10000,
@@ -111,29 +104,12 @@ const HomeTopContainer = () => {
   return (
     <TopWidgetsContainer>
       <WidgetCard>
-        {/* <HelpButton /> */}
-        {/* <ExpandButton /> */}
         {/* {loading ? (
           <LoadingIndicator />
         ) : ( */}
-        <ExpenseByWrapper>
-          <Select
-            id="expense_distribution"
-            value={expenseBy}
-            style={{ width: '10ch' }}
-            inputProps={{}}
-            onChange={event => setExpenseBy(event.target.value)}
-          >
-            <MenuItem value="yearly">Yearly</MenuItem>
-            <MenuItem value="monthly">Monthly</MenuItem>
-            <MenuItem value="weekly">Weekly</MenuItem>
-          </Select>
-        </ExpenseByWrapper>
+        <ExpenseBySelect expenseBy={expenseBy} setExpenseBy={setExpenseBy} />
         <ExpensePerDayWidget expenseData={expenseByData()} />
-        {/* )}
-        {!loading && (
-          <MetricDonutTitle>Out of Stock Distribution</MetricDonutTitle>
-        )} */}
+        <MetricDonutTitle>Expenses Distribution</MetricDonutTitle>
       </WidgetCard>
       <WidgetCard
         style={{
@@ -141,8 +117,6 @@ const HomeTopContainer = () => {
           width: '300px',
         }}
       >
-        {/* <HelpButton /> */}
-        {/* <ExpandButton /> */}
         {/* {loading ? (
           <LoadingIndicator />
         ) : ( */}
@@ -151,24 +125,10 @@ const HomeTopContainer = () => {
           // graphClickEvent={graphClickEvent}
           dataType="MonthlyExpense"
         />
+        <MetricDonutTitle>Category Distribution</MetricDonutTitle>
         {/* )} */}
       </WidgetCard>
-      <WidgetCard>
-        {/* <HelpButton /> */}
-        {/* <ExpandButton /> */}
-        {/* {loading ? (
-          <LoadingIndicator />
-        ) : (
-          <AvailabilityDistributionWidget
-            availabilityDistribution={nbOffersByNbDays}
-            graphClickEvent={graphClickEvent}
-            widgetType={WIDGET_TYPE.AVAILABILITY_DISTRIBUTION}
-          />
-        )}
-        {!loading && (
-          <MetricDonutTitle>Availability Distribution</MetricDonutTitle>
-        )} */}
-      </WidgetCard>
+      <WidgetCard />
     </TopWidgetsContainer>
   );
 };
