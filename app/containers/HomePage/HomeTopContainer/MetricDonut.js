@@ -30,56 +30,44 @@ const DonutTitleContainer = styled.div`
 `;
 
 export const getAvailabilityDoughnutData = (data, theme) => ({
-  labels: ['Food', 'Shopping', 'Others'],
-  // calculateTotal(data) > 0 ? getLabels(data) : ['No data'],
-  data: [10, 20, 30],
-  // calculateTotal(data) > 0 ? getData(data) : [1],
-  colors: [
-    theme.palette.primary.main,
-    theme.palette.primary.dark,
-    theme.palette.primary.light,
-  ],
+  labels: data.length > 0 ? getLabels(data) : ['No data'],
+  data: data.length > 0 ? getData(data) : [1],
+  colors:
+    data.length > 0
+      ? data.map(item => getColors(item.category, theme))
+      : undefined,
 });
 
-const getData = data => Object.values(data).map(item => round2decimals(item));
+const getData = data => data.map(item => item.aggrAmount);
 
-const calculateTotal = data =>
-  Object.values(data).reduce((pv, cv) => pv + cv, 0);
+const getLabels = data => data.map(item => item.category);
 
-const getLabels = data => {
-  const labels = Object.keys(data);
-  const newLabels = labels.map(item => formatLabels(item));
-  return newLabels;
-};
-
-const formatLabels = type => {
-  const label = {
-    available: () => AVAILABILITY_TAB_LABELS.AVAILABLE,
-    notListed: () => AVAILABILITY_TAB_LABELS.NOT_LISTED,
-    outOfStock: () => AVAILABILITY_TAB_LABELS.OUT_OF_STOCK,
-    outsideAvailable: () => AVAILABILITY_TAB_LABELS.OUTSIDE_AVAILABLE,
-    default: undefined,
-  };
-  return (label[type] || label.default)();
-};
+// const formatLabels=()=>{
+//   const label = {
+//     available: () => AVAILABILITY_TAB_LABELS.AVAILABLE,
+//     notListed: () => AVAILABILITY_TAB_LABELS.NOT_LISTED,
+//     outOfStock: () => AVAILABILITY_TAB_LABELS.OUT_OF_STOCK,
+//     outsideAvailable: () => AVAILABILITY_TAB_LABELS.OUTSIDE_AVAILABLE,
+//     default: undefined,
+//   };
+//   return (label[type] || label.default)();
+// };
 
 const getColors = (label, theme) => {
   const colors = {
-    // eslint-disable-next-line prettier/prettier
-    Available: () => (theme.palette ? theme.palette.primary.main : undefined),
-    'Not Listed': () => (theme.workIT ? theme.workIT.cautionColor : undefined),
-    'Out Of Stock': () => (theme.workIT ? theme.workIT.badColor : undefined),
-    'Outside Available': () =>
-      theme.workIT ? theme.workIT.warningColor : undefined,
-    default: undefined,
+    food: () => (theme.palette ? theme.palette.primary.main : undefined),
+    clothing: () => (theme.palette ? theme.palette.primary.dark : undefined),
+    bills: () => (theme.palette ? theme.palette.primary.light : undefined),
+    others: () => (theme.palette ? theme.palette.secondary.light : undefined),
+    none: () => undefined,
   };
-  return (colors[label] || colors.default)();
+
+  return colors[label]();
 };
 
 const MetricDonut = ({
   doughnutData = {},
   graphClickEvent,
-  dataType,
   theme,
   ...rest
 }) => (
@@ -92,7 +80,6 @@ const MetricDonut = ({
       {...rest}
       doughnutData={getAvailabilityDoughnutData(doughnutData, theme)}
       graphClickEvent={graphClickEvent}
-      dataType={dataType}
       cutoutPercentage={78}
       withLegends
       legendPosition="bottom"
@@ -104,7 +91,7 @@ const MetricDonut = ({
 MetricDonut.propTypes = {
   // graphClickEvent: PropTypes.func.isRequired,
   // dataType: PropTypes.string.isRequired,
-  // doughnutData: PropTypes.object.isRequired,
+  doughnutData: PropTypes.array.isRequired,
 };
 
 export default (memo, withTheme)(MetricDonut);

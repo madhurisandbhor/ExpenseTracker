@@ -21,7 +21,7 @@ import reducer from './reducer';
 import saga from './saga';
 import MetricDonut from './MetricDonut';
 import ExpensePerDayWidget from './ExpensePerDayWidget';
-import ExpenseBySelect from './ExpenseBySelect';
+import { loadCategoryStatistics as loadCategoryStatisticsAction } from './actions';
 
 const TopWidgetsContainer = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ const TopWidgetsContainer = styled.div`
   margin: 0 0 1rem 0;
 `;
 
-const MetricDonutTitle = styled.div`
+const BlockTitle = styled.div`
   font-size: 14px;
   color: rgba(0, 0, 0, 0.65);
 `;
@@ -47,86 +47,46 @@ const WidgetCard = withStyles(theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: theme.palette.background.paper,
+    '&:nth-child(2)': {
+      paddingTop: '22px',
+      width: '300px',
+    },
   },
 }))(Card);
 
-const HomeTopContainer = () => {
+const HomeTopContainer = ({ homeTopContainer, loadCategoryStatistics }) => {
   useInjectReducer({ key: 'homeTopContainer', reducer });
   useInjectSaga({ key: 'homeTopContainer', saga });
   // const { profileId, loadAvailabilityDistribution } = this.props;
+  const [loading, setLoading] = useState(true);
+  const [doughnutData, setDoughnutData] = useState({});
 
   useEffect(() => {
-    // loadAvailabilityDistribution(profileId);
+    loadCategoryStatistics();
   }, []);
 
-  const percentage = [10, 20, 30];
-  const [expenseBy, setExpenseBy] = useState('yearly');
-
-  const expenseDataPerYear = {
-    2020: 10000,
-    2019: 2000,
-    2018: 26000,
-    2017: 5000,
-    2016: 5600,
-  };
-
-  const expenseDataPerMonth = {
-    Jan: 1000,
-    Feb: 200,
-    Mar: 260,
-    Apr: 5000,
-    May: 100,
-    Jun: 10,
-    Jul: 1000,
-    Aug: 0,
-    Sep: 960,
-    Oct: 100,
-    Nov: 790,
-    Dec: 10,
-  };
-
-  const expenseDataPerWeek = {
-    Sun: 500,
-    Mon: 20,
-    Tue: 260,
-    Wed: 50,
-    Thu: 67,
-    Fri: 0,
-    Sat: 99,
-  };
-
-  const expenseByData = () => {
-    if (expenseBy === 'yearly') return expenseDataPerYear;
-    if (expenseBy === 'monthly') return expenseDataPerMonth;
-    return expenseDataPerWeek;
-  };
+  useEffect(() => {
+    setDoughnutData(homeTopContainer.data);
+    setLoading(homeTopContainer.loading);
+  }, [homeTopContainer.data]);
 
   return (
     <TopWidgetsContainer>
       <WidgetCard>
-        {/* {loading ? (
-          <LoadingIndicator />
-        ) : ( */}
-        <ExpenseBySelect expenseBy={expenseBy} setExpenseBy={setExpenseBy} />
-        <ExpensePerDayWidget expenseData={expenseByData()} />
-        <MetricDonutTitle>Expenses Distribution</MetricDonutTitle>
+        <ExpensePerDayWidget />
+        <BlockTitle>Expenses Distribution</BlockTitle>
       </WidgetCard>
-      <WidgetCard
-        style={{
-          paddingTop: '22px',
-          width: '300px',
-        }}
-      >
-        {/* {loading ? (
+      <WidgetCard>
+        {loading ? (
           <LoadingIndicator />
-        ) : ( */}
-        <MetricDonut
-          doughnutData={percentage}
-          // graphClickEvent={graphClickEvent}
-          dataType="MonthlyExpense"
-        />
-        <MetricDonutTitle>Category Distribution</MetricDonutTitle>
-        {/* )} */}
+        ) : (
+          <MetricDonut
+            doughnutData={doughnutData}
+            // graphClickEvent={graphClickEvent}
+            // dataType="TotalCategoriesAggrAmount"
+          />
+        )}
+        <BlockTitle>Category Distribution</BlockTitle>
       </WidgetCard>
       <WidgetCard />
     </TopWidgetsContainer>
@@ -134,18 +94,18 @@ const HomeTopContainer = () => {
 };
 
 HomeTopContainer.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  homeTopContainer: PropTypes.object.isRequired,
+  loadCategoryStatistics: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
   homeTopContainer: makeSelectHomeTopContainer(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  loadCategoryStatistics: params =>
+    dispatch(loadCategoryStatisticsAction(params)),
+});
 
 const withConnect = connect(
   mapStateToProps,

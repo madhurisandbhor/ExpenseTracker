@@ -41,7 +41,7 @@ const GlobalStyle = createGlobalStyle`
     // background: url(${img1}) no-repeat center center fixed;    
     // background-size: cover;
     // background-position: bottom;
-    background:lightgrey;
+    background:#e8e8e8;
   }
 
   p,

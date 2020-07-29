@@ -132,7 +132,11 @@ const Filter = ({
         value={ipToAmount}
         onChange={e => setIpToAmount(e.target.value)}
       />
-      <Button variant="outlined" onClick={onApply}>
+      <Button
+        variant="outlined"
+        onClick={onApply}
+        style={{ marginRight: '1rem' }}
+      >
         Apply
       </Button>
       <Button variant="outlined" onClick={onClear}>

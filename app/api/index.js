@@ -5,3 +5,5 @@ export {
   updateExpenseData,
   deleteExpenseData,
 } from './expenseApi';
+
+export { getCatgeoryStatisticData } from './expenseStatisticsApi';

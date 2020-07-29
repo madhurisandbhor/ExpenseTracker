@@ -14,17 +14,12 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
-import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
 import HomeTopContainer from './HomeTopContainer/Loadable';
-import ExpenseList from '../ExpenseList/Loadable';
 
 const key = 'home';
 

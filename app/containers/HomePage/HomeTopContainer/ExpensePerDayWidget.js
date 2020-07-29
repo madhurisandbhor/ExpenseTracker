@@ -4,11 +4,12 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import { Line } from 'react-chartjs-2';
+import ExpenseBySelect from './ExpenseBySelect';
 // import { EXPENSE_LABELS } from '../constants';
 
 const Container = styled.div`
@@ -71,15 +72,56 @@ const options = {
   },
 };
 
+const expenseDataPerYear = {
+  2020: 10000,
+  2019: 2000,
+  2018: 26000,
+  2017: 5000,
+  2016: 5600,
+};
+
+const expenseDataPerMonth = {
+  Jan: 1000,
+  Feb: 200,
+  Mar: 260,
+  Apr: 5000,
+  May: 100,
+  Jun: 10,
+  Jul: 1000,
+  Aug: 0,
+  Sep: 960,
+  Oct: 100,
+  Nov: 790,
+  Dec: 10,
+};
+
+const expenseDataPerWeek = {
+  Sun: 500,
+  Mon: 20,
+  Tue: 260,
+  Wed: 50,
+  Thu: 67,
+  Fri: 0,
+  Sat: 99,
+};
+
 export const customTooltip = tooltipItem => `expense - ${tooltipItem.yLabel}`;
 
 const getLabels = data => Object.keys(data);
 
 const getData = data => Object.values(data);
 
-const ExpensePerDayWidget = ({ expenseData, theme }) => {
+const ExpensePerDayWidget = ({ theme }) => {
+  const [expenseBy, setExpenseBy] = useState('yearly');
+
+  const expenseByData = () => {
+    if (expenseBy === 'yearly') return expenseDataPerYear;
+    if (expenseBy === 'monthly') return expenseDataPerMonth;
+    return expenseDataPerWeek;
+  };
+
   const data = {
-    labels: expenseData ? getLabels(expenseData) : ['No data'],
+    labels: expenseByData() ? getLabels(expenseByData()) : ['No data'],
     datasets: [
       {
         fill: false,
@@ -98,13 +140,14 @@ const ExpensePerDayWidget = ({ expenseData, theme }) => {
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
-        data: getData(expenseData),
+        data: getData(expenseByData()),
       },
     ],
   };
 
   return (
     <Container>
+      <ExpenseBySelect expenseBy={expenseBy} setExpenseBy={setExpenseBy} />
       <Line data={data} options={options} />
     </Container>
   );
@@ -113,7 +156,7 @@ const ExpensePerDayWidget = ({ expenseData, theme }) => {
 ExpensePerDayWidget.propTypes = {
   // graphClickEvent: PropTypes.func.isRequired,
   // dataType: PropTypes.string.isRequired,
-  expenseData: PropTypes.object.isRequired,
+  // expenseData: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
 

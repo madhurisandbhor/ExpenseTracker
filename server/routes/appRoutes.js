@@ -3,17 +3,22 @@
 /* eslint-disable global-require */
 /* eslint-disable func-names */
 module.exports = function (app) {
-  const expenseList = require('../api/expenseApi');
+  const expenseApi = require('../api/expenseApi');
+  const expenseStatisticsApi = require('../api/expenseStatisticsApi');
 
-  // expenseList Routes
+  // expenseApi Routes
 
   app.route('/api/expense/:expenseId')
-    .get(expenseList.readExpense)
-    .put(expenseList.updateExpense)
-    .delete(expenseList.deleteExpense);
+    .get(expenseApi.readExpense)
+    .put(expenseApi.updateExpense)
+    .delete(expenseApi.deleteExpense);
 
 
   app.route('/api/expense')
-    .get(expenseList.listAllExpenses)
-    .post(expenseList.addExpense);
+    .get(expenseApi.listAllExpenses)
+    .post(expenseApi.addExpense);
+
+  app.route('/api/expenseStatistics/categories')
+    .get(expenseStatisticsApi.getCatgeoryStatistic);
+
 };

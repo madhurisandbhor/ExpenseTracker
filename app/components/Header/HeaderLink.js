@@ -19,7 +19,7 @@ export default styled(NavLink).attrs({
   font-size: 1.8rem;
   font-weight: 200;
   align-items: center;
-  height: -webkit-fill-available;
+  height: 6rem;
 
  &:hover {
     // background: ${props => props.theme.palette.primary.main};

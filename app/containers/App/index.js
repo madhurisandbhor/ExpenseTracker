@@ -19,7 +19,6 @@ import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import TestPage from 'containers/TestPage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
-import AddExpensesForm from 'containers/AddExpensesForm/Loadable';
 import ExpenseList from 'containers/ExpenseList/Loadable';
 import Header from 'components/Header';
 import theme from './Theme';
@@ -57,7 +56,6 @@ export default function App() {
             <AppContainer>
               <Switch>
                 <Route exact path="/" component={HomePage} />
-                <Route path="/addExpenses" component={AddExpensesForm} />
                 <Route path="/expensesList" component={ExpenseList} />
                 <Route path="/about" component={TestPage} />
                 <Route path="/login" component={LoginPage} />
