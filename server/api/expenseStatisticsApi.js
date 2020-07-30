@@ -23,9 +23,6 @@ const handleListExpenses = (res, result) => {
 }
 
 exports.getCatgeoryStatistic = (req, res) => {
-    // const page = req.query.page ? parseInt(req.query.page, 10) : '';
-    // const limit = req.query.limit ? parseInt(req.query.limit, 10) : '';
-   
     ExpenseStatistics.getCatgeoryStatistic(responseCallback(res, handleListExpenses));
 }
 

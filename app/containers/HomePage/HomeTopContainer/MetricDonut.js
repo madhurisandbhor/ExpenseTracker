@@ -23,8 +23,8 @@ const DonutTitleContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  left: 36%;
-  top: 35%;
+  left: 38%;
+  top: 27%;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.6);
 `;
@@ -38,27 +38,17 @@ export const getAvailabilityDoughnutData = (data, theme) => ({
       : undefined,
 });
 
-const getData = data => data.map(item => item.aggrAmount);
+const getData = data => data.map(item => item.percentage);
 
-const getLabels = data => data.map(item => item.category);
-
-// const formatLabels=()=>{
-//   const label = {
-//     available: () => AVAILABILITY_TAB_LABELS.AVAILABLE,
-//     notListed: () => AVAILABILITY_TAB_LABELS.NOT_LISTED,
-//     outOfStock: () => AVAILABILITY_TAB_LABELS.OUT_OF_STOCK,
-//     outsideAvailable: () => AVAILABILITY_TAB_LABELS.OUTSIDE_AVAILABLE,
-//     default: undefined,
-//   };
-//   return (label[type] || label.default)();
-// };
+const getLabels = data =>
+  data.map(item => item.category[0].toUpperCase() + item.category.substr(1));
 
 const getColors = (label, theme) => {
   const colors = {
     food: () => (theme.palette ? theme.palette.primary.main : undefined),
     clothing: () => (theme.palette ? theme.palette.primary.dark : undefined),
     bills: () => (theme.palette ? theme.palette.primary.light : undefined),
-    others: () => (theme.palette ? theme.palette.secondary.light : undefined),
+    others: () => (theme.palette ? theme.palette.grey : undefined),
     none: () => undefined,
   };
 
@@ -73,8 +63,8 @@ const MetricDonut = ({
 }) => (
   <MetricDonutContainer>
     <DonutTitleContainer>
-      <div>Monthly</div>
-      <div>DISTRIBUTION</div>
+      <div>Expense by</div>
+      <div>CATEGORY</div>
     </DonutTitleContainer>
     <DoughnutWidget
       {...rest}

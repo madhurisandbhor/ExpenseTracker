@@ -30,9 +30,7 @@ const options = {
           data.labels[tooltipItem.index] === 'No data'
             ? 0
             : data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-        return `${data.labels[tooltipItem.index]}: ${percentageValue} ${
-          data.dataType === 'Availability' ? '%' : ''
-        }`;
+        return `${data.labels[tooltipItem.index]}: ${percentageValue}%`;
       },
     },
   },

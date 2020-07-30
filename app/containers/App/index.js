@@ -47,8 +47,8 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <AppWrapper>
             <Helmet
-              titleTemplate="%s - React.js Boilerplate"
-              defaultTitle="React.js Boilerplate"
+              titleTemplate="%s - Expense Tracker"
+              defaultTitle="Expense Tracker"
             >
               <meta name="description" content="Expense tracker application" />
             </Helmet>

@@ -1,7 +1,7 @@
 {
-  "name": "react-boilerplate",
+  "name": "expense-tracker",
   "version": "4.0.0",
-  "description": "A highly scalable, offline-first foundation with the best DX and a focus on performance and best practices",
+  "description": "expense tracker",
   "repository": {
     "type": "git",
     "url": "git://github.com/react-boilerplate/react-boilerplate.git"
@@ -11,7 +11,6 @@
     "node": ">=8.15.1"
   },
   "author": "Max Stoiber",
-  "license": "MIT",
   "scripts": {
     "analyze:clean": "rimraf stats.json",
     "preanalyze": "npm run analyze:clean",

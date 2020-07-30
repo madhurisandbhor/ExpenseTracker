@@ -19,6 +19,7 @@ const theme = createMuiTheme({
   spacing: 4,
   tracker: {
     white: '#fff',
+    grey: '#dbdbdb',
   },
   overrides: {
     MuiInputLabel: fontSize14,
