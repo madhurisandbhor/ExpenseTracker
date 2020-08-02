@@ -20,6 +20,15 @@ export const getExpenseList = ({
   return axios.request(config);
 };
 
+export const getLastestExpenseList = ({ currentPage, limit }) => {
+  const config = {
+    ...defaultConfig, // get defaultConfig and override them.
+    url: `/expense?page=${currentPage}&limit=${limit}`,
+    method: 'get',
+  };
+  return axios.request(config);
+};
+
 export const getExpenseData = ({ id }) => {
   const config = {
     ...defaultConfig,

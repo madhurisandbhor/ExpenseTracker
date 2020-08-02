@@ -13,7 +13,7 @@ export default styled.header`
   width: 100%;
   z-index: 100;
   box-shadow: 0 0.4rem 0.8rem 0 rgba(0, 0, 0, 0.2);
-  background-color: ${props => props.theme.tracker.white};
+  background-color: #e15c09;
   @media (max-width: 768px) {
     flex-direction: column;
     height: 8rem;

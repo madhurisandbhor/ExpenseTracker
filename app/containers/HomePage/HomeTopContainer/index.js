@@ -21,6 +21,7 @@ import reducer from './reducer';
 import saga from './saga';
 import MetricDonut from './MetricDonut';
 import ExpensePerDayWidget from './ExpensePerDayWidget';
+import LatestExpenseList from './LatestExpenseList/Loadable';
 import { loadCategoryStatistics as loadCategoryStatisticsAction } from './actions';
 
 const TopWidgetsContainer = styled.div`
@@ -39,7 +40,7 @@ const BlockTitle = styled.div`
 const WidgetCard = withStyles(theme => ({
   root: {
     position: 'relative',
-    padding: '30px 20px 20px 20px',
+    padding: '8px 20px 8px 20px',
     height: '300px',
     width: '468px',
     display: 'flex',
@@ -88,7 +89,10 @@ const HomeTopContainer = ({ homeTopContainer, loadCategoryStatistics }) => {
         )}
         <BlockTitle>Category Distribution</BlockTitle>
       </WidgetCard>
-      <WidgetCard />
+      <WidgetCard>
+        {/* Lastest 10 expenses */}
+        <LatestExpenseList />
+      </WidgetCard>
     </TopWidgetsContainer>
   );
 };

@@ -73,6 +73,7 @@
     "body-parser": "^1.19.0",
     "chalk": "^2.4.2",
     "chart.js": "^2.9.3",
+    "clsx": "^1.1.1",
     "compression": "1.7.4",
     "connected-react-router": "6.4.0",
     "cross-env": "5.2.0",

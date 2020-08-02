@@ -9,8 +9,6 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import DoughnutWidget from 'components/DoughnutWidget';
 import styled from 'styled-components';
-// import { round2decimals } from 'utils/calculations';
-// import { AVAILABILITY_TAB_LABELS } from '../constants';
 
 const MetricDonutContainer = styled.div`
   position: relative;
@@ -80,7 +78,6 @@ const MetricDonut = ({
 
 MetricDonut.propTypes = {
   // graphClickEvent: PropTypes.func.isRequired,
-  // dataType: PropTypes.string.isRequired,
   doughnutData: PropTypes.array.isRequired,
 };
 

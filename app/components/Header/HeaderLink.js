@@ -8,7 +8,7 @@ export default styled(NavLink).attrs({
 })`
   display: inline-flex;
   padding: .8rem 2rem;
-  color: ${props => props.theme.palette.primary.dark};
+  color: ${props => props.theme.tracker.white};
   text-decoration: none;
   -webkit-font-smoothing: antialiased;
   -webkit-touch-callout: none;
@@ -23,10 +23,11 @@ export default styled(NavLink).attrs({
 
  &:hover {
     // background: ${props => props.theme.palette.primary.main};
-    color: ${props => props.theme.palette.primary.main};
+    color: #4b1a99;
+    // ${props => props.theme.palette.primary.main};
   }
   &:active, &.${activeClassName} {
-    background: ${props => props.theme.palette.primary.main};
+    background:  #4b1a99;
     color: ${props => props.theme.tracker.white};
   }
 `;
