@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,16 +15,29 @@ import { useInjectReducer } from 'utils/injectReducer';
 import makeSelectLoginPage from './selectors';
 import reducer from './reducer';
 import saga from './saga';
+import UserContext from '../../utils/UserContext';
 
 export function LoginPage() {
   useInjectReducer({ key: 'loginPage', reducer });
   useInjectSaga({ key: 'loginPage', saga });
+  const { localState, setLocalState } = useContext(UserContext);
 
-  return <div>Username</div>;
+  const onLogin = () => {
+    setLocalState({ ...localState, isLoggedIn: true });
+  };
+
+  return (
+    <>
+      <div>Username</div>
+      <button type="button" onClick={onLogin}>
+        Login
+      </button>
+    </>
+  );
 }
 
 LoginPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  // dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

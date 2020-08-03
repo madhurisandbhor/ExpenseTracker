@@ -6,7 +6,7 @@
 
 import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core';
+import { withStyles, withTheme } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -36,7 +36,11 @@ const ListItemWrapper = withStyles(() => ({
   },
 }))(ListItem);
 
-export function LatestExpenseList({ loadExpenseList, latestExpenseList }) {
+export function LatestExpenseList({
+  loadExpenseList,
+  latestExpenseList,
+  theme,
+}) {
   useInjectReducer({ key: 'latestExpenseList', reducer });
   useInjectSaga({ key: 'latestExpenseList', saga });
   const currentPage = 1;
@@ -50,10 +54,14 @@ export function LatestExpenseList({ loadExpenseList, latestExpenseList }) {
 
   const categoryIcon = category => {
     let icon = <DeviceUnknownIcon />;
-    if (category === 'food') icon = <FastfoodIcon />;
-    if (category === 'clothing') icon = <ShoppingCartIcon />;
-    if (category === 'bills') icon = <ReceiptIcon />;
-    if (category === 'others') icon = <PublicIcon />;
+    if (category === 'food')
+      icon = <FastfoodIcon style={{ color: theme.tracker.category.yellow }} />;
+    if (category === 'clothing')
+      icon = <ShoppingCartIcon style={{ color: theme.tracker.category.red }} />;
+    if (category === 'bills')
+      icon = <ReceiptIcon style={{ color: theme.tracker.category.blue }} />;
+    if (category === 'others')
+      icon = <PublicIcon style={{ color: theme.tracker.category.green }} />;
     return <Tooltip title={category}>{icon}</Tooltip>;
   };
   return (
@@ -105,6 +113,7 @@ export function LatestExpenseList({ loadExpenseList, latestExpenseList }) {
 LatestExpenseList.propTypes = {
   loadExpenseList: PropTypes.func.isRequired,
   latestExpenseList: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -123,4 +132,5 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
+  withTheme,
 )(LatestExpenseList);

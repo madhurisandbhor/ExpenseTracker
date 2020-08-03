@@ -13,13 +13,19 @@ const fontSize12 = {
 
 const theme = createMuiTheme({
   palette: {
-    primary: { light: '#d3bcc0', main: '#e26d5c', dark: '#69306D' },
+    primary: { light: '#d3bcc0', main: '#f34925', dark: '#69306D' },
     secondary: { light: '#613ba1', main: '#e26d5c', dark: '#4003a8' },
   },
   spacing: 4,
   tracker: {
     white: '#fff',
     grey: '#dbdbdb',
+    category: {
+      yellow: '#ebb734',
+      red: '#e33030',
+      blue: '#3330e3',
+      green: '#1fab26',
+    },
   },
   overrides: {
     MuiInputLabel: fontSize14,
@@ -79,6 +85,11 @@ const theme = createMuiTheme({
     MuiTooltip: {
       tooltip: {
         fontSize: '1rem',
+      },
+    },
+    MuiSvgIcon: {
+      root: {
+        fontSize: '1.8rem',
       },
     },
   },

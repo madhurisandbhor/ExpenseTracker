@@ -1,18 +1,19 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
+// import { useHistory } from 'react-router';
 // import styled from 'styled-components';
-import Img from 'components/Img';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import Wrapper from './Wrapper';
 import NavBar from './NavBar';
 import NavItem from './NavItem';
 import HeaderLink from './HeaderLink';
 import messages from './messages';
 import UserConnect from './UserConnect';
-import logo from '../../images/expense_tracker_logo2.png';
+import logo from '../../images/logo2.png';
 
 const Header = props => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  // const history = useHistory();
 
   const handleClickOpen = event => {
     setAnchorEl(event.currentTarget);
@@ -31,36 +32,20 @@ const Header = props => {
     dialogTitle: '',
   };
 
-  // const redirectHome = () => {
-  //   props.history.push('/');
-  // };
-
   return (
     <Wrapper>
       <NavBar>
         <NavItem>
-          <span
-            style={{
-              fontFamily: '"Trebuchet MS", Helvetica, sans-serif',
-              color: '#fff',
-              fontWeight: 'bold',
-              fontSize: '2rem',
-              margin: '0 1.6rem',
-            }}
-            // role="button"
-            // tabIndex="0"
-            // onClick={() => { }}
-            // onKeyPress={redirectHome}
-          >
-            <AccountBalanceIcon
+          <Link to="/">
+            <img
+              src={logo}
+              alt="logo"
               style={{
-                fontWeight: 'bold',
-                fontSize: '3rem',
-                marginRight: '.8rem',
+                width: '130px',
+                margin: '0 2rem 0 1rem',
               }}
             />
-            Expense Tracker
-          </span>
+          </Link>
         </NavItem>
         <NavItem>
           <HeaderLink to="/overview">
