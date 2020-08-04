@@ -15,7 +15,7 @@ import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
 import Paper from '@material-ui/core/Paper';
-
+import Footer from 'components/Footer';
 import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
@@ -92,7 +92,7 @@ export function HomePage() {
   useInjectSaga({ key, saga });
 
   return (
-    <article>
+    <>
       <Helmet>
         <title>Home Page</title>
         <meta name="description" content="Expense tracker application" />
@@ -106,13 +106,12 @@ export function HomePage() {
             <Info>click here to... </Info>
           </Paper>
         </TopContainer>
-
         <BottomContainer>
           <HomeTopContainer />
-          {/* <ExpenseList /> */}
         </BottomContainer>
       </Wrapper>
-    </article>
+      <Footer />
+    </>
   );
 }
 

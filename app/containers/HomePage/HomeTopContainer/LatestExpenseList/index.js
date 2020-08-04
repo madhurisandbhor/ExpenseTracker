@@ -23,7 +23,6 @@ import DeviceUnknownIcon from '@material-ui/icons/DeviceUnknown';
 import PublicIcon from '@material-ui/icons/Public';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import { toLength } from 'lodash';
 import makeSelectLatestExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -49,8 +48,6 @@ export function LatestExpenseList({
   useEffect(() => {
     loadExpenseList({ currentPage, limit });
   }, []);
-
-  console.log(latestExpenseList.list);
 
   const categoryIcon = category => {
     let icon = <DeviceUnknownIcon />;

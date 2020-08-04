@@ -23,6 +23,8 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lora', sans-serif;
     font-weight: 300;
     min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {

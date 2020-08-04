@@ -29,7 +29,8 @@ const TopWidgetsContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 0 0 1rem 0;
+  margin-bottom: 0.5rem;
+  width: 100%;
 `;
 
 const BlockTitle = styled.div`
@@ -50,7 +51,7 @@ const WidgetCard = withStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
     '&:nth-child(2)': {
       paddingTop: '22px',
-      width: '300px',
+      width: '290px',
     },
   },
 }))(Card);
@@ -81,16 +82,15 @@ const HomeTopContainer = ({ homeTopContainer, loadCategoryStatistics }) => {
         {loading ? (
           <LoadingIndicator />
         ) : (
-          <MetricDonut
-            doughnutData={doughnutData}
+            <MetricDonut
+              doughnutData={doughnutData}
             // graphClickEvent={graphClickEvent}
             // dataType="TotalCategoriesAggrAmount"
-          />
-        )}
+            />
+          )}
         <BlockTitle>Category Distribution</BlockTitle>
       </WidgetCard>
       <WidgetCard>
-        {/* Lastest 10 expenses */}
         <LatestExpenseList />
       </WidgetCard>
     </TopWidgetsContainer>

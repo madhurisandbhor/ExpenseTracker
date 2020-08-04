@@ -33,28 +33,48 @@ const TextFieldWrapper = withStyles(() => ({
   },
 }))(TextField);
 
+const Name = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const Register = ({ onSignUp }) => {
-  const [fullName, setFullName] = useState('');
-  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [emailId, setEmailId] = useState('');
   return (
     <>
       <SignUpText>Register</SignUpText>
       <form onSubmit={onSignUp}>
         <FieldWrapper>
-          <TextFieldWrapper
-            id="name"
-            label="Full Name"
-            type="text"
-            fullWidth
-            required
-            inputProps={{
-              maxLength: 80,
-            }}
-            value={fullName}
-            onChange={e => setFullName(e.target.value)}
-          />
+          <Name>
+            <TextFieldWrapper
+              id="name"
+              label="First Name"
+              type="text"
+              style={{ width: '20ch' }}
+              required
+              inputProps={{
+                maxLength: 80,
+              }}
+              value={firstName}
+              onChange={e => setFirstName(e.target.value)}
+            />
+            <TextFieldWrapper
+              id="lastname"
+              label="Lastname"
+              type="text"
+              style={{ width: '20ch' }}
+              inputProps={{
+                min: 0,
+                maxLength: 12,
+              }}
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
+            />
+          </Name>
           <TextFieldWrapper
             id="email"
             label="Email"
@@ -64,27 +84,15 @@ const Register = ({ onSignUp }) => {
             inputProps={{
               maxLength: 80,
             }}
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            value={emailId}
+            onChange={e => setEmailId(e.target.value)}
           />
-          <TextFieldWrapper
-            id="username"
-            label="Username"
-            type="text"
-            required
-            inputProps={{
-              min: 0,
-              maxLength: 12,
-            }}
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-          />
+
           <TextFieldWrapper
             id="password"
             label="Password"
             type="password"
             required
-            // style={{ width: '15ch' }}
             inputProps={{
               min: 0,
               maxLength: 12,
@@ -97,7 +105,12 @@ const Register = ({ onSignUp }) => {
               alignSelf: 'center',
             }}
           >
-            <ButtonWrapper type="submit" onClick={onSignUp}>
+            <ButtonWrapper
+              type="submit"
+              onClick={() =>
+                onSignUp({ firstName, lastName, emailId, password })
+              }
+            >
               Sign Up
             </ButtonWrapper>
             {/* <ButtonWrapper type="button" onClick={onCancel}>

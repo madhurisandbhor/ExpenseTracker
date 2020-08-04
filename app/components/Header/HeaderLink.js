@@ -23,11 +23,11 @@ export default styled(NavLink).attrs({
 
  &:hover {
     // background: ${props => props.theme.palette.primary.main};
-    color: #4b1a99;
+    color: ${props => props.theme.palette.primary.dark};
     // ${props => props.theme.palette.primary.main};
   }
   &:active, &.${activeClassName} {
-    background:  #4b1a99;
+    background: ${props => props.theme.palette.primary.dark};
     color: ${props => props.theme.tracker.white};
   }
 `;

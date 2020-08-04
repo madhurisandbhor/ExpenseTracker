@@ -12,6 +12,7 @@ import {
   ThemeProvider as MuiThemeProvider,
   StylesProvider,
 } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import styled, { ThemeProvider } from 'styled-components';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
@@ -21,7 +22,8 @@ import TestPage from 'containers/TestPage/Loadable';
 import LoginPage from 'containers/LoginPage/Loadable';
 import ConnectionForm from 'containers/ConnectionForm/Loadable';
 import ExpenseList from 'containers/ExpenseList/Loadable';
-import AuthHeader from './AuthHeader';
+import Header from 'components/Header';
+import AuthComponent from './AuthComponent';
 import theme from './Theme';
 import GlobalStyle from '../../global-styles';
 import UserContext from '../../utils/UserContext';
@@ -30,6 +32,7 @@ const AppWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   min-height: 100vh;
+  width: 100%;
   flex-direction: column;
   position: relative;
 `;
@@ -40,14 +43,16 @@ const AppContainer = styled.div`
   margin-top: 6.5rem;
   z-index: 2;
 `;
-// eslint-disable-next-line react/prop-types
 
+// eslint-disable-next-line react/prop-types
 export default function App() {
   const initState = {
     isLoggedIn: false,
+    isRegister: false,
   };
   const [localState, setLocalState] = useState(initState);
 
+  // eslint-disable-next-line react/prop-types
   const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
       {...rest}
@@ -55,12 +60,12 @@ export default function App() {
         localState.isLoggedIn ? (
           <Component {...props} />
         ) : (
-          <Redirect
-            to={{
-              pathname: '/',
-            }}
-          />
-        )
+            <Redirect
+              to={{
+                pathname: '/',
+              }}
+            />
+          )
       }
     />
   );
@@ -82,7 +87,10 @@ export default function App() {
                   content="Expense tracker application"
                 />
               </Helmet>
-              <AuthHeader isLoggedIn={localState.isLoggedIn} />
+              <AuthComponent
+                isLoggedIn={localState.isLoggedIn}
+                component={Header}
+              />
               <AppContainer>
                 <Switch>
                   <PrivateRoute path="/overview" component={HomePage} />

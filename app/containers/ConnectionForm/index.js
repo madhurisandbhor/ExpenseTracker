@@ -4,16 +4,24 @@
  *
  */
 
-import React, { memo, useState, useEffect, useContext } from 'react';
+import React, {
+  memo,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 // import clsx from 'clsx';
+import Snackbar from '@material-ui/core/Snackbar';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
+import MessageBar from 'components/MessageBar';
 import makeSelectConnectionForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
@@ -21,6 +29,10 @@ import UserContext from '../../utils/UserContext';
 import logo from '../../images/logo2.png';
 import Register from './Register';
 import Login from './Login';
+import {
+  addUser as addUserAction,
+  clearData as clearDataAction,
+} from './actions';
 
 const AppHeader = styled.div`
   width: 100%;
@@ -70,31 +82,94 @@ const LinkText = styled.span`
   margin-left: 0.8rem;
 `;
 
-export function ConnectionForm(props) {
+export function ConnectionForm({
+  addUser,
+  history,
+  connectionData,
+  clearData,
+}) {
   useInjectReducer({ key: 'ConnectionForm', reducer });
   useInjectSaga({ key: 'ConnectionForm', saga });
 
   const { localState, setLocalState } = useContext(UserContext);
-  const [isRegister, setIsRegister] = useState(false);
+  const [isRegister, setIsRegister] = useState(localState.isRegister);
+  const [message, setMessage] = useState('');
+  const [open, setOpen] = useState(false);
+  const [severity, setSeverity] = useState('info');
 
-  const onSignUp = () => {
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
   };
 
-  const onLogin = () => {
+  const clear = () => {
+    setMessage('');
+    setOpen(false);
+    clearData();
+  };
+
+  const validate = newData => {
+    const msg = [];
+    if (!newData.firstName) msg.push('first name');
+    if (!newData.password) msg.push('password');
+    if (!newData.emailId) msg.push('email id');
+    if (msg.length !== 0) {
+      msg.unshift('Invalid');
+      return msg.join(' ');
+    }
+    return msg;
+  };
+
+  const onSignUp = useCallback(params => {
+    clear();
+    const msg = validate(params);
+    if (msg.length !== 0) {
+      setMessage(msg);
+      setOpen(true);
+      setSeverity('error');
+    } else {
+      addUser(params);
+    }
+  }, []);
+
+  const onLogin = useCallback(() => {
     setLocalState({ ...localState, isLoggedIn: true });
-    props.history.push('/overview');
+    history.push('/overview');
+  }, []);
+
+  const onLoginLink = () => {
+    setIsRegister(false);
+    setLocalState({ isRegister: false });
+  };
+
+  const onRegisterLink = () => {
+    setIsRegister(true);
+    setLocalState({ isRegister: true });
   };
 
   useEffect(() => {
     setLocalState({ ...localState, isLoggedIn: false });
   }, []);
 
-  const onLoginLink = () => {
-    setIsRegister(false);
-  };
-  const onRegisterLink = () => {
-    setIsRegister(true);
-  };
+  useEffect(() => {
+    if (connectionData.error || connectionData.message) {
+      const msg = connectionData.error
+        ? connectionData.error
+        : connectionData.message;
+      const alertType = connectionData.error ? 'error' : 'success';
+      setMessage(msg);
+      setOpen(true);
+      setSeverity(alertType);
+      if (alertType === 'success') {
+        onLoginLink();
+      }
+    } else {
+      setMessage('');
+      setOpen(false);
+    }
+  }, [connectionData.message, connectionData.error]);
 
   return (
     <>
@@ -131,23 +206,38 @@ export function ConnectionForm(props) {
           </LinksWrapper>
         )}
       </Wrapper>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+      >
+        <MessageBar onClose={handleClose} severity={severity}>
+          {message}
+        </MessageBar>
+      </Snackbar>
     </>
   );
 }
 
 ConnectionForm.propTypes = {
   history: PropTypes.object.isRequired,
+  addUser: PropTypes.func.isRequired,
+  connectionData: PropTypes.object.isRequired,
+  clearData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  ConnectionForm: makeSelectConnectionForm(),
+  connectionData: makeSelectConnectionForm(),
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  addUser: params => dispatch(addUserAction(params)),
+  clearData: () => dispatch(clearDataAction()),
+});
 
 const withConnect = connect(
   mapStateToProps,

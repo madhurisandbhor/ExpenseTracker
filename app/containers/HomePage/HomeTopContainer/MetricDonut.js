@@ -43,10 +43,10 @@ const getLabels = data =>
 
 const getColors = (label, theme) => {
   const colors = {
-    food: () => (theme.palette ? theme.palette.primary.main : undefined),
-    clothing: () => (theme.palette ? theme.palette.primary.dark : undefined),
-    bills: () => (theme.palette ? theme.palette.primary.light : undefined),
-    others: () => (theme.palette ? theme.palette.grey : undefined),
+    food: () => (theme.tracker ? theme.tracker.category.yellow : undefined),
+    clothing: () => (theme.tracker ? theme.tracker.category.red : undefined),
+    bills: () => (theme.tracker ? theme.tracker.category.blue : undefined),
+    others: () => (theme.tracker ? theme.tracker.category.green : undefined),
     none: () => undefined,
   };
 

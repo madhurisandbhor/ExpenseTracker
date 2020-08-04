@@ -31,8 +31,11 @@ const WelcomeText = styled.span`
 
 const ButtonWrapper = withStyles(theme => ({
   root: {
-    color: theme.palette.secondary.dark,
+    color: theme.tracker.white,
     padding: '.5rem',
+    '&:hover': {
+      color: theme.palette.primary.dark,
+    },
   },
 }))(IconButton);
 

@@ -8,3 +8,5 @@ export {
 } from './expenseApi';
 
 export { getCatgeoryStatisticData } from './expenseStatisticsApi';
+
+export { addUser } from './userApi';

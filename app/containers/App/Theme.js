@@ -14,9 +14,8 @@ const fontSize12 = {
 const theme = createMuiTheme({
   palette: {
     primary: { light: '#d3bcc0', main: '#f34925', dark: '#69306D' },
-    secondary: { light: '#613ba1', main: '#e26d5c', dark: '#4003a8' },
+    secondary: { light: '#613ba1', main: '#4CC9F0', dark: '#4003a8' },
   },
-  spacing: 4,
   tracker: {
     white: '#fff',
     grey: '#dbdbdb',
@@ -49,13 +48,13 @@ const theme = createMuiTheme({
         color: '#69306D',
       },
       caption: {
-        fontSize: '1.2rem',
+        fontSize: '1.4rem',
       },
       body1: {
-        fontSize: '1.2rem',
+        fontSize: '1.4rem',
       },
       body2: {
-        fontSize: '1rem',
+        fontSize: '1.1rem',
       },
     },
     MuiTableCell: {

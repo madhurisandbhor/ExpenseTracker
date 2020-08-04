@@ -1,6 +1,22 @@
-// import { take, call, put, select } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
+import { addUser as addUserAPI } from 'api';
+import { ADD_USER } from './constants';
 
-// Individual exports for testing
+import { addUserSuccess, addUserError } from './actions';
+
+export function* addUser(action) {
+  const { params } = action;
+  try {
+    const result = params
+      ? yield call(addUserAPI, params)
+      : yield call(addUserAPI);
+    const { data } = result;
+    yield put(addUserSuccess(data));
+  } catch (err) {
+    yield put(addUserError(err));
+  }
+}
+
 export default function* ConnectionFormSaga() {
-  // See example in containers/HomePage/saga.js
+  yield takeLatest(ADD_USER, addUser);
 }

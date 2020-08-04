@@ -5,6 +5,7 @@
 module.exports = function (app) {
   const expenseApi = require('../api/expenseApi');
   const expenseStatisticsApi = require('../api/expenseStatisticsApi');
+  const userApi = require('../api/userApi');
 
   // expenseApi Routes
 
@@ -20,5 +21,8 @@ module.exports = function (app) {
 
   app.route('/api/expenseStatistics/categories')
     .get(expenseStatisticsApi.getCatgeoryStatistic);
+
+  app.route('/api/user')
+    .post(userApi.addUser);
 
 };
