@@ -9,4 +9,4 @@ export {
 
 export { getCatgeoryStatisticData } from './expenseStatisticsApi';
 
-export { addUser } from './userApi';
+export { addUser, userLogin } from './userApi';

@@ -47,7 +47,12 @@ const Register = ({ onSignUp }) => {
   return (
     <>
       <SignUpText>Register</SignUpText>
-      <form onSubmit={onSignUp}>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          onSignUp({ firstName, lastName, emailId, password });
+        }}
+      >
         <FieldWrapper>
           <Name>
             <TextFieldWrapper
@@ -57,7 +62,7 @@ const Register = ({ onSignUp }) => {
               style={{ width: '20ch' }}
               required
               inputProps={{
-                maxLength: 80,
+                maxLength: 20,
               }}
               value={firstName}
               onChange={e => setFirstName(e.target.value)}
@@ -69,7 +74,7 @@ const Register = ({ onSignUp }) => {
               style={{ width: '20ch' }}
               inputProps={{
                 min: 0,
-                maxLength: 12,
+                maxLength: 20,
               }}
               value={lastName}
               onChange={e => setLastName(e.target.value)}
@@ -82,7 +87,7 @@ const Register = ({ onSignUp }) => {
             fullWidth
             required
             inputProps={{
-              maxLength: 80,
+              maxLength: 40,
             }}
             value={emailId}
             onChange={e => setEmailId(e.target.value)}
@@ -105,14 +110,7 @@ const Register = ({ onSignUp }) => {
               alignSelf: 'center',
             }}
           >
-            <ButtonWrapper
-              type="submit"
-              onClick={() =>
-                onSignUp({ firstName, lastName, emailId, password })
-              }
-            >
-              Sign Up
-            </ButtonWrapper>
+            <ButtonWrapper type="submit">Sign Up</ButtonWrapper>
             {/* <ButtonWrapper type="button" onClick={onCancel}>
               Cancel
             </ButtonWrapper> */}

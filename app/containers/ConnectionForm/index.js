@@ -31,6 +31,7 @@ import Register from './Register';
 import Login from './Login';
 import {
   addUser as addUserAction,
+  userLogin as userLoginAction,
   clearData as clearDataAction,
 } from './actions';
 
@@ -84,6 +85,7 @@ const LinkText = styled.span`
 
 export function ConnectionForm({
   addUser,
+  userLogin,
   history,
   connectionData,
   clearData,
@@ -123,7 +125,6 @@ export function ConnectionForm({
   };
 
   const onSignUp = useCallback(params => {
-    clear();
     const msg = validate(params);
     if (msg.length !== 0) {
       setMessage(msg);
@@ -134,19 +135,24 @@ export function ConnectionForm({
     }
   }, []);
 
-  const onLogin = useCallback(() => {
-    setLocalState({ ...localState, isLoggedIn: true });
-    history.push('/overview');
+  const onLogin = useCallback(params => {
+    if (!params.username && !params.password) {
+      setMessage('Please enter valid email id and password');
+      setOpen(true);
+      setSeverity('error');
+    } else {
+      userLogin(params);
+    }
   }, []);
 
   const onLoginLink = () => {
     setIsRegister(false);
-    setLocalState({ isRegister: false });
+    setLocalState({ ...localState, isRegister: false });
   };
 
   const onRegisterLink = () => {
     setIsRegister(true);
-    setLocalState({ isRegister: true });
+    setLocalState({ ...localState, isRegister: true });
   };
 
   useEffect(() => {
@@ -162,14 +168,26 @@ export function ConnectionForm({
       setMessage(msg);
       setOpen(true);
       setSeverity(alertType);
-      if (alertType === 'success') {
-        onLoginLink();
-      }
     } else {
       setMessage('');
       setOpen(false);
     }
   }, [connectionData.message, connectionData.error]);
+
+  useEffect(() => {
+    if (connectionData.url === '/login' && !connectionData.error) {
+      setLocalState({
+        isRegister: false,
+        isLoggedIn: true,
+        username: connectionData.username,
+      });
+      clear();
+      history.push('/overview');
+    }
+    if (connectionData.url === '/user' && !connectionData.error) {
+      onLoginLink();
+    }
+  }, [connectionData.url]);
 
   return (
     <>
@@ -236,6 +254,7 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = dispatch => ({
   addUser: params => dispatch(addUserAction(params)),
+  userLogin: params => dispatch(userLoginAction(params)),
   clearData: () => dispatch(clearDataAction()),
 });
 

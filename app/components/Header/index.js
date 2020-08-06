@@ -1,8 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-// import { useHistory } from 'react-router';
-// import styled from 'styled-components';
 import Wrapper from './Wrapper';
 import NavBar from './NavBar';
 import NavItem from './NavItem';
@@ -11,9 +9,8 @@ import messages from './messages';
 import UserConnect from './UserConnect';
 import logo from '../../images/logo2.png';
 
-const Header = props => {
+const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  // const history = useHistory();
 
   const handleClickOpen = event => {
     setAnchorEl(event.currentTarget);

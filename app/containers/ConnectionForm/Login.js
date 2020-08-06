@@ -34,31 +34,31 @@ const TextFieldWrapper = withStyles(() => ({
 }))(TextField);
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
+  const [emailId, setEmailId] = useState('');
   const [password, setPassword] = useState('');
   return (
     <>
       <LoginText>Login</LoginText>
-      <form onSubmit={onLogin}>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          onLogin({ emailId, password });
+        }}
+      >
         <FieldWrapper>
           <TextFieldWrapper
-            id="username"
-            label="Username"
+            id="emailId"
+            label="Email ID"
             type="text"
             required
-            inputProps={{
-              min: 0,
-              maxLength: 12,
-            }}
-            value={username}
-            onChange={e => setUsername(e.target.value)}
+            value={emailId}
+            onChange={e => setEmailId(e.target.value)}
           />
           <TextFieldWrapper
             id="password"
             label="Password"
             type="password"
             required
-            // style={{ width: '15ch' }}
             inputProps={{
               min: 0,
               maxLength: 12,
@@ -71,12 +71,9 @@ const Login = ({ onLogin }) => {
               alignSelf: 'center',
             }}
           >
-            <ButtonWrapper type="submit" onClick={onLogin}>
+            <ButtonWrapper type="submit" value="submit">
               Login
             </ButtonWrapper>
-            {/* <ButtonWrapper type="button" onClick={onCancel}>
-              Cancel
-            </ButtonWrapper> */}
           </div>
         </FieldWrapper>
       </form>

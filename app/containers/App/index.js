@@ -12,7 +12,6 @@ import {
   ThemeProvider as MuiThemeProvider,
   StylesProvider,
 } from '@material-ui/styles';
-import { withStyles } from '@material-ui/core/styles';
 import styled, { ThemeProvider } from 'styled-components';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
@@ -49,6 +48,7 @@ export default function App() {
   const initState = {
     isLoggedIn: false,
     isRegister: false,
+    username: '',
   };
   const [localState, setLocalState] = useState(initState);
 
@@ -60,11 +60,7 @@ export default function App() {
         localState.isLoggedIn ? (
           <Component {...props} />
         ) : (
-            <Redirect
-              to={{
-                pathname: '/',
-              }}
-            />
+            <Redirect to={{ pathname: '/' }} />
           )
       }
     />

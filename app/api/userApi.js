@@ -10,3 +10,13 @@ export const addUser = data => {
   };
   return axios.request(config);
 };
+
+export const userLogin = data => {
+  const config = {
+    ...defaultConfig,
+    url: `/login`,
+    method: 'post',
+    data,
+  };
+  return axios.request(config);
+};

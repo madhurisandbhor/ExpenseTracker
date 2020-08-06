@@ -18,6 +18,10 @@ User.addUser = (newUser, handleResponse) => {
     connection.query("INSERT into user set ?", newUser, handleResponse);
 };
 
+User.userLogin = (user, handleResponse) => {
+    connection.query(`SELECT * from user WHERE emailId ='${user.emailId}'`, user, handleResponse);
+}
+
 // Expense.getExpenseById = function (expenseId, handleResponse) {
 //     connection.query("SELECT * from expense where id = ? ", expenseId, handleResponse);
 // };

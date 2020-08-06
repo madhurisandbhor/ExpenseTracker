@@ -49,13 +49,13 @@ const UserConnect = ({ open, anchorEl, onClose, handleClickOpen, history }) => {
   const { localState, setLocalState } = useContext(UserContext);
 
   const onSignout = () => {
-    setLocalState({ ...localState, isLoggedIn: false });
+    setLocalState({ ...localState, isLoggedIn: false, username: '' });
     history.push('/');
   };
 
   return (
     <Wrapper>
-      <WelcomeText>Hello, User</WelcomeText>
+      <WelcomeText>Hello, {localState.username}</WelcomeText>
       <UserWrapper onClick={handleClickOpen}>
         <ButtonWrapper aria-label="UserIcon">
           <IconWrapper />
@@ -102,7 +102,7 @@ const UserConnect = ({ open, anchorEl, onClose, handleClickOpen, history }) => {
 UserConnect.propTypes = {
   handleClickOpen: PropTypes.func,
   open: PropTypes.bool.isRequired,
-  anchorEl: PropTypes.number,
+  anchorEl: PropTypes.object,
   onClose: PropTypes.func,
   history: PropTypes.object.isRequired,
 };

@@ -64,7 +64,7 @@ export const ExpenseList = ({
   const [categoriesSelected, setCategoriesSelected] = useState([]);
   const [categoriesToSend, setCategoriesToSend] = useState([]);
   const [emptyDataSrcMsg, setEmptyDataSrcMsg] = useState('');
-  
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
