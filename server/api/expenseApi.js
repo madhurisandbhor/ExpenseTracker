@@ -42,15 +42,17 @@ const handleDelete = res => {
 exports.listAllExpenses = (req, res) => {
     const page = req.query.page ? parseInt(req.query.page, 10) : '';
     const limit = req.query.limit ? parseInt(req.query.limit, 10) : '';
+    const userId= req.query.userId? parseInt(req.query.userId, 10) : '';
     const params = {
         page,
+        userId,
         searchText: req.query.search ? req.query.search : '',
         limit,
         offset: limit ? (page - 1) * limit : '',
         fromDate: req.query.fromDate ? req.query.fromDate : '',
         toDate: req.query.toDate ? req.query.toDate : '',
-        fromAmount: req.query.fromAmount ? parseInt(req.query.fromAmount, 10) : '',
-        toAmount: req.query.toAmount ? parseInt(req.query.toAmount, 10) : '',
+        fromAmount: req.query.fromAmount && req.query.fromAmount!=='0'? parseInt(req.query.fromAmount, 10) : '',
+        toAmount: req.query.toAmount && req.query.toAmount!=='0' ? parseInt(req.query.toAmount, 10) : '',
         categories:
             req.query.categories ?
                 req.query.categories

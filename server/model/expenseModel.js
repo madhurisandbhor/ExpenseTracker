@@ -12,6 +12,7 @@ const Expense = function (expense) {
     this.amount = expense.amount;
     this.category = expense.category;
     this.expense_date = expense.expense_date;
+    this.user_id = expense.user_id;
 };
 
 const info = {
@@ -22,7 +23,8 @@ const info = {
 };
 
 Expense.getExpenseList = function (
-    { page,
+    {   page,
+        userId,
         limit,
         offset,
         searchText,
@@ -39,10 +41,12 @@ Expense.getExpenseList = function (
     let multiConditionFlag = false;
 
     let queryToAppend = '';
-    if (fromDate || toDate || searchText || toAmount || fromAmount || categories) {
-        queryToAppend += ` WHERE `;
+    if (fromDate || toDate || searchText || toAmount || fromAmount || categories || userId) {
+        queryToAppend += ` WHERE user_id=${userId}`;
+        multiConditionFlag = true;
 
         if (searchText) {
+            queryToAppend += ` AND `;
             queryToAppend += `description like '%${searchText}%'`;
             multiConditionFlag = true;
         }
@@ -64,7 +68,7 @@ Expense.getExpenseList = function (
             multiConditionFlag = true;
         }
 
-        if (fromAmount !== 0 || toAmount !== 0) {
+        if (fromAmount || toAmount) {
             if (multiConditionFlag)
                 queryToAppend += ' AND ';
             if (fromAmount !== 0 && toAmount !== 0)
@@ -74,7 +78,7 @@ Expense.getExpenseList = function (
         }
     }
 
-    const totalRecordsQuery = "SELECT count(*) as TotalCount from expense";
+    const totalRecordsQuery = `SELECT count(*) as TotalCount from expense`;
 
     let query = totalRecordsQuery + queryToAppend;
 
@@ -93,16 +97,16 @@ Expense.getExpenseList = function (
 
         query += ` ORDER BY expense_date DESC LIMIT ${limitNum} OFFSET ${startNum}`;
 
-        connection.query(query, function (err, rows) {
-            if (err) {
-                handleResponse(err, null);
+        connection.query(query, function (error, result) {
+            if (error) {
+                handleResponse(error, null);
             }
             else {
                 info.totalCount = totalCount;
                 info.pages = Math.ceil(info.totalCount / limitNum);
                 info.next = page < info.pages ? `http://localhost:4000/api/expense/?page=${page + 1}&limit=${limitNum}&search=${searchText}` : '';
                 info.prev = page > 1 ? `http://localhost:4000/api/expense/?page=${page - 1}&limit=${limitNum}&search=${searchText}` : '';
-                handleResponse(null, { "info": info, "result": rows });
+                handleResponse(null, { "info": info, "result": result });
             }
         });
     });

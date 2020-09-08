@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, withTheme } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -27,6 +27,7 @@ import makeSelectLatestExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import { loadExpenseList as loadExpenseListAction } from './actions';
+import UserContext from '../../../../utils/UserContext';
 
 const ListItemWrapper = withStyles(() => ({
   root: {
@@ -42,11 +43,13 @@ export function LatestExpenseList({
 }) {
   useInjectReducer({ key: 'latestExpenseList', reducer });
   useInjectSaga({ key: 'latestExpenseList', saga });
+  const { localState } = useContext(UserContext);
+  const { userId } = localState;
   const currentPage = 1;
   const limit = 10;
 
   useEffect(() => {
-    loadExpenseList({ currentPage, limit });
+    loadExpenseList({ currentPage, limit, userId });
   }, []);
 
   const categoryIcon = category => {

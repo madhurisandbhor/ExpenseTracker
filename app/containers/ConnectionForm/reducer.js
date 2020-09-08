@@ -19,6 +19,7 @@ export const initialState = {
   message: '',
   url: '',
   username: '',
+  userId: '',
 };
 
 /* eslint-disable default-case, no-param-reassign */
@@ -31,6 +32,7 @@ const ConnectionFormReducer = (state = initialState, action) => {
         message: initialState.message,
         error: initialState.error,
         url: initialState.url,
+        userId: initialState.userId,
       };
     case ADD_USER_SUCCESS:
       return {
@@ -55,6 +57,7 @@ const ConnectionFormReducer = (state = initialState, action) => {
         error: initialState.error,
         url: initialState.url,
         username: initialState.username,
+        userId: initialState.userId,
       };
     case USER_LOGIN_SUCCESS:
       return {
@@ -63,6 +66,7 @@ const ConnectionFormReducer = (state = initialState, action) => {
         // message: action.payload.message,
         username: action.payload.username,
         url: '/login',
+        userId: action.payload.userId,
       };
     case USER_LOGIN_ERROR:
       return {

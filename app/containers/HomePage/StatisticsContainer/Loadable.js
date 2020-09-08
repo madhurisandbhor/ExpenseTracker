@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for HomeTopContainer
+ * Asynchronously loads the component for StatisticsContainer
  *
  */
 

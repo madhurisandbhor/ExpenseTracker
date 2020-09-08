@@ -9,8 +9,8 @@ const connection = require('./db');
 
 const ExpenseStatistics = {};
 
-ExpenseStatistics.getCatgeoryStatistic = function (handleResponse) {
-    connection.query(`SELECT category, round((total_by_cat/total * 100),0) as percentage from (SELECT category, sum(amount) as total_by_cat FROM expense GROUP BY category) as sum_by_cat join (SELECT sum(amount) as total FROM expense) as total_amnt`, handleResponse);
+ExpenseStatistics.getCatgeoryStatistic = function (userId, handleResponse) {
+    connection.query(`SELECT category, round((total_by_cat/total * 100),0) as percentage from (SELECT category, sum(amount) as total_by_cat FROM expense where user_id=${userId} GROUP BY category) as sum_by_cat join (SELECT sum(amount) as total FROM expense) as total_amnt`, handleResponse);
     // connection.query("SELECT category, sum(amount) as aggrAmount FROM expense GROUP BY category", handleResponse);
 };
 

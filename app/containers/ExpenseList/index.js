@@ -4,15 +4,13 @@
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
@@ -27,9 +25,9 @@ import {
   deleteExpenseData as deleteExpenseDataAction,
   clearData as clearDataAction,
 } from './actions';
+import UserContext from '../../utils/UserContext';
 
 const categories = [
-  { title: 'None', value: 'none' },
   { title: 'Bills', value: 'bills' },
   { title: 'Food', value: 'food' },
   { title: 'Clothing', value: 'clothing' },
@@ -64,6 +62,19 @@ export const ExpenseList = ({
   const [categoriesSelected, setCategoriesSelected] = useState([]);
   const [categoriesToSend, setCategoriesToSend] = useState([]);
   const [emptyDataSrcMsg, setEmptyDataSrcMsg] = useState('');
+  const { localState } = useContext(UserContext);
+  const { userId } = localState;
+  const loadExpenseListProps = {
+    userId,
+    currentPage,
+    limit,
+    searchText,
+    fromDate,
+    toDate,
+    fromAmount,
+    toAmount,
+    categoriesToSend,
+  };
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -147,7 +158,7 @@ export const ExpenseList = ({
         </Select>
       ),
       // eslint-disable-next-line react/prop-types
-      editComponent: ({ value = 'none', ...props }) => (
+      editComponent: ({ value = 'others', ...props }) => (
         <Select
           id="category"
           style={{ width: '20ch' }}
@@ -209,6 +220,11 @@ export const ExpenseList = ({
     new Promise((resolve, reject) => {
       setTimeout(() => {
         const msg = validate(newData);
+        const data = {
+          ...newData,
+          category: newData.category ? newData.category : 'others',
+          user_id: userId,
+        };
         if (msg.length !== 0) {
           setMessage(msg);
           setOpen(true);
@@ -216,22 +232,13 @@ export const ExpenseList = ({
           return reject();
         }
         const dataUpdate = [...rows];
-        dataUpdate.push(newData);
+        dataUpdate.push(data);
         setRows([...dataUpdate]);
-        saveExpenseData(newData);
+        saveExpenseData(data);
         return resolve();
       }, 600);
     }).then(() => {
-      loadExpenseList({
-        currentPage,
-        limit,
-        searchText,
-        fromDate,
-        toDate,
-        fromAmount,
-        toAmount,
-        categoriesToSend,
-      });
+      loadExpenseList(loadExpenseListProps);
     });
 
   const onDelete = oldData =>
@@ -244,16 +251,7 @@ export const ExpenseList = ({
         resolve();
       }, 600);
     }).then(() => {
-      loadExpenseList({
-        currentPage,
-        limit,
-        searchText,
-        fromDate,
-        toDate,
-        fromAmount,
-        toAmount,
-        categoriesToSend,
-      });
+      loadExpenseList(loadExpenseListProps);
     });
 
   const onUpdate = (newData, oldData) =>
@@ -274,16 +272,7 @@ export const ExpenseList = ({
         return resolve();
       }, 600);
     }).then(() => {
-      loadExpenseList({
-        currentPage,
-        limit,
-        searchText,
-        fromDate,
-        toDate,
-        fromAmount,
-        toAmount,
-        categoriesToSend,
-      });
+      loadExpenseList(loadExpenseListProps);
     });
 
   const onChangeFilter = (
@@ -348,19 +337,11 @@ export const ExpenseList = ({
     setTypingTimeout(
       setTimeout(() => {
         setLoading(true);
-        loadExpenseList({
-          currentPage,
-          limit,
-          searchText,
-          fromDate,
-          toDate,
-          fromAmount,
-          toAmount,
-          categoriesToSend,
-        });
+        loadExpenseList(loadExpenseListProps);
       }, 500),
     );
   }, [
+    userId,
     currentPage,
     searchText,
     limit,

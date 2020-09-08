@@ -1,6 +1,6 @@
 /*
  *
- * HomeTopContainer reducer
+ * StatisticsContainer reducer
  *
  */
 import {
@@ -16,10 +16,10 @@ export const initialState = {
 };
 
 /* eslint-disable default-case, no-param-reassign */
-const homeTopContainerReducer = (state = initialState, action) => {
+const StatisticsContainerReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_CATEGORY_STATISTICS:
-      return { ...state, loading: true };
+      return { ...state, loading: true, data: initialState.data };
     case LOAD_CATEGORY_STATISTICS_SUCCESS:
       return {
         ...state,
@@ -33,4 +33,4 @@ const homeTopContainerReducer = (state = initialState, action) => {
   }
 };
 
-export default homeTopContainerReducer;
+export default StatisticsContainerReducer;

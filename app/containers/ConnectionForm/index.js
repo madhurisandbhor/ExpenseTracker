@@ -180,6 +180,7 @@ export function ConnectionForm({
         isRegister: false,
         isLoggedIn: true,
         username: connectionData.username,
+        userId: connectionData.userId,
       });
       clear();
       history.push('/overview');

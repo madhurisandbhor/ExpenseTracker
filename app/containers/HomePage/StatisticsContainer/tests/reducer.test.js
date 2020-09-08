@@ -1,9 +1,9 @@
 // import produce from 'immer';
-import homeTopContainerReducer from '../reducer';
+import StatisticsContainerReducer from '../reducer';
 // import { someAction } from '../actions';
 
 /* eslint-disable default-case, no-param-reassign */
-describe('homeTopContainerReducer', () => {
+describe('StatisticsContainerReducer', () => {
   let state;
   beforeEach(() => {
     state = {
@@ -13,7 +13,7 @@ describe('homeTopContainerReducer', () => {
 
   it('returns the initial state', () => {
     const expectedResult = state;
-    expect(homeTopContainerReducer(undefined, {})).toEqual(expectedResult);
+    expect(StatisticsContainerReducer(undefined, {})).toEqual(expectedResult);
   });
 
   /**

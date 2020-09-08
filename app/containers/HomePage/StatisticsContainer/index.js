@@ -1,28 +1,28 @@
 /**
  *
- * HomeTopContainer
+ * StatisticsContainer
  *
  */
 
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core';
 import Card from '@material-ui/core/Card/Card';
-
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
 import LoadingIndicator from 'components/LoadingIndicator';
-import makeSelectHomeTopContainer from './selectors';
+import makeSelectStatisticsContainer from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import MetricDonut from './MetricDonut';
 import ExpensePerDayWidget from './ExpensePerDayWidget';
 import LatestExpenseList from './LatestExpenseList/Loadable';
 import { loadCategoryStatistics as loadCategoryStatisticsAction } from './actions';
+import UserContext from '../../../utils/UserContext';
 
 const TopWidgetsContainer = styled.div`
   display: flex;
@@ -56,21 +56,25 @@ const WidgetCard = withStyles(theme => ({
   },
 }))(Card);
 
-const HomeTopContainer = ({ homeTopContainer, loadCategoryStatistics }) => {
-  useInjectReducer({ key: 'homeTopContainer', reducer });
-  useInjectSaga({ key: 'homeTopContainer', saga });
+const StatisticsContainer = ({
+  statisticsContainer,
+  loadCategoryStatistics,
+}) => {
+  useInjectReducer({ key: 'statisticsContainer', reducer });
+  useInjectSaga({ key: 'statisticsContainer', saga });
   // const { profileId, loadAvailabilityDistribution } = this.props;
   const [loading, setLoading] = useState(true);
   const [doughnutData, setDoughnutData] = useState({});
+  const { localState } = useContext(UserContext);
 
   useEffect(() => {
-    loadCategoryStatistics();
+    loadCategoryStatistics(localState.userId);
   }, []);
 
   useEffect(() => {
-    setDoughnutData(homeTopContainer.data);
-    setLoading(homeTopContainer.loading);
-  }, [homeTopContainer.data]);
+    setDoughnutData(statisticsContainer.data);
+    setLoading(statisticsContainer.loading);
+  }, [statisticsContainer.data]);
 
   return (
     <TopWidgetsContainer>
@@ -82,12 +86,12 @@ const HomeTopContainer = ({ homeTopContainer, loadCategoryStatistics }) => {
         {loading ? (
           <LoadingIndicator />
         ) : (
-            <MetricDonut
-              doughnutData={doughnutData}
+          <MetricDonut
+            doughnutData={doughnutData}
             // graphClickEvent={graphClickEvent}
             // dataType="TotalCategoriesAggrAmount"
-            />
-          )}
+          />
+        )}
         <BlockTitle>Category Distribution</BlockTitle>
       </WidgetCard>
       <WidgetCard>
@@ -97,13 +101,13 @@ const HomeTopContainer = ({ homeTopContainer, loadCategoryStatistics }) => {
   );
 };
 
-HomeTopContainer.propTypes = {
-  homeTopContainer: PropTypes.object.isRequired,
+StatisticsContainer.propTypes = {
+  statisticsContainer: PropTypes.object.isRequired,
   loadCategoryStatistics: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-  homeTopContainer: makeSelectHomeTopContainer(),
+  statisticsContainer: makeSelectStatisticsContainer(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -119,4 +123,4 @@ const withConnect = connect(
 export default compose(
   withConnect,
   memo,
-)(HomeTopContainer);
+)(StatisticsContainer);

@@ -21,6 +21,6 @@ export function* getCategeoryStatisticData(action) {
 }
 
 // Individual exports for testing
-export default function* homeTopContainerSaga() {
+export default function* StatisticsContainerSaga() {
   yield takeLatest(LOAD_CATEGORY_STATISTICS, getCategeoryStatisticData);
 }

@@ -5,7 +5,6 @@
  */
 
 import React, { memo } from 'react';
-// import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -19,25 +18,9 @@ import Footer from 'components/Footer';
 import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
-import HomeTopContainer from './HomeTopContainer/Loadable';
+import StatisticsContainer from './StatisticsContainer/Loadable';
 
 const key = 'home';
-
-const Section = styled.div`
-  width: 20%;
-  background: ${props => props.theme.palette.primary.main};
-  color: ${props => props.theme.tracker.white};
-`;
-
-const SectionItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.8rem;
-  &:hover {
-    background: ${props => props.theme.palette.primary.light}; // #6298a6;
-  }
-`;
 
 const TopContainer = styled.div`
   color: ${props => props.theme.palette.primary.dark};
@@ -54,40 +37,7 @@ const Info = styled.div`
   padding: 0.8rem;
 `;
 
-const AddBtnWrapper = styled.div`
-  position: absolute;
-  bottom: 2rem;
-  right: 5rem;
-  display: flex;
-  align-items: center;
-`;
-
-const AddText = styled.span`
-  color: ${props => props.theme.tracker.white};
-  margin-right: 1.5rem;
-  order: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: visibility 0s, opacity 0.5s linear;
-`;
-
-// const IconButtonWrapper = withStyles(theme => ({
-//   root: {
-//     color: theme.tracker.white,
-//     order: 1,
-//     background: theme.palette.primary.main,
-//     '&:hover': {
-//       background: theme.palette.primary.dark,
-//     },
-//     '&:hover + .add_text': {
-//       opacity: 1,
-//       visibility: 'visible',
-//     },
-//   },
-// }))(IconButton);
-
 export function HomePage() {
-  // let history = useHistory();
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
 
@@ -100,14 +50,14 @@ export function HomePage() {
       <Wrapper>
         <TopContainer>
           <Paper>
-            <Info>Your total expenses this year : €8900+ Rs.456 </Info>
-            <Info>You owe Rs.67 to Prasad</Info>
-            <Info>Prasad owes you €1560 </Info>
+            <Info>Your total expenses this year : €1900 </Info>
+            <Info>You owe €67 to Prasad</Info>
+            <Info>Prasad owes you €160 </Info>
             <Info>click here to... </Info>
           </Paper>
         </TopContainer>
         <BottomContainer>
-          <HomeTopContainer />
+          <StatisticsContainer />
         </BottomContainer>
       </Wrapper>
       <Footer />
@@ -119,7 +69,7 @@ HomePage.propTypes = {};
 
 const mapStateToProps = createStructuredSelector({});
 
-export function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps() {
   return {};
 }
 

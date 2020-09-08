@@ -2,6 +2,7 @@ import axios from 'axios';
 import { defaultConfig } from './constants';
 
 export const getExpenseList = ({
+  userId,
   searchText,
   currentPage,
   limit,
@@ -13,17 +14,17 @@ export const getExpenseList = ({
 }) => {
   const config = {
     ...defaultConfig, // get defaultConfig and override them.
-    url: `/expense?search=${searchText}&page=${currentPage}&limit=${limit}
+    url: `/expense?userId=${userId}&search=${searchText}&page=${currentPage}&limit=${limit}
     &fromDate=${fromDate}&toDate=${toDate}&fromAmount=${fromAmount}&toAmount=${toAmount}&categories=${categoriesToSend}`,
     method: 'get',
   };
   return axios.request(config);
 };
 
-export const getLastestExpenseList = ({ currentPage, limit }) => {
+export const getLastestExpenseList = ({ currentPage, limit, userId }) => {
   const config = {
     ...defaultConfig, // get defaultConfig and override them.
-    url: `/expense?page=${currentPage}&limit=${limit}`,
+    url: `/expense?page=${currentPage}&limit=${limit}&userId=${userId}`,
     method: 'get',
   };
   return axios.request(config);

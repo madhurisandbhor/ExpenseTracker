@@ -33,7 +33,8 @@ const handleuserLogin = (res, result, user) => {
         bcrypt.compare(user.password, result[0].password, function (err, output) {
             if (output) {
                 const userName = result[0].lastName ? `${result[0].firstName} ${result[0].lastName}` : result[0].firstName;
-                res.status(200).send({ message: 'Login successful', username: userName });
+                const userID = result[0].id ? result[0].id : 0;
+                res.status(200).send({ message: 'Login successful', username: userName, userId: userID });
                 res.end();
             } else if (!output || err)
                 res.status(401).send('Invalid credentials');

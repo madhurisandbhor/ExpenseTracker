@@ -23,6 +23,7 @@ const handleListExpenses = (res, result) => {
 }
 
 exports.getCatgeoryStatistic = (req, res) => {
-    ExpenseStatistics.getCatgeoryStatistic(responseCallback(res, handleListExpenses));
+    const userId = req.query.userId ? parseInt(req.query.userId, 10) : 0;
+    ExpenseStatistics.getCatgeoryStatistic(userId, responseCallback(res, handleListExpenses));
 }
 

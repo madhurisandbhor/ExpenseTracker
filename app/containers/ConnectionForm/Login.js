@@ -49,7 +49,7 @@ const Login = ({ onLogin }) => {
           <TextFieldWrapper
             id="emailId"
             label="Email ID"
-            type="text"
+            type="email"
             required
             value={emailId}
             onChange={e => setEmailId(e.target.value)}
