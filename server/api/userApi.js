@@ -75,8 +75,8 @@ exports.addUser = (req, res) => {
     else {
         bcrypt.hash(newUser.password, saltRounds, function (err, hash) {
             newUser.password = hash;
-            newUser.firstName = newUser.firstName[0].toUpperCase() + newUser.firstName.substr(1);
-            newUser.lastName = newUser.lastName[0].toUpperCase() + newUser.lastName.substr(1);
+            newUser.firstName = newUser.firstName && newUser.firstName[0].toUpperCase() + newUser.firstName.substr(1);
+            newUser.lastName = newUser.lastName && newUser.lastName[0].toUpperCase() + newUser.lastName.substr(1);
             User.addUser(newUser, (responseCallback(res, handleAddUser)));
             if (err) {
                 res.status(400).send(errMessage);

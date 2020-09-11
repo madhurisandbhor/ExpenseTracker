@@ -25,7 +25,7 @@ import MessageBar from 'components/MessageBar';
 import makeSelectConnectionForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import UserContext from '../../utils/UserContext';
+import { InfoContext } from '../App/InfoContext';
 import logo from '../../images/logo2.png';
 import Register from './Register';
 import Login from './Login';
@@ -92,9 +92,8 @@ export function ConnectionForm({
 }) {
   useInjectReducer({ key: 'ConnectionForm', reducer });
   useInjectSaga({ key: 'ConnectionForm', saga });
-
-  const { localState, setLocalState } = useContext(UserContext);
-  const [isRegister, setIsRegister] = useState(localState.isRegister);
+  const { info, setInfo } = useContext(InfoContext);
+  const [isRegister, setIsRegister] = useState(info.isRegister);
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [severity, setSeverity] = useState('info');
@@ -147,16 +146,16 @@ export function ConnectionForm({
 
   const onLoginLink = () => {
     setIsRegister(false);
-    setLocalState({ ...localState, isRegister: false });
+    setInfo({ ...info, isRegister: false });
   };
 
   const onRegisterLink = () => {
     setIsRegister(true);
-    setLocalState({ ...localState, isRegister: true });
+    setInfo({ ...info, isRegister: true });
   };
 
   useEffect(() => {
-    setLocalState({ ...localState, isLoggedIn: false });
+    setInfo({ ...info, isLoggedIn: false });
   }, []);
 
   useEffect(() => {
@@ -176,7 +175,7 @@ export function ConnectionForm({
 
   useEffect(() => {
     if (connectionData.url === '/login' && !connectionData.error) {
-      setLocalState({
+      setInfo({
         isRegister: false,
         isLoggedIn: true,
         username: connectionData.username,

@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Header from 'components/Header';
+import { InfoContext } from './InfoContext';
 
 const AuthHeader = () => {
-  if (window.location.pathname === '/') return null;
+  const { info } = useContext(InfoContext);
+
+  if (window.location.pathname === '/' && info.isLoggedIn === false)
+    return null;
   return <Header />;
 };
 

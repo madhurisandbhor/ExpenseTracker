@@ -24,7 +24,7 @@ import AuthHeader from './AuthHeader';
 import PrivateRoute from './PrivateRoute';
 import theme from './Theme';
 import GlobalStyle from '../../global-styles';
-import UserContext from '../../utils/UserContext';
+import { InfoProvider } from './InfoContext';
 
 const AppWrapper = styled.div`
   margin: 0 auto;
@@ -44,20 +44,13 @@ const AppContainer = styled.div`
 
 // eslint-disable-next-line react/prop-types
 export default function App() {
-  const initState = {
-    isLoggedIn: false,
-    isRegister: false,
-    username: '',
-  };
-  const [localState, setLocalState] = useState(initState);
-
   return (
     // Make sure the Material stylesheet is placed above your own
     // styles so you can overwrite them
     <StylesProvider injectFirst>
       <MuiThemeProvider theme={theme}>
         <ThemeProvider theme={theme}>
-          <UserContext.Provider value={{ localState, setLocalState }}>
+          <InfoProvider>
             <AppWrapper>
               <Helmet
                 titleTemplate="%s - Expense Tracker"
@@ -80,7 +73,7 @@ export default function App() {
               </AppContainer>
               <GlobalStyle />
             </AppWrapper>
-          </UserContext.Provider>
+          </InfoProvider>
         </ThemeProvider>
       </MuiThemeProvider>
     </StylesProvider>

@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import SettingsIcon from '@material-ui/icons/Settings';
 import DraftsIcon from '@material-ui/icons/Drafts';
-import UserContext from '../../utils/UserContext';
+import { InfoContext } from '../../containers/App/InfoContext';
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,17 +47,19 @@ const IconWrapper = withStyles(() => ({
 }))(AccountCircleIcon);
 
 const UserConnect = ({ open, anchorEl, onClose, handleClickOpen, history }) => {
-  const { localState, setLocalState } = useContext(UserContext);
+  const { info, setInfo } = useContext(InfoContext);
 
   const onSignout = () => {
-    setLocalState({ ...localState, isLoggedIn: false, username: '' });
+    setInfo(null);
     Cookies.remove('jwt');
     history.push('/');
   };
 
+  const userName = `${info.username[0].toUpperCase()}${info.username.slice(1)}`;
+
   return (
     <Wrapper>
-      <WelcomeText>Hello, {localState.username}</WelcomeText>
+      <WelcomeText>Hello, {userName}</WelcomeText>
       <UserWrapper onClick={handleClickOpen}>
         <ButtonWrapper aria-label="UserIcon">
           <IconWrapper />

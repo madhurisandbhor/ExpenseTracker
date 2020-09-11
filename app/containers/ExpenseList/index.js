@@ -25,7 +25,7 @@ import {
   deleteExpenseData as deleteExpenseDataAction,
   clearData as clearDataAction,
 } from './actions';
-import UserContext from '../../utils/UserContext';
+import { InfoContext } from '../App/InfoContext';
 
 const categories = [
   { title: 'Bills', value: 'bills' },
@@ -62,8 +62,8 @@ export const ExpenseList = ({
   const [categoriesSelected, setCategoriesSelected] = useState([]);
   const [categoriesToSend, setCategoriesToSend] = useState([]);
   const [emptyDataSrcMsg, setEmptyDataSrcMsg] = useState('');
-  const { localState } = useContext(UserContext);
-  const { userId } = localState;
+  const { info } = useContext(InfoContext);
+  const { userId } = info;
   const loadExpenseListProps = {
     userId,
     currentPage,

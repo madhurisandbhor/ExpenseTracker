@@ -22,7 +22,7 @@ import MetricDonut from './MetricDonut';
 import ExpensePerDayWidget from './ExpensePerDayWidget';
 import LatestExpenseList from './LatestExpenseList/Loadable';
 import { loadCategoryStatistics as loadCategoryStatisticsAction } from './actions';
-import UserContext from '../../../utils/UserContext';
+import { InfoContext } from '../../App/InfoContext';
 
 const TopWidgetsContainer = styled.div`
   display: flex;
@@ -65,10 +65,10 @@ const StatisticsContainer = ({
   // const { profileId, loadAvailabilityDistribution } = this.props;
   const [loading, setLoading] = useState(true);
   const [doughnutData, setDoughnutData] = useState({});
-  const { localState } = useContext(UserContext);
+  const { info } = useContext(InfoContext);
 
   useEffect(() => {
-    loadCategoryStatistics(localState.userId);
+    loadCategoryStatistics(info.userId);
   }, []);
 
   useEffect(() => {

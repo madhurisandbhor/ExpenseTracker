@@ -27,7 +27,7 @@ import makeSelectLatestExpenseList from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import { loadExpenseList as loadExpenseListAction } from './actions';
-import UserContext from '../../../../utils/UserContext';
+import { InfoContext } from '../../../App/InfoContext';
 
 const ListItemWrapper = withStyles(() => ({
   root: {
@@ -43,8 +43,8 @@ export function LatestExpenseList({
 }) {
   useInjectReducer({ key: 'latestExpenseList', reducer });
   useInjectSaga({ key: 'latestExpenseList', saga });
-  const { localState } = useContext(UserContext);
-  const { userId } = localState;
+  const { info } = useContext(InfoContext);
+  const { userId } = info;
   const currentPage = 1;
   const limit = 10;
 
