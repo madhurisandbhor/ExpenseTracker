@@ -185,14 +185,14 @@ export function ConnectionForm({
       clear();
       history.push('/overview');
     }
-    if (connectionData.url === '/user' && !connectionData.error) {
+    if (connectionData.url === '/register' && !connectionData.error) {
       onLoginLink();
     }
   }, [connectionData.url]);
 
   return (
     <>
-      <AppHeader isLoggedIn={!localState.isLoggedIn}>
+      <AppHeader>
         <Image src={logo} alt="logo" />
       </AppHeader>
       <Wrapper>
@@ -247,6 +247,7 @@ ConnectionForm.propTypes = {
   addUser: PropTypes.func.isRequired,
   connectionData: PropTypes.object.isRequired,
   clearData: PropTypes.func.isRequired,
+  userLogin: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({

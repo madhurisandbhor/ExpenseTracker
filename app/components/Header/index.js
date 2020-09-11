@@ -33,7 +33,7 @@ const Header = () => {
     <Wrapper>
       <NavBar>
         <NavItem>
-          <Link to="/">
+          <Link to="/overview">
             <img
               src={logo}
               alt="logo"

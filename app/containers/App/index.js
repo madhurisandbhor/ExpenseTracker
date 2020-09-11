@@ -13,16 +13,15 @@ import {
   StylesProvider,
 } from '@material-ui/styles';
 import styled, { ThemeProvider } from 'styled-components';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import TestPage from 'containers/TestPage/Loadable';
-import LoginPage from 'containers/LoginPage/Loadable';
 import ConnectionForm from 'containers/ConnectionForm/Loadable';
 import ExpenseList from 'containers/ExpenseList/Loadable';
-import Header from 'components/Header';
-import AuthComponent from './AuthComponent';
+import AuthHeader from './AuthHeader';
+import PrivateRoute from './PrivateRoute';
 import theme from './Theme';
 import GlobalStyle from '../../global-styles';
 import UserContext from '../../utils/UserContext';
@@ -52,20 +51,6 @@ export default function App() {
   };
   const [localState, setLocalState] = useState(initState);
 
-  // eslint-disable-next-line react/prop-types
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-      {...rest}
-      render={props =>
-        localState.isLoggedIn ? (
-          <Component {...props} />
-        ) : (
-            <Redirect to={{ pathname: '/' }} />
-          )
-      }
-    />
-  );
-
   return (
     // Make sure the Material stylesheet is placed above your own
     // styles so you can overwrite them
@@ -83,18 +68,14 @@ export default function App() {
                   content="Expense tracker application"
                 />
               </Helmet>
-              <AuthComponent
-                isLoggedIn={localState.isLoggedIn}
-                component={Header}
-              />
+              <AuthHeader />
               <AppContainer>
                 <Switch>
                   <PrivateRoute path="/overview" component={HomePage} />
                   <PrivateRoute path="/expensesList" component={ExpenseList} />
                   <PrivateRoute path="/about" component={TestPage} />
-                  <Route path="/login" component={LoginPage} />
-                  <Route path="/" component={ConnectionForm} />
-                  <Route path="" component={NotFoundPage} />
+                  <Route exact path="/" component={ConnectionForm} />
+                  <Route component={NotFoundPage} />
                 </Switch>
               </AppContainer>
               <GlobalStyle />

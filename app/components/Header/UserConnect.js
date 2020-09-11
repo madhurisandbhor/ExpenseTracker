@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -50,6 +51,7 @@ const UserConnect = ({ open, anchorEl, onClose, handleClickOpen, history }) => {
 
   const onSignout = () => {
     setLocalState({ ...localState, isLoggedIn: false, username: '' });
+    Cookies.remove('jwt');
     history.push('/');
   };
 

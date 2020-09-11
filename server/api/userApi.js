@@ -5,8 +5,15 @@
 /* eslint-disable func-names */
 
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../model/userModel');
 const saltRounds = 10;
+
+const maxAge = 3 * 24 * 60 * 60;
+
+const createToken = id => (jwt.sign({ id }, 'nivdung secret', {
+    expiresIn: maxAge,
+}));
 
 const responseCallback = (res, callback, user) => function (err, result) {
     if (err) {
@@ -34,6 +41,8 @@ const handleuserLogin = (res, result, user) => {
             if (output) {
                 const userName = result[0].lastName ? `${result[0].firstName} ${result[0].lastName}` : result[0].firstName;
                 const userID = result[0].id ? result[0].id : 0;
+                const token = createToken(userID);
+                res.cookie('jwt', token, { httpOnly: false, maxAge: maxAge * 1000 });
                 res.status(200).send({ message: 'Login successful', username: userName, userId: userID });
                 res.end();
             } else if (!output || err)

@@ -39,7 +39,7 @@ const ConnectionFormReducer = (state = initialState, action) => {
         ...state,
         loading: false,
         message: action.payload,
-        url: '/user',
+        url: '/register',
       };
     case ADD_USER_ERROR:
       return {
@@ -47,7 +47,7 @@ const ConnectionFormReducer = (state = initialState, action) => {
         loading: false,
         error: action.error.response.data,
         message: initialState.message,
-        url: '/user',
+        url: '/register',
       };
     case USER_LOGIN:
       return {

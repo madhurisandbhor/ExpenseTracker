@@ -22,18 +22,4 @@ User.userLogin = (user, handleResponse) => {
     connection.query(`SELECT * from user WHERE emailId ='${user.emailId}'`, user, handleResponse);
 }
 
-// Expense.getExpenseById = function (expenseId, handleResponse) {
-//     connection.query("SELECT * from expense where id = ? ", expenseId, handleResponse);
-// };
-
-// Expense.updateExpenseById = (id, updatedExpense, handleResponse) => {
-//     connection.query("UPDATE expense set description=?, amount=?, category=?, expense_date=? where id = ?",
-//         [updatedExpense.description, updatedExpense.amount, updatedExpense.category, updatedExpense.expense_date, id],
-//         handleResponse);
-// };
-
-// Expense.deleteExpenseById = function (expenseId, handleResponse) {
-//     connection.query("DELETE from expense where id = ? ", expenseId, handleResponse);
-// };
-
 module.exports = User;

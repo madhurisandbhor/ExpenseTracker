@@ -26,6 +26,6 @@ module.exports = function (app) {
     .post(userApi.addUser);
 
   app.route('/api/login')
-  .post(userApi.userLogin);
+    .post(userApi.userLogin);
 
 };

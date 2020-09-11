@@ -5,6 +5,7 @@
 const express = require('express');
 const logger = require('./logger');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const argv = require('./argv');
 const port = require('./port');
 const connection = require('./model/db');
@@ -20,6 +21,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 connection.connect(err => {
   err ? console.log(err) : console.log('Mysql database connected');
