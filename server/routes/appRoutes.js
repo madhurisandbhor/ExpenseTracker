@@ -19,8 +19,8 @@ module.exports = function (app) {
     .get(expenseApi.listAllExpenses)
     .post(expenseApi.addExpense);
 
-  app.route('/api/expenseStatistics/categories')
-    .get(expenseStatisticsApi.getCatgeoryStatistic);
+  app.route('/api/expenseStatistics')
+    .get(expenseStatisticsApi.getStatisticData);
 
   app.route('/api/user')
     .post(userApi.addUser);

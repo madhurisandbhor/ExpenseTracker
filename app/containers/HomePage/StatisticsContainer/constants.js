@@ -4,9 +4,9 @@
  *
  */
 
-export const LOAD_CATEGORY_STATISTICS =
-  'app/StatisticsContainer/LOAD_CATEGORY_STATISTICS';
-export const LOAD_CATEGORY_STATISTICS_SUCCESS =
-  'app/StatisticsContainer/LOAD_CATEGORY_STATISTICS_SUCCESS';
-export const LOAD_CATEGORY_STATISTICS_ERROR =
-  'app/StatisticsContainer/LOAD_CATEGORY_STATISTICS_ERROR';
+export const LOAD_STATISTICS_DATA =
+  'app/StatisticsContainer/LOAD_STATISTICS_DATA';
+export const LOAD_STATISTICS_DATA_SUCCESS =
+  'app/StatisticsContainer/LOAD_STATISTICS_DATA_SUCCESS';
+export const LOAD_STATISTICS_DATA_ERROR =
+  'app/StatisticsContainer/LOAD_STATISTICS_DATA_ERROR';

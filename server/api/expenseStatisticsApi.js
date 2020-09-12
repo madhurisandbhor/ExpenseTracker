@@ -12,7 +12,7 @@ const responseCallback = (res, callback) => function (err, result) {
         res.status(500);
         res.send(err.sqlMessage);
     }
-    else if (result.length === 0)
+    else if (!result.dataByCategory || !result.dataByDays)
         res.status(404).send('Not found');
     else
         callback(res, result);
@@ -20,10 +20,11 @@ const responseCallback = (res, callback) => function (err, result) {
 
 const handleListExpenses = (res, result) => {
     res.json(result);
-}
+};
 
-exports.getCatgeoryStatistic = (req, res) => {
+exports.getStatisticData = (req, res) => {
     const userId = req.query.userId ? parseInt(req.query.userId, 10) : 0;
-    ExpenseStatistics.getCatgeoryStatistic(userId, responseCallback(res, handleListExpenses));
+    const {expenseBy} = req.query; 
+    ExpenseStatistics.getStatisticData(userId,expenseBy, responseCallback(res, handleListExpenses));
 }
 

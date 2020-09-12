@@ -1,26 +1,26 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import { getCatgeoryStatisticData as getCatgeoryStatisticDataAPI } from 'api';
-import { LOAD_CATEGORY_STATISTICS } from './constants';
+import { getStatisticData as getStatisticDataAPI } from 'api';
+import { LOAD_STATISTICS_DATA } from './constants';
 
 import {
-  loadCategoryStatisticsSuccess,
-  loadCategoryStatisticsError,
+  loadStatisticsDataSuccess,
+  loadStatisticsDataError,
 } from './actions';
 
-export function* getCategeoryStatisticData(action) {
+export function* getStatisticData(action) {
   const { params } = action;
   try {
     const result = params
-      ? yield call(getCatgeoryStatisticDataAPI, params)
-      : yield call(getCatgeoryStatisticDataAPI);
+      ? yield call(getStatisticDataAPI, params)
+      : yield call(getStatisticDataAPI);
     const { data } = result;
-    yield put(loadCategoryStatisticsSuccess(data));
+    yield put(loadStatisticsDataSuccess(data));
   } catch (err) {
-    yield put(loadCategoryStatisticsError(err));
+    yield put(loadStatisticsDataError(err));
   }
 }
 
 // Individual exports for testing
 export default function* StatisticsContainerSaga() {
-  yield takeLatest(LOAD_CATEGORY_STATISTICS, getCategeoryStatisticData);
+  yield takeLatest(LOAD_STATISTICS_DATA, getStatisticData);
 }

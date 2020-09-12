@@ -4,7 +4,13 @@
  *
  */
 
-import React, { memo, useEffect, useState, useContext } from 'react';
+import React, {
+  memo,
+  useEffect,
+  useState,
+  useContext,
+  useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core';
@@ -21,7 +27,7 @@ import saga from './saga';
 import MetricDonut from './MetricDonut';
 import ExpensePerDayWidget from './ExpensePerDayWidget';
 import LatestExpenseList from './LatestExpenseList/Loadable';
-import { loadCategoryStatistics as loadCategoryStatisticsAction } from './actions';
+import { loadStatisticsData as loadStatisticsDataAction } from './actions';
 import { InfoContext } from '../../App/InfoContext';
 
 const TopWidgetsContainer = styled.div`
@@ -56,46 +62,55 @@ const WidgetCard = withStyles(theme => ({
   },
 }))(Card);
 
-const StatisticsContainer = ({
-  statisticsContainer,
-  loadCategoryStatistics,
-}) => {
+const StatisticsContainer = ({ statisticsContainer, loadStatisticsData }) => {
   useInjectReducer({ key: 'statisticsContainer', reducer });
   useInjectSaga({ key: 'statisticsContainer', saga });
-  // const { profileId, loadAvailabilityDistribution } = this.props;
   const [loading, setLoading] = useState(true);
-  const [doughnutData, setDoughnutData] = useState({});
+  const [doughnutData, setDoughnutData] = useState([]);
+  const [perDayWidgetData, setPerDayWidgetData] = useState([]);
+  const [expenseBy, setExpenseBy] = useState('yearly');
   const { info } = useContext(InfoContext);
+  const { userId } = info;
+  const { dataByCategory, dataByDays } = statisticsContainer.expenseData;
 
-  useEffect(() => {
-    loadCategoryStatistics(info.userId);
+  const updateExpenseByValue = useCallback(value => {
+    setExpenseBy(value);
   }, []);
 
   useEffect(() => {
-    setDoughnutData(statisticsContainer.data);
+    loadStatisticsData({ userId, expenseBy });
+  }, []);
+
+  useEffect(() => {
+    setDoughnutData(dataByCategory);
+    setPerDayWidgetData(dataByDays);
     setLoading(statisticsContainer.loading);
-  }, [statisticsContainer.data]);
+  }, [dataByCategory, dataByDays]);
 
   return (
     <TopWidgetsContainer>
       <WidgetCard>
-        <ExpensePerDayWidget />
+        {loading ? (
+          <LoadingIndicator />
+        ) : (
+          <ExpensePerDayWidget
+            expenseData={perDayWidgetData}
+            expenseBy={expenseBy}
+            setExpenseBy={updateExpenseByValue}
+          />
+        )}
         <BlockTitle>Expenses Distribution</BlockTitle>
       </WidgetCard>
       <WidgetCard>
         {loading ? (
           <LoadingIndicator />
         ) : (
-          <MetricDonut
-            doughnutData={doughnutData}
-            // graphClickEvent={graphClickEvent}
-            // dataType="TotalCategoriesAggrAmount"
-          />
+          <MetricDonut doughnutData={doughnutData} />
         )}
         <BlockTitle>Category Distribution</BlockTitle>
       </WidgetCard>
       <WidgetCard>
-        <LatestExpenseList />
+        {loading ? <LoadingIndicator /> : <LatestExpenseList />}
       </WidgetCard>
     </TopWidgetsContainer>
   );
@@ -103,7 +118,7 @@ const StatisticsContainer = ({
 
 StatisticsContainer.propTypes = {
   statisticsContainer: PropTypes.object.isRequired,
-  loadCategoryStatistics: PropTypes.func.isRequired,
+  loadStatisticsData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
@@ -111,8 +126,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadCategoryStatistics: params =>
-    dispatch(loadCategoryStatisticsAction(params)),
+  loadStatisticsData: params => dispatch(loadStatisticsDataAction(params)),
 });
 
 const withConnect = connect(

@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import styled from 'styled-components';
@@ -111,11 +111,21 @@ const getLabels = data => Object.keys(data);
 
 const getData = data => Object.values(data);
 
-const ExpensePerDayWidget = ({ theme }) => {
-  const [expenseBy, setExpenseBy] = useState('yearly');
+const ExpensePerDayWidget = ({
+  theme,
+  expenseData = [],
+  expenseBy,
+  setExpenseBy,
+}) => {
+  const newExpenseDataByYear = {};
+
+  // convert data array into {year: amount} object
+  expenseData.forEach(item => {
+    newExpenseDataByYear[item.year] = item.totalAmount;
+  });
 
   const expenseByData = () => {
-    if (expenseBy === 'yearly') return expenseDataPerYear;
+    if (expenseBy === 'yearly') return newExpenseDataByYear;
     if (expenseBy === 'monthly') return expenseDataPerMonth;
     return expenseDataPerWeek;
   };
@@ -154,9 +164,9 @@ const ExpensePerDayWidget = ({ theme }) => {
 };
 
 ExpensePerDayWidget.propTypes = {
-  // graphClickEvent: PropTypes.func.isRequired,
-  // dataType: PropTypes.string.isRequired,
-  // expenseData: PropTypes.object.isRequired,
+  expenseData: PropTypes.array.isRequired,
+  setExpenseBy: PropTypes.func.isRequired,
+  expenseBy: PropTypes.string.isRequired,
   theme: PropTypes.object.isRequired,
 };
 

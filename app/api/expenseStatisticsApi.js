@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { defaultConfig } from './constants';
 
-export const getCatgeoryStatisticData = ({ userId }) => {
+export const getStatisticData = ({ userId, expenseBy }) => {
   const config = {
     ...defaultConfig, // get defaultConfig and override them.
-    url: `/expenseStatistics/categories?userId=${userId}`,
+    url: `/expenseStatistics?userId=${userId}&expenseBy=${expenseBy}`,
     method: 'get',
   };
   return axios.request(config);

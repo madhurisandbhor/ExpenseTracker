@@ -7,6 +7,6 @@ export {
   getLastestExpenseList,
 } from './expenseApi';
 
-export { getCatgeoryStatisticData } from './expenseStatisticsApi';
+export { getStatisticData } from './expenseStatisticsApi';
 
 export { addUser, userLogin } from './userApi';
