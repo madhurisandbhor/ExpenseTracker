@@ -83,6 +83,7 @@ export function LatestExpenseList({
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}
+              key={item.id}
             >
               <ListItemIcon>{categoryIcon(item.category)}</ListItemIcon>
               <ListItemText

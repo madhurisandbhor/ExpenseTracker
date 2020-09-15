@@ -182,7 +182,7 @@ export function ConnectionForm({
         userId: connectionData.userId,
       });
       clear();
-      history.push('/overview');
+      history.push('/');
     }
     if (connectionData.url === '/register' && !connectionData.error) {
       onLoginLink();

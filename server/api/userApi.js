@@ -52,6 +52,11 @@ const handleuserLogin = (res, result, user) => {
     else res.status(401).send('Invalid credentials');
 }
 
+const handleUserData = (res, result) => {
+    const userName = result[0].lastName ? `${result[0].firstName} ${result[0].lastName}` : result[0].firstName;
+    const userID = result[0].id ? result[0].id : 0;
+    res.status(200).send({ username: userName, userId: userID });
+};
 const validate = user => {
     const message = [];
     if (!user.firstName)
@@ -93,3 +98,26 @@ exports.userLogin = (req, res) => {
         User.userLogin(user, (responseCallback(res, handleuserLogin, user)));
 }
 
+exports.authenticate = (req, res) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        jwt.verify(token, 'nivdung secret', (err, decodedToken) => {
+            if (err) {
+                console.log(err.message);
+                res.send(401);
+            } else {
+                console.log(decodedToken);
+                res.locals.id = decodedToken.id;
+                const userId = decodedToken.id;
+                if (!userId)
+                    res.status(400).send('Invalid token/user id');
+                else
+                    User.getUserData(userId, (responseCallback(res, handleUserData)));
+            }
+        });
+    }
+    else {
+        console.log('jwt cookie not available');
+        res.send(401);
+    }
+};

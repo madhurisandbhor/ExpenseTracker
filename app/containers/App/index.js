@@ -6,7 +6,7 @@
  * contain code that should be seen on all pages. (e.g. navigation bar)
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
 import {
   ThemeProvider as MuiThemeProvider,
@@ -14,7 +14,6 @@ import {
 } from '@material-ui/styles';
 import styled, { ThemeProvider } from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
-
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import TestPage from 'containers/TestPage/Loadable';
@@ -43,7 +42,7 @@ const AppContainer = styled.div`
 `;
 
 // eslint-disable-next-line react/prop-types
-export default function App() {
+function App() {
   return (
     // Make sure the Material stylesheet is placed above your own
     // styles so you can overwrite them
@@ -64,10 +63,10 @@ export default function App() {
               <AuthHeader />
               <AppContainer>
                 <Switch>
-                  <PrivateRoute path="/overview" component={HomePage} />
+                  <PrivateRoute exact path="/" component={HomePage} />
                   <PrivateRoute path="/expensesList" component={ExpenseList} />
                   <PrivateRoute path="/about" component={TestPage} />
-                  <Route exact path="/" component={ConnectionForm} />
+                  <Route path="/connect" component={ConnectionForm} />
                   <Route component={NotFoundPage} />
                 </Switch>
               </AppContainer>
@@ -79,3 +78,5 @@ export default function App() {
     </StylesProvider>
   );
 }
+
+export default App;

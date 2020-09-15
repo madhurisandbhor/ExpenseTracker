@@ -6,6 +6,7 @@ module.exports = function (app) {
   const expenseApi = require('../api/expenseApi');
   const expenseStatisticsApi = require('../api/expenseStatisticsApi');
   const userApi = require('../api/userApi');
+  const requireAuth = require('../middlewares/authMiddleware');
 
   // expenseApi Routes
 
@@ -27,5 +28,8 @@ module.exports = function (app) {
 
   app.route('/api/login')
     .post(userApi.userLogin);
+
+  app.route('/api/authUser')
+    .get(userApi.authenticate);
 
 };

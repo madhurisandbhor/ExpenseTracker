@@ -9,4 +9,4 @@ export {
 
 export { getStatisticData } from './expenseStatisticsApi';
 
-export { addUser, userLogin } from './userApi';
+export { addUser, userLogin, getUserData } from './userApi';

@@ -5,7 +5,7 @@ import { InfoContext } from './InfoContext';
 const AuthHeader = () => {
   const { info } = useContext(InfoContext);
 
-  if (window.location.pathname === '/' && info.isLoggedIn === false)
+  if (window.location.pathname === '/connect' || info.isLoggedIn === false)
     return null;
   return <Header />;
 };

@@ -20,3 +20,12 @@ export const userLogin = data => {
   };
   return axios.request(config);
 };
+
+export const getUserData = () => {
+  const config = {
+    ...defaultConfig,
+    url: `/authUser`,
+    method: 'get',
+  };
+  return axios.request(config);
+};

@@ -25,7 +25,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       render={props => {
         const isUserAuth = authUser();
         if (!isUserAuth) {
-          return <Redirect to={{ pathname: '/' }} />;
+          return <Redirect to={{ pathname: '/connect' }} />;
         }
         return <Component {...props} />;
       }}

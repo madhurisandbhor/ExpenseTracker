@@ -10,6 +10,7 @@ const requireAuth = (req, res, next) => {
         res.send(401);
       } else {
         console.log(decodedToken);
+        res.locals.id = decodedToken.id;
         next();
       }
     });

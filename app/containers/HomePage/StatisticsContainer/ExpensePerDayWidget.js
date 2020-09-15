@@ -120,9 +120,10 @@ const ExpensePerDayWidget = ({
   const newExpenseDataByYear = {};
 
   // convert data array into {year: amount} object
-  expenseData.forEach(item => {
-    newExpenseDataByYear[item.year] = item.totalAmount;
-  });
+  if (expenseData.length > 0)
+    expenseData.forEach(item => {
+      newExpenseDataByYear[item.year] = item.totalAmount;
+    });
 
   const expenseByData = () => {
     if (expenseBy === 'yearly') return newExpenseDataByYear;

@@ -50,16 +50,24 @@ const UserConnect = ({ open, anchorEl, onClose, handleClickOpen, history }) => {
   const { info, setInfo } = useContext(InfoContext);
 
   const onSignout = () => {
-    setInfo(null);
+    setInfo({
+      ...info,
+      isLoggedIn: false,
+      isRegister: false,
+      username: '',
+      userId: '',
+    });
     Cookies.remove('jwt');
-    history.push('/');
+    history.push('/connect');
   };
 
-  const userName = `${info.username[0].toUpperCase()}${info.username.slice(1)}`;
+  const userName = info.username
+    ? `${info.username[0].toUpperCase()}${info.username.slice(1)}`
+    : '';
 
   return (
     <Wrapper>
-      <WelcomeText>Hello, {userName}</WelcomeText>
+      {userName && <WelcomeText>Hello, {userName}</WelcomeText>}
       <UserWrapper onClick={handleClickOpen}>
         <ButtonWrapper aria-label="UserIcon">
           <IconWrapper />

@@ -22,4 +22,8 @@ User.userLogin = (user, handleResponse) => {
     connection.query(`SELECT * from user WHERE emailId ='${user.emailId}'`, user, handleResponse);
 }
 
+User.getUserData = (userId, handleResponse) => {
+    connection.query(`SELECT * from user WHERE id ='${userId}'`, handleResponse);
+}
+
 module.exports = User;

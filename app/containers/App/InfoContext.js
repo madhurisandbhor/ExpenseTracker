@@ -1,31 +1,32 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-
-const reducer = (info, newInfo) => {
-  if (newInfo === null) {
-    localStorage.removeItem('info');
-    return initialState;
-  }
-  return { ...info, ...newInfo };
-};
+const InfoContext = React.createContext();
 
 const initialState = {
   isLoggedIn: false,
   isRegister: false,
+  userId: '',
   username: '',
 };
 
-const localState = JSON.parse(localStorage.getItem('info'));
-
-const InfoContext = React.createContext();
-
 const InfoProvider = props => {
-  const [info, setInfo] = useReducer(reducer, localState || initialState);
-
-  // whenever context info is updated it will update localstorage
+  const [info, setInfo] = useState(initialState);
+  const getUserDataURL = 'http://localhost:4000/api/authUser';
+  // whenever page refreshes, fetch user data to update user login info
   useEffect(() => {
-    localStorage.setItem('info', JSON.stringify(info));
-  }, [info]);
+    async function getUserData() {
+      const result = await fetch(getUserDataURL);
+      const data = await result.json();
+      setInfo({
+        ...info,
+        isLoggedIn: !!data,
+        isRegister: false,
+        userId: data ? data.userId : '',
+        username: data ? data.username : '',
+      });
+    }
+    getUserData();
+  }, []);
 
   return (
     <InfoContext.Provider value={{ info, setInfo }}>

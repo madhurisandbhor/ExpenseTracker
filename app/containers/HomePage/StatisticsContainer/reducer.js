@@ -13,8 +13,8 @@ export const initialState = {
   loading: false,
   error: '',
   expenseData: {
-    dataByCategory: {},
-    dataByDays: {},
+    dataByCategory: [],
+    dataByDays: [],
   },
 };
 

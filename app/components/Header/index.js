@@ -33,7 +33,7 @@ const Header = () => {
     <Wrapper>
       <NavBar>
         <NavItem>
-          <Link to="/overview">
+          <Link to="/">
             <img
               src={logo}
               alt="logo"
@@ -45,7 +45,7 @@ const Header = () => {
           </Link>
         </NavItem>
         <NavItem>
-          <HeaderLink to="/overview">
+          <HeaderLink exact to="/">
             <FormattedMessage {...messages.home} />
           </HeaderLink>
         </NavItem>
