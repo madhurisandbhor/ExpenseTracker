@@ -9,10 +9,16 @@ import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
 import DoughnutWidget from 'components/DoughnutWidget';
 import styled from 'styled-components';
+import NoDataMsg from './NoDataMsg';
 
 const MetricDonutContainer = styled.div`
   position: relative;
   margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
 `;
 
 const DonutTitleContainer = styled.div`
@@ -53,15 +59,21 @@ const getColors = (label, theme) => {
   return colors[label]();
 };
 
-const MetricDonut = ({ doughnutData = {}, theme }) => (
+const MetricDonut = ({ doughnutData = [], theme }) => (
   <MetricDonutContainer>
-    <DonutTitleContainer>
-      <div>Expense by</div>
-      <div>CATEGORY</div>
-    </DonutTitleContainer>
-    <DoughnutWidget
-      doughnutData={getAvailabilityDoughnutData(doughnutData, theme)}
-    />
+    {doughnutData.length > 0 ? (
+      <>
+        <DonutTitleContainer>
+          <div>Expense by</div>
+          <div>CATEGORY</div>
+        </DonutTitleContainer>
+        <DoughnutWidget
+          doughnutData={getAvailabilityDoughnutData(doughnutData, theme)}
+        />
+      </>
+    ) : (
+      <NoDataMsg> No data available</NoDataMsg>
+    )}
   </MetricDonutContainer>
 );
 

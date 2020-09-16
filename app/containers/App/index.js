@@ -16,7 +16,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { Switch, Route } from 'react-router-dom';
 import HomePage from 'containers/HomePage/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
-import TestPage from 'containers/TestPage/Loadable';
+import AboutPage from 'containers/AboutPage/Loadable';
 import ConnectionForm from 'containers/ConnectionForm/Loadable';
 import ExpenseList from 'containers/ExpenseList/Loadable';
 import AuthHeader from './AuthHeader';
@@ -65,7 +65,7 @@ function App() {
                 <Switch>
                   <PrivateRoute exact path="/" component={HomePage} />
                   <PrivateRoute path="/expensesList" component={ExpenseList} />
-                  <PrivateRoute path="/about" component={TestPage} />
+                  <PrivateRoute path="/about" component={AboutPage} />
                   <Route path="/connect" component={ConnectionForm} />
                   <Route component={NotFoundPage} />
                 </Switch>

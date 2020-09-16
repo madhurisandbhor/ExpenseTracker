@@ -6,7 +6,7 @@ module.exports = function (app) {
   const expenseApi = require('../api/expenseApi');
   const expenseStatisticsApi = require('../api/expenseStatisticsApi');
   const userApi = require('../api/userApi');
-  const requireAuth = require('../middlewares/authMiddleware');
+  // const requireAuth = require('../middlewares/authMiddleware');
 
   // expenseApi Routes
 
@@ -14,7 +14,9 @@ module.exports = function (app) {
     .get(expenseApi.readExpense)
     .put(expenseApi.updateExpense)
     .delete(expenseApi.deleteExpense);
-
+    
+  app.route('/api/totalExpense')
+  .get(expenseApi.getTotalExpense);
 
   app.route('/api/expense')
     .get(expenseApi.listAllExpenses)

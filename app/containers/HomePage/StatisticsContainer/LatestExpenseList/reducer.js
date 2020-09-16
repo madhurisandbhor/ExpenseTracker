@@ -19,7 +19,7 @@ export const initialState = {
 const latestExpenseListReducer = (state = initialState, action) => {
   switch (action.type) {
     case LOAD_EXPENSE_LIST:
-      return { ...state, loading: true, searchText: action.params.searchText };
+      return { ...state, loading: true, list: [] };
     case LOAD_EXPENSE_LIST_SUCCESS:
       return {
         ...state,

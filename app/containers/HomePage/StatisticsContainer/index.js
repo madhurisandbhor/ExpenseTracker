@@ -89,8 +89,8 @@ const StatisticsContainer = ({ statisticsContainer, loadStatisticsData }) => {
   }, []);
 
   useEffect(() => {
-    loadStatisticsData({ userId, expenseBy });
-  }, [expenseBy]);
+    if (userId) loadStatisticsData({ userId, expenseBy });
+  }, [userId, expenseBy]);
 
   useEffect(() => {
     setDoughnutData(dataByCategory);
@@ -122,6 +122,7 @@ const StatisticsContainer = ({ statisticsContainer, loadStatisticsData }) => {
       </WidgetCard>
       <WidgetCard>
         {loading ? <LoadingIndicator /> : <LatestExpenseList />}
+        <BlockTitle>Latest Expenses</BlockTitle>
       </WidgetCard>
     </TopWidgetsContainer>
   );

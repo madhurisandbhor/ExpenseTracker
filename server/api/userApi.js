@@ -106,7 +106,6 @@ exports.authenticate = (req, res) => {
                 console.log(err.message);
                 res.send(401);
             } else {
-                console.log(decodedToken);
                 res.locals.id = decodedToken.id;
                 const userId = decodedToken.id;
                 if (!userId)

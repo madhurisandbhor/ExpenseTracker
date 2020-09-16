@@ -67,3 +67,12 @@ export const deleteExpenseData = ({ id }) => {
   };
   return axios.request(config);
 };
+
+export const getTotalExpense = ({ userId }) => {
+  const config = {
+    ...defaultConfig,
+    url: `/totalExpense?userId=${userId}`,
+    method: 'get',
+  };
+  return axios.request(config);
+};

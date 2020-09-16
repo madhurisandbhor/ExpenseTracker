@@ -15,18 +15,23 @@
  *    }
  */
 
-import { CHANGE_USERNAME } from './constants';
+import {
+  LOAD_TOTAL_EXPENSE,
+  LOAD_TOTAL_EXPENSE_SUCCESS,
+  LOAD_TOTAL_EXPENSE_ERROR,
+} from './constants';
 
-/**
- * Changes the input field of the form
- *
- * @param  {string} username The new text of the input field
- *
- * @return {object} An action object with a type of CHANGE_USERNAME
- */
-export function changeUsername(username) {
-  return {
-    type: CHANGE_USERNAME,
-    username,
-  };
-}
+export const loadTotalExpense = userId => ({
+  type: LOAD_TOTAL_EXPENSE,
+  params: { userId },
+});
+
+export const loadTotalExpenseSuccess = data => ({
+  type: LOAD_TOTAL_EXPENSE_SUCCESS,
+  payload: data,
+});
+
+export const loadTotalExpenseError = error => ({
+  type: LOAD_TOTAL_EXPENSE_ERROR,
+  error,
+});

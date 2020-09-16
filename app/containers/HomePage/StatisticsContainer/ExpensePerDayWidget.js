@@ -10,7 +10,7 @@ import { withTheme } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import { Line } from 'react-chartjs-2';
 import ExpenseBySelect from './ExpenseBySelect';
-// import { EXPENSE_LABELS } from '../constants';
+import NoDataMsg from './NoDataMsg';
 
 const Container = styled.div`
   display: flex;
@@ -18,10 +18,6 @@ const Container = styled.div`
   justify-content: center;
   height: 100%;
   width: 100%;
-`;
-
-const NoDataMsg = styled.div`
-  text-align: center;
 `;
 
 const options = {

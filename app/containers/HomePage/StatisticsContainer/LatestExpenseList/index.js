@@ -6,6 +6,7 @@
 
 import React, { memo, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 import { withStyles, withTheme } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -28,6 +29,15 @@ import reducer from './reducer';
 import saga from './saga';
 import { loadExpenseList as loadExpenseListAction } from './actions';
 import { InfoContext } from '../../../App/InfoContext';
+import NoDataMsg from '../NoDataMsg';
+
+const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+`;
 
 const ListItemWrapper = withStyles(() => ({
   root: {
@@ -46,7 +56,7 @@ export function LatestExpenseList({
   const { info } = useContext(InfoContext);
   const { userId } = info;
   const currentPage = 1;
-  const limit = 10;
+  const limit = 6;
 
   useEffect(() => {
     loadExpenseList({ currentPage, limit, userId });
@@ -66,17 +76,17 @@ export function LatestExpenseList({
   };
   return (
     <>
-      <List
-        style={{
-          width: '100%',
-          position: 'relative',
-          overflow: 'auto',
-          maxHeight: '290px',
-          maxWidth: '468px',
-        }}
-      >
-        {latestExpenseList.list &&
-          latestExpenseList.list.map(item => (
+      {latestExpenseList.list && latestExpenseList.list.length > 0 ? (
+        <List
+          style={{
+            width: '100%',
+            position: 'relative',
+            overflow: 'auto',
+            maxHeight: '290px',
+            maxWidth: '468px',
+          }}
+        >
+          {latestExpenseList.list.map(item => (
             <ListItemWrapper
               style={{
                 display: 'flex',
@@ -97,16 +107,23 @@ export function LatestExpenseList({
               />
             </ListItemWrapper>
           ))}
-        <ListItemWrapper
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            paddingRight: '2rem',
-          }}
-        >
-          <Link to="/expensesList">...more</Link>
-        </ListItemWrapper>
-      </List>
+          {latestExpenseList.list.length < limit ? null : (
+            <ListItemWrapper
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                paddingRight: '2rem',
+              }}
+            >
+              <Link to="/expensesList">...more</Link>
+            </ListItemWrapper>
+          )}
+        </List>
+      ) : (
+        <Wrapper>
+          <NoDataMsg> No data available</NoDataMsg>
+        </Wrapper>
+      )}
     </>
   );
 }

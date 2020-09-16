@@ -30,7 +30,7 @@ ExpenseStatistics.getStatisticData = function ({ userId, type, year, weekStartDa
 
     const dataByWeekQuery = `SELECT expense_date as date, amount as totalAmount
     FROM expense 
-    WHERE user_id=63
+    WHERE user_id=${userId}
     AND expense_date BETWEEN '${weekStartDate}' and '${weekEndDate}'`;
 
     let dataByDaysQuery = '';

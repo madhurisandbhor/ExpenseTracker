@@ -135,7 +135,7 @@ export function ConnectionForm({
   }, []);
 
   const onLogin = useCallback(params => {
-    if (!params.username && !params.password) {
+    if (!params.emailId && !params.password) {
       setMessage('Please enter valid email id and password');
       setOpen(true);
       setSeverity('error');

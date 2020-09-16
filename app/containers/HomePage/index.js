@@ -4,8 +4,9 @@
  * This is the first thing users see of our App, at the '/' route
  */
 
-import React, { memo } from 'react';
+import React, { memo, useContext, useEffect } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
@@ -13,18 +14,20 @@ import { compose } from 'redux';
 import { createStructuredSelector } from 'reselect';
 import { useInjectReducer } from 'utils/injectReducer';
 import { useInjectSaga } from 'utils/injectSaga';
-import Paper from '@material-ui/core/Paper';
 import Footer from 'components/Footer';
+import LoadingIndicator from 'components/LoadingIndicator';
 import Wrapper from './Wrapper';
 import reducer from './reducer';
 import saga from './saga';
+import { loadTotalExpense as loadTotalExpenseAction } from './actions';
 import StatisticsContainer from './StatisticsContainer/Loadable';
+import { makeSelectHome } from './selectors';
+import { InfoContext } from '../App/InfoContext';
 
 const key = 'home';
 
 const TopContainer = styled.div`
   color: ${props => props.theme.palette.primary.dark};
-  // padding: 2rem;
   height: 40%;
   margin-bottom: 1rem;
 `;
@@ -33,13 +36,40 @@ const BottomContainer = styled.div`
   height: 60%;
 `;
 
-const Info = styled.div`
-  padding: 0.8rem;
+const InfoContainer = styled.div`
+  background: ${props => props.theme.tracker.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-export function HomePage() {
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem;
+  align-items: center;
+`;
+
+const Text = styled.div`
+  font-size: 1.4rem;
+  padding: 0.5rem;
+  border-bottom: 0.1rem solid ${props => props.theme.tracker.grey};
+`;
+
+const TotalAmount = styled.span`
+  font-size: 2rem;
+`;
+
+export function HomePage({ loadTotalExpense, expenseData }) {
   useInjectReducer({ key, reducer });
   useInjectSaga({ key, saga });
+  const { info } = useContext(InfoContext);
+  const { userId } = info;
+  const { currYear, currMonth, loading } = expenseData;
+
+  useEffect(() => {
+    if (userId) loadTotalExpense(userId);
+  }, [userId]);
 
   return (
     <>
@@ -49,12 +79,22 @@ export function HomePage() {
       </Helmet>
       <Wrapper>
         <TopContainer>
-          <Paper>
-            <Info>Your total expenses this year : €1900 </Info>
-            <Info>You owe €67 to Prasad</Info>
-            <Info>Prasad owes you €160 </Info>
-            <Info>click here to... </Info>
-          </Paper>
+          <InfoContainer>
+            {loading ? (
+              <LoadingIndicator />
+            ) : (
+              <>
+                <Info>
+                  <Text>Total Expenses this year</Text>
+                  <TotalAmount>{currYear}€</TotalAmount>
+                </Info>
+                <Info>
+                  <Text>Total Expenses this month</Text>
+                  <TotalAmount>{currMonth}€</TotalAmount>
+                </Info>
+              </>
+            )}
+          </InfoContainer>
         </TopContainer>
         <BottomContainer>
           <StatisticsContainer />
@@ -65,13 +105,17 @@ export function HomePage() {
   );
 }
 
-HomePage.propTypes = {};
+HomePage.propTypes = {
+  loadTotalExpense: PropTypes.func.isRequired,
+  expenseData: PropTypes.object.isRequired,
+};
 
-const mapStateToProps = createStructuredSelector({});
-
-export function mapDispatchToProps() {
-  return {};
-}
+const mapStateToProps = createStructuredSelector({
+  expenseData: makeSelectHome(),
+});
+const mapDispatchToProps = dispatch => ({
+  loadTotalExpense: params => dispatch(loadTotalExpenseAction(params)),
+});
 
 const withConnect = connect(
   mapStateToProps,

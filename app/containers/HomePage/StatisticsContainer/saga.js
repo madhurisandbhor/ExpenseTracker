@@ -2,10 +2,7 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import { getStatisticData as getStatisticDataAPI } from 'api';
 import { LOAD_STATISTICS_DATA } from './constants';
 
-import {
-  loadStatisticsDataSuccess,
-  loadStatisticsDataError,
-} from './actions';
+import { loadStatisticsDataSuccess, loadStatisticsDataError } from './actions';
 
 export function* getStatisticData(action) {
   const { params } = action;

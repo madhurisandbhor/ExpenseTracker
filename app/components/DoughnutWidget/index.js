@@ -6,7 +6,6 @@
 
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
-// import styled from 'styled-components';
 import { Doughnut } from 'react-chartjs-2';
 
 const options = {
@@ -60,7 +59,7 @@ const DoughnutWidget = ({ doughnutData }) => {
 };
 
 DoughnutWidget.propTypes = {
-  doughnutData: PropTypes.array.isRequired,
+  doughnutData: PropTypes.object.isRequired,
 };
 
 export default memo(DoughnutWidget);

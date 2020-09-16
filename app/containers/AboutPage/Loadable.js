@@ -1,6 +1,6 @@
 /**
  *
- * Asynchronously loads the component for TestPage
+ * Asynchronously loads the component for AboutPage
  *
  */
 

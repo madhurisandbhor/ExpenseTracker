@@ -9,8 +9,8 @@
  * export const YOUR_ACTION_CONSTANT = 'yourproject/YourContainer/YOUR_ACTION_CONSTANT';
  */
 
-export const CHANGE_USERNAME = 'boilerplate/Home/CHANGE_USERNAME';
-
-export const EXPENSE_LABELS = {
-
-};
+export const LOAD_TOTAL_EXPENSE = 'boilerplate/Home/LOAD_TOTAL_EXPENSE';
+export const LOAD_TOTAL_EXPENSE_SUCCESS =
+  'boilerplate/Home/LOAD_TOTAL_EXPENSE_SUCCESS';
+export const LOAD_TOTAL_EXPENSE_ERROR =
+  'boilerplate/Home/LOAD_TOTAL_EXPENSE_ERROR';

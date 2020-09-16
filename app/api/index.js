@@ -5,6 +5,7 @@ export {
   updateExpenseData,
   deleteExpenseData,
   getLastestExpenseList,
+  getTotalExpense,
 } from './expenseApi';
 
 export { getStatisticData } from './expenseStatisticsApi';

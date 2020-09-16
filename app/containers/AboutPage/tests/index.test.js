@@ -1,6 +1,6 @@
 /**
  *
- * Tests for TestPage
+ * Tests for AboutPage
  *
  * @see https://github.com/react-boilerplate/react-boilerplate/tree/master/docs/testing
  *
@@ -11,16 +11,16 @@ import { render } from 'react-testing-library';
 import { IntlProvider } from 'react-intl';
 // import 'jest-dom/extend-expect'; // add some helpful assertions
 
-import { TestPage } from '../index';
+import { AboutPage } from '../index';
 import { DEFAULT_LOCALE } from '../../../i18n';
 
-describe('<TestPage />', () => {
+describe('<AboutPage />', () => {
   it('Expect to not log errors in console', () => {
     const spy = jest.spyOn(global.console, 'error');
     const dispatch = jest.fn();
     render(
       <IntlProvider locale={DEFAULT_LOCALE}>
-        <TestPage dispatch={dispatch} />
+        <AboutPage dispatch={dispatch} />
       </IntlProvider>,
     );
     expect(spy).not.toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe('<TestPage />', () => {
       container: { firstChild },
     } = render(
       <IntlProvider locale={DEFAULT_LOCALE}>
-        <TestPage />
+        <AboutPage />
       </IntlProvider>,
     );
     expect(firstChild).toMatchSnapshot();

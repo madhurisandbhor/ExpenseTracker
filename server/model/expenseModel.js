@@ -23,7 +23,7 @@ const info = {
 };
 
 Expense.getExpenseList = function (
-    {   page,
+    { page,
         userId,
         limit,
         offset,
@@ -128,6 +128,20 @@ Expense.updateExpenseById = (id, updatedExpense, handleResponse) => {
 
 Expense.deleteExpenseById = function (expenseId, handleResponse) {
     connection.query("DELETE from expense where id = ? ", expenseId, handleResponse);
+};
+
+Expense.getTotalExpense = function (userId, handleResponse) {
+    const totalExpCurrYear = `SELECT sum(amount) as total from expense where user_id = ${userId} and YEAR(expense_date)=YEAR(NOW())`;
+    const totalExpCurrMonth = `SELECT sum(amount) as total from expense where user_id = ${userId} and MONTH(expense_date)=MONTH(NOW())`;
+
+    connection.query(`${totalExpCurrYear} ; ${totalExpCurrMonth}`, function (err, results) {
+        if (err)
+            handleResponse(err, null);
+        else
+            handleResponse(null, {
+                "currYear": results[0][0].total ? results[0][0].total : 0, "currMonth": results[1][0].total ? results[1][0].total : 0
+            })
+    });
 };
 
 module.exports = Expense;
