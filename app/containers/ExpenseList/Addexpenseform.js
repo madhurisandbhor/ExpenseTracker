@@ -144,7 +144,7 @@ export function AddExpensesForm(props) {
             }}
             inputProps={{
               min: 0,
-              maxLength: 12,
+              maxLength: 8,
             }}
             onInput={(e) => {
               e.target.value = Math.max(0, parseInt(e.target.value)).toString().slice(0, 12)

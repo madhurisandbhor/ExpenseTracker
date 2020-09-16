@@ -182,6 +182,16 @@ export const ExpenseList = ({
       cellStyle: {
         fontSize: '1.4rem',
       },
+      // eslint-disable-next-line no-unused-vars
+      editComponent: ({ value = '', ...props }) => (
+        <TextField
+          value={value}
+          // eslint-disable-next-line react/prop-types
+          onChange={e => props.onChange(e.target.value)}
+          // eslint-disable-next-line react/prop-types
+          inputProps={{ maxLength: 8 }}
+        />
+      ),
     },
   ];
 
@@ -206,13 +216,16 @@ export const ExpenseList = ({
 
   const validate = newData => {
     const msg = [];
-    if (!newData.amount) msg.push('amount');
+    if (!newData.amount || parseInt(newData.amount, 10) === 0)
+      msg.push('amount');
     if (!newData.description) msg.push('description');
     if (!newData.expense_date) msg.push('expense_date');
     if (msg.length !== 0) {
       msg.unshift('Invalid');
       return msg.join(' ');
     }
+    if (new Date(newData.expense_date) > new Date())
+      msg.push('expense date should not be future date');
     return msg;
   };
 
