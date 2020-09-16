@@ -47,7 +47,7 @@ const BlockTitle = styled.div`
 const WidgetCard = withStyles(theme => ({
   root: {
     position: 'relative',
-    padding: '8px 20px 8px 20px',
+    padding: '25px 20px 8px 20px',
     height: '300px',
     width: '468px',
     display: 'flex',
@@ -68,18 +68,29 @@ const StatisticsContainer = ({ statisticsContainer, loadStatisticsData }) => {
   const [loading, setLoading] = useState(true);
   const [doughnutData, setDoughnutData] = useState([]);
   const [perDayWidgetData, setPerDayWidgetData] = useState([]);
-  const [expenseBy, setExpenseBy] = useState('yearly');
+  const [expenseBy, setExpenseBy] = useState({
+    type: 'yearly',
+    year: '',
+    weekStartDate: '',
+    weekEndDate: '',
+  });
   const { info } = useContext(InfoContext);
   const { userId } = info;
   const { dataByCategory, dataByDays } = statisticsContainer.expenseData;
 
-  const updateExpenseByValue = useCallback(value => {
-    setExpenseBy(value);
+  const updateExpenseByValue = useCallback(args => {
+    setExpenseBy({
+      ...expenseBy,
+      type: args.type,
+      year: args.year,
+      weekStartDate: args.weekStartDate,
+      weekEndDate: args.weekEndDate,
+    });
   }, []);
 
   useEffect(() => {
     loadStatisticsData({ userId, expenseBy });
-  }, []);
+  }, [expenseBy]);
 
   useEffect(() => {
     setDoughnutData(dataByCategory);

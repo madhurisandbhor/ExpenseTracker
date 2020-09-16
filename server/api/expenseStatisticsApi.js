@@ -24,7 +24,8 @@ const handleListExpenses = (res, result) => {
 
 exports.getStatisticData = (req, res) => {
     const userId = req.query.userId ? parseInt(req.query.userId, 10) : 0;
-    const {expenseBy} = req.query; 
-    ExpenseStatistics.getStatisticData(userId,expenseBy, responseCallback(res, handleListExpenses));
+    const { type, year, weekStartDate, weekEndDate } = req.query;
+    const params = { type, year, weekStartDate, weekEndDate, userId };
+    ExpenseStatistics.getStatisticData(params, responseCallback(res, handleListExpenses));
 }
 

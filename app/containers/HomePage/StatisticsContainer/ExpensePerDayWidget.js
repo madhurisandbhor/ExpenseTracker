@@ -13,7 +13,15 @@ import ExpenseBySelect from './ExpenseBySelect';
 // import { EXPENSE_LABELS } from '../constants';
 
 const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   width: 100%;
+`;
+
+const NoDataMsg = styled.div`
+  text-align: center;
 `;
 
 const options = {
@@ -40,10 +48,6 @@ const options = {
         display: true,
         ticks: {
           beginAtZero: true,
-        },
-        scaleLabel: {
-          display: false,
-          labelString: 'Month',
         },
       },
     ],
@@ -72,39 +76,6 @@ const options = {
   },
 };
 
-const expenseDataPerYear = {
-  2020: 10000,
-  2019: 2000,
-  2018: 26000,
-  2017: 5000,
-  2016: 5600,
-};
-
-const expenseDataPerMonth = {
-  Jan: 1000,
-  Feb: 200,
-  Mar: 260,
-  Apr: 5000,
-  May: 100,
-  Jun: 10,
-  Jul: 1000,
-  Aug: 0,
-  Sep: 960,
-  Oct: 100,
-  Nov: 790,
-  Dec: 10,
-};
-
-const expenseDataPerWeek = {
-  Sun: 500,
-  Mon: 20,
-  Tue: 260,
-  Wed: 50,
-  Thu: 67,
-  Fri: 0,
-  Sat: 99,
-};
-
 export const customTooltip = tooltipItem => `expense - ${tooltipItem.yLabel}`;
 
 const getLabels = data => Object.keys(data);
@@ -122,17 +93,13 @@ const ExpensePerDayWidget = ({
   // convert data array into {year: amount} object
   if (expenseData.length > 0)
     expenseData.forEach(item => {
-      newExpenseDataByYear[item.year] = item.totalAmount;
+      newExpenseDataByYear[item.date] = item.totalAmount;
     });
 
-  const expenseByData = () => {
-    if (expenseBy === 'yearly') return newExpenseDataByYear;
-    if (expenseBy === 'monthly') return expenseDataPerMonth;
-    return expenseDataPerWeek;
-  };
-
   const data = {
-    labels: expenseByData() ? getLabels(expenseByData()) : ['No data'],
+    labels: newExpenseDataByYear
+      ? getLabels(newExpenseDataByYear)
+      : ['No data'],
     datasets: [
       {
         fill: false,
@@ -151,7 +118,7 @@ const ExpensePerDayWidget = ({
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
-        data: getData(expenseByData()),
+        data: getData(newExpenseDataByYear),
       },
     ],
   };
@@ -159,7 +126,11 @@ const ExpensePerDayWidget = ({
   return (
     <Container>
       <ExpenseBySelect expenseBy={expenseBy} setExpenseBy={setExpenseBy} />
-      <Line data={data} options={options} />
+      {data.datasets[0].data.length > 0 ? (
+        <Line data={data} options={options} />
+      ) : (
+        <NoDataMsg> No data available</NoDataMsg>
+      )}
     </Container>
   );
 };
@@ -167,7 +138,7 @@ const ExpensePerDayWidget = ({
 ExpensePerDayWidget.propTypes = {
   expenseData: PropTypes.array.isRequired,
   setExpenseBy: PropTypes.func.isRequired,
-  expenseBy: PropTypes.string.isRequired,
+  expenseBy: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
 };
 

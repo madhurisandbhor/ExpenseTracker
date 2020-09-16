@@ -22,7 +22,7 @@ const DonutTitleContainer = styled.div`
   justify-content: center;
   align-items: center;
   left: 38%;
-  top: 27%;
+  top: 37%;
   font-size: 13px;
   color: rgba(0, 0, 0, 0.6);
 `;
@@ -53,31 +53,20 @@ const getColors = (label, theme) => {
   return colors[label]();
 };
 
-const MetricDonut = ({
-  doughnutData = {},
-  graphClickEvent,
-  theme,
-  ...rest
-}) => (
+const MetricDonut = ({ doughnutData = {}, theme }) => (
   <MetricDonutContainer>
     <DonutTitleContainer>
       <div>Expense by</div>
       <div>CATEGORY</div>
     </DonutTitleContainer>
     <DoughnutWidget
-      {...rest}
       doughnutData={getAvailabilityDoughnutData(doughnutData, theme)}
-      graphClickEvent={graphClickEvent}
-      cutoutPercentage={78}
-      withLegends
-      legendPosition="bottom"
-      canvasHeight={210}
     />
   </MetricDonutContainer>
 );
 
 MetricDonut.propTypes = {
-  // graphClickEvent: PropTypes.func.isRequired,
+  theme: PropTypes.object.isRequired,
   doughnutData: PropTypes.array.isRequired,
 };
 

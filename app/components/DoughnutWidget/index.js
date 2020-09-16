@@ -5,11 +5,12 @@
  */
 
 import React, { memo } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 // import styled from 'styled-components';
 import { Doughnut } from 'react-chartjs-2';
 
 const options = {
+  cutoutPercentage: 70,
   legend: {
     display: false,
     position: 'bottom',
@@ -36,7 +37,7 @@ const options = {
   },
 };
 
-export const getDoughnutData = (data, labels, colors, dataType) => ({
+export const getDoughnutData = (data, labels, colors) => ({
   labels,
   datasets: [
     {
@@ -46,45 +47,20 @@ export const getDoughnutData = (data, labels, colors, dataType) => ({
       borderWidth: 1,
     },
   ],
-  dataType,
 });
 
-const DoughnutWidget = ({
-  doughnutData = {
-    labels: '',
-    data: '',
-    colors: '',
-    dataType: '',
-  },
-  graphClickEvent,
-  dataType,
-  cutoutPercentage,
-  withLegends,
-  legendPosition,
-  canvasHeight = 180,
-  chartId,
-  plugin,
-  ...rest
-}) => {
+const DoughnutWidget = ({ doughnutData }) => {
   const { data, labels, colors } = doughnutData;
-  const dataSet = getDoughnutData(data, labels, colors, dataType);
-  options.cutoutPercentage = cutoutPercentage;
-  options.legend.display = withLegends;
-  options.legend.position = legendPosition;
+  const dataSet = getDoughnutData(data, labels, colors);
   return (
-    <div style={{ paddingBottom: '5px' }} {...rest}>
-      <Doughnut
-        id={chartId}
-        data={dataSet}
-        options={options}
-        height={canvasHeight}
-        onElementsClick={graphClickEvent}
-        plugins={plugin ? [plugin] : []}
-      />
+    <div style={{ paddingBottom: '5px' }}>
+      <Doughnut data={dataSet} options={options} height={180} />
     </div>
   );
 };
 
-DoughnutWidget.propTypes = {};
+DoughnutWidget.propTypes = {
+  doughnutData: PropTypes.array.isRequired,
+};
 
 export default memo(DoughnutWidget);

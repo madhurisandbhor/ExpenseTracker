@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
@@ -48,8 +48,14 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
   const [nextLinkDisabled, setNextLinkDisabled] = useState(false);
   const [expenseByYear, setExpenseByYear] = useState(new Date().getFullYear());
 
-  const onSelectionChange = event => {
-    setExpenseBy(event.target.value);
+  const onSelectionChange = useCallback(event => {
+    setExpenseBy({
+      ...expenseBy,
+      type: event.target.value,
+      year: expenseByYear,
+      weekStartDate,
+      weekEndDate,
+    });
 
     const currDate = new Date();
     const first = currDate.getDate() - currDate.getDay();
@@ -64,14 +70,14 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
     setWeekStartDate(firstDay);
     setWeekEndDate(lastDay);
     setNextLinkDisabled(true);
-  };
+  }, []);
 
   const onNavigationClick = link => {
     const startDate = new Date(weekStartDate);
     const endDate = new Date(weekEndDate);
     const currDate = new Date();
 
-    if (expenseBy === 'weekly') {
+    if (expenseBy.type === 'weekly') {
       if (link === 'prev') {
         startDate.setDate(startDate.getDate() - 7);
         endDate.setDate(endDate.getDate() - 7);
@@ -90,9 +96,15 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
         setNextLinkDisabled(true);
       else setNextLinkDisabled(false);
       // setPrevLinkDisabled - TODO: disable conditionally
+
+      setExpenseBy({
+        ...expenseBy,
+        weekStartDate: startDate.toISOString().split('T')[0],
+        weekEndDate: endDate.toISOString().split('T')[0],
+      });
     }
 
-    if (expenseBy === 'monthly') {
+    if (expenseBy.type === 'monthly') {
       let year = 0;
       if (link === 'prev') year = expenseByYear - 1;
       else year = expenseByYear + 1;
@@ -100,12 +112,16 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
 
       if (year >= currDate.getFullYear()) setNextLinkDisabled(true);
       else setNextLinkDisabled(false);
+      setExpenseBy({
+        ...expenseBy,
+        year,
+      });
     }
   };
 
   return (
     <ExpenseByWrapper>
-      {expenseBy !== 'yearly' && (
+      {expenseBy.type !== 'yearly' && (
         <Links>
           <Tooltip title="Previous">
             <span>
@@ -117,7 +133,7 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
               </Btn>
             </span>
           </Tooltip>
-          {expenseBy === 'weekly' && (
+          {expenseBy.type === 'weekly' && (
             <>
               <TextField
                 type="date"
@@ -144,7 +160,7 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
               />
             </>
           )}
-          {expenseBy === 'monthly' && (
+          {expenseBy.type === 'monthly' && (
             <TextField
               type="text"
               value={expenseByYear}
@@ -172,7 +188,7 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
 
       <Select
         id="expense_distribution"
-        value={expenseBy}
+        value={expenseBy.type}
         style={{ width: '10ch' }}
         onChange={event => onSelectionChange(event)}
       >
@@ -186,7 +202,7 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
 
 ExpenseBySelect.propTypes = {
   setExpenseBy: PropTypes.func.isRequired,
-  expenseBy: PropTypes.string.isRequired,
+  expenseBy: PropTypes.object.isRequired,
 };
 
 export default memo(ExpenseBySelect);
