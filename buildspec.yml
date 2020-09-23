@@ -6,13 +6,10 @@ env:
 
 phases:
   install:
+  runtime-versions:
+      nodejs: 12  
     commands:
       - echo Installing Node...
-      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-      - export NVM_DIR="$HOME/.nvm"
-      - [ -s "$NVM_DIR/nvm.sh" ]
-      - [ -s "$NVM_DIR/bash_completion" ]
-      - nvm install v12.18.4
   pre_build:
     commands:
       - echo Installing dependencies...
