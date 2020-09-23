@@ -1,0 +1,35 @@
+version: 0.2
+
+env:
+  variables:
+    NODE_ENV: "development"
+
+phases:
+  install:
+    commands:
+      - echo Installing Node...
+      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+      - export NVM_DIR="$HOME/.nvm"
+      - [ -s "$NVM_DIR/nvm.sh" ]
+      - [ -s "$NVM_DIR/bash_completion" ]
+      nvm install v12.18.4
+  pre_build:
+    commands:
+      - echo Installing dependencies...
+      - npm install
+
+  build:
+    commands:
+      - echo Building...
+      - npm run build
+      - npm start
+
+cache:
+  paths:
+    - './node_modules/**/*'
+
+artifacts:
+  files:
+    - index.js
+    - build/**/*
+    - node_modules/**/*
