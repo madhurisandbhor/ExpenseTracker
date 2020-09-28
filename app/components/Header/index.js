@@ -1,11 +1,9 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Wrapper from './Wrapper';
 import NavBar from './NavBar';
 import NavItem from './NavItem';
 import HeaderLink from './HeaderLink';
-import messages from './messages';
 import UserConnect from './UserConnect';
 import logo from '../../images/logo2.png';
 
@@ -46,18 +44,14 @@ const Header = () => {
         </NavItem>
         <NavItem>
           <HeaderLink exact to="/">
-            <FormattedMessage {...messages.home} />
+            Overview
           </HeaderLink>
         </NavItem>
         <NavItem>
-          <HeaderLink to="/expensesList">
-            <FormattedMessage {...messages.expenseList} />
-          </HeaderLink>
+          <HeaderLink to="/expensesList">Expense List</HeaderLink>
         </NavItem>
         <NavItem>
-          <HeaderLink to="/about">
-            <FormattedMessage {...messages.about} />
-          </HeaderLink>
+          <HeaderLink to="/about">About</HeaderLink>
         </NavItem>
       </NavBar>
       <UserConnect handleClickOpen={handleClickOpen} {...params} />

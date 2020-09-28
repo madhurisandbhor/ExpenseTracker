@@ -117,6 +117,6 @@ exports.authenticate = (req, res) => {
     }
     else {
         console.log('jwt cookie not available');
-        res.send(401);
+        res.sendStatus(401);
     }
 };

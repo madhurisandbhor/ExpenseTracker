@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components';
-import img1 from './images/MH_background.jpg';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -38,7 +37,6 @@ const GlobalStyle = createGlobalStyle`
    
     // background: linear-gradient(90deg, rgba(213,190,174,1) 0%, rgba(171,126,112,1) 84%);
     
-    // background: url(${img1}) no-repeat center center fixed;    
     // background-size: cover;
     // background-position: bottom;
     background:#e8e8e8;

@@ -13,7 +13,6 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-// import clsx from 'clsx';
 import Snackbar from '@material-ui/core/Snackbar';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -21,7 +20,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import MessageBar from 'components/MessageBar';
+import MessageBar from 'components/MessageBar/Loadable';
 import makeSelectConnectionForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';

@@ -7,7 +7,7 @@
 import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import { withTheme } from '@material-ui/core/styles';
-import DoughnutWidget from 'components/DoughnutWidget';
+import DoughnutWidget from 'components/DoughnutWidget/Loadable';
 import styled from 'styled-components';
 import NoDataMsg from './NoDataMsg';
 

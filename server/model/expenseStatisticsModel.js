@@ -17,16 +17,19 @@ ExpenseStatistics.getStatisticData = function ({ userId, type, year, weekStartDa
       FROM expense where user_id=${userId} GROUP BY category) as sum_by_cat 
     JOIN (SELECT sum(amount) as total FROM expense) as total_amnt`;
 
-    const dataByYearQuery = `SELECT YEAR(e.expense_date) as date, sum(amount) as totalAmount
+    const dataByYearQuery = `SELECT YEAR(e.expense_date) as date, 
+    sum(amount) as totalAmount
     FROM expense e
     WHERE user_id=${userId}
-    GROUP BY YEAR(e.expense_date) asc`;
+    GROUP BY YEAR(e.expense_date) 
+    ORDER BY e.expense_date asc`;
 
     const dataByMonthQuery = `SELECT MONTHNAME(e.expense_date) as date, sum(amount) as totalAmount
     FROM expense e
     where user_id=${userId}
     AND YEAR(e.expense_date) = ${year}
-    GROUP BY MONTH(e.expense_date) asc;`;
+    GROUP BY MONTH(e.expense_date) 
+    ORDER BY e.expense_date asc`;
 
     const dataByWeekQuery = `SELECT expense_date as date, amount as totalAmount
     FROM expense 
@@ -40,7 +43,7 @@ ExpenseStatistics.getStatisticData = function ({ userId, type, year, weekStartDa
         dataByDaysQuery = dataByMonthQuery;
     else dataByDaysQuery = dataByWeekQuery;
 
-    connection.query(`${dataByCategoryQuery} ; ${dataByDaysQuery}`, function (err, results) {
+    connection.query(`${dataByCategoryQuery}; ${dataByDaysQuery};`, function (err, results) {
         if (err)
             handleResponse(err, null);
         else

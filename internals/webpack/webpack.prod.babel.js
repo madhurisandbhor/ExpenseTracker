@@ -123,17 +123,6 @@ module.exports = require('./webpack.base.babel')({
       theme_color: '#b1624d',
       inject: true,
       ios: true,
-      // icons: [
-      //   {
-      //     src: path.resolve('app/images/icon-512x512.png'),
-      //     sizes: [72, 96, 128, 144, 192, 384, 512],
-      //   },
-      //   {
-      //     src: path.resolve('app/images/icon-512x512.png'),
-      //     sizes: [120, 152, 167, 180],
-      //     ios: true,
-      //   },
-      // ],
     }),
 
     new HashedModuleIdsPlugin({
@@ -146,5 +135,7 @@ module.exports = require('./webpack.base.babel')({
   performance: {
     assetFilter: assetFilename =>
       !/(\.map$)|(^(main\.|favicon\.))/.test(assetFilename),
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
   },
 });

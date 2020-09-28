@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
@@ -93,7 +92,7 @@ export function AddExpensesForm(props) {
   return (
     <Wrapper>
       <Section>
-        <FormattedMessage {...messages.header} />
+        Add Expense
       </Section>
       <form onSubmit={onSave} >
         <FieldWrapper>
