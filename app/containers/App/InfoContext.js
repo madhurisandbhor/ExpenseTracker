@@ -15,15 +15,23 @@ const InfoProvider = props => {
   // whenever page refreshes, fetch user data to update user login info
   useEffect(() => {
     async function getUserData() {
-      const result = await fetch(getUserDataURL);
-      const data = await result.json();
-      setInfo({
-        ...info,
-        isLoggedIn: !!data,
-        isRegister: false,
-        userId: data ? data.userId : '',
-        username: data ? data.username : '',
-      });
+      try {
+        const result = await fetch(getUserDataURL);
+        if (result.status === 200) {
+          const data = await result.json();
+          setInfo({
+            ...info,
+            isLoggedIn: !!data,
+            isRegister: false,
+            userId: data ? data.userId : '',
+            username: data ? data.username : '',
+          });
+        } else {
+          console.log('user unathorized');
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
     getUserData();
   }, []);

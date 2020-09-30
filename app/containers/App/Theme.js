@@ -19,6 +19,7 @@ const theme = createMuiTheme({
   tracker: {
     white: '#fff',
     grey: '#dbdbdb',
+    black: '#000',
     category: {
       yellow: '#ebb734',
       red: '#e33030',

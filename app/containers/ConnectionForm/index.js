@@ -25,7 +25,7 @@ import makeSelectConnectionForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import { InfoContext } from '../App/InfoContext';
-import logo from '../../images/logo2.png';
+// import logo from '../../images/ExpenseTrackerLogo.png';
 import Register from './Register';
 import Login from './Login';
 import {
@@ -34,35 +34,54 @@ import {
   clearData as clearDataAction,
 } from './actions';
 
-const AppHeader = styled.div`
-  width: 100%;
-  min-height: 450px;
-  background: #f34925;
-  z-index: 1;
+const LogoWrapper = styled.div`
   position: absolute;
-  top: 0;
-  clip-path: polygon(100% 0, 100% 37%, 0 89%, 0 0);
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background: rgb(243,73,37);
+  background: linear-gradient(180deg, rgba(243,73,37,1) 0%, rgba(105,48,109,1) 100%);
+`;
+
+const Logo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6rem;
 `;
 
 const Image = styled.img`
-  position: absolute;
-  top: 19%;
-  left: 49%;
-  transform: translate(-50%, -99%);
-  width: 230px;
+  width: 230rem;
+`;
+
+const Title = styled.span`
+  margin-left: 1rem;
+  line-height: 1.6rem;
+  font-size: 2.8rem;
+  color: ${props => props.theme.tracker.white};
+  font-weight: 500;
+  font-weight: bold;
 `;
 
 const Wrapper = styled.div`
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  top: 0;
+  margin-top: 6rem;
+  display: flex;
+  justify-content: center;
+`;
+
+const Form = styled.div`
+  position: relative;
   margin: 3.5rem auto;
   padding: 2rem 6.5rem;
   width: 40%;
-  background-color: #fff;
+  background-color: ${props=>props.theme.tracker.white};
   border-radius: 0.4rem;
-  z-index: 3;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -65%);
 `;
 
 const LinksWrapper = styled.div`
@@ -190,38 +209,43 @@ export function ConnectionForm({
 
   return (
     <>
-      <AppHeader>
-        <Image src={logo} alt="logo" />
-      </AppHeader>
+      <LogoWrapper>
+        <Logo>
+          {/* <Image src={logo} alt="logo" /> */}
+          <Title>Expense Tracker</Title>
+        </Logo>
+      </LogoWrapper>
       <Wrapper>
-        {isRegister && <Register onSignUp={onSignUp} />}
-        {!isRegister && <Login onLogin={onLogin} />}
-        {isRegister && (
-          <LinksWrapper>
-            <span>Already a user?</span>
-            <Links
-              onClick={onLoginLink}
-              onKeyPress={onLoginLink}
-              role="link"
-              tabIndex={0}
-            >
-              <LinkText>Login</LinkText>
-            </Links>
-          </LinksWrapper>
-        )}
-        {!isRegister && (
-          <LinksWrapper>
-            <span>New user?</span>
-            <Links
-              onClick={onRegisterLink}
-              onKeyPress={onRegisterLink}
-              role="link"
-              tabIndex={0}
-            >
-              <LinkText>Create an account</LinkText>
-            </Links>
-          </LinksWrapper>
-        )}
+        <Form>
+          {isRegister && <Register onSignUp={onSignUp} />}
+          {!isRegister && <Login onLogin={onLogin} />}
+          {isRegister && (
+            <LinksWrapper>
+              <span>Already a user?</span>
+              <Links
+                onClick={onLoginLink}
+                onKeyPress={onLoginLink}
+                role="link"
+                tabIndex={0}
+              >
+                <LinkText>Login</LinkText>
+              </Links>
+            </LinksWrapper>
+          )}
+          {!isRegister && (
+            <LinksWrapper>
+              <span>New user?</span>
+              <Links
+                onClick={onRegisterLink}
+                onKeyPress={onRegisterLink}
+                role="link"
+                tabIndex={0}
+              >
+                <LinkText>Create an account</LinkText>
+              </Links>
+            </LinksWrapper>
+          )}
+        </Form>
       </Wrapper>
       <Snackbar
         anchorOrigin={{

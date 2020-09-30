@@ -37,7 +37,7 @@ const AppWrapper = styled.div`
 const AppContainer = styled.div`
   width: 100%;
   height: 100%;
-  margin-top: 6.5rem;
+  padding-top: 6.5rem;
   z-index: 2;
 `;
 

@@ -12,11 +12,12 @@ const About = styled.section`
   display: flex;
   flex-direction: column;
   align-content: start;
+  padding-top: 0.5rem;
 `;
 
 const AboutText = styled.section`
   font-weight: bold;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 `;
 
 const Icons = styled.div`
@@ -40,7 +41,7 @@ const MessageText = styled.span`
 
 const iconRoot = theme => ({
   fontSize: '2.5rem',
-  color: theme.tracker.white,
+  color: theme.palette.primary.dark,
 });
 
 const LinkedInIconWrapper = withStyles(theme => ({
