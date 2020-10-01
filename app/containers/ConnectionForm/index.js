@@ -20,7 +20,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
-import MessageBar from 'components/MessageBar/Loadable';
+import MessageBar from 'components/MessageBar';
 import makeSelectConnectionForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
