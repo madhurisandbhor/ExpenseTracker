@@ -59,10 +59,8 @@ const Image = styled.img`
 const Title = styled.span`
   margin-left: 1rem;
   line-height: 1.6rem;
-  font-size: 2.8rem;
+  font-size: 3.2rem;
   color: ${props => props.theme.tracker.white};
-  font-weight: 500;
-  font-weight: bold;
 `;
 
 const Wrapper = styled.div`

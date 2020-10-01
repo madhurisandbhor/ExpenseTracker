@@ -41,7 +41,7 @@ const TopWidgetsContainer = styled.div`
 
 const BlockTitle = styled.div`
   font-size: 14px;
-  color: rgba(0, 0, 0, 0.65);
+  color: ${props=>props.theme.tracker.lightTextColor};
 `;
 
 const WidgetCard = withStyles(theme => ({

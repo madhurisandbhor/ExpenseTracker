@@ -36,6 +36,13 @@ const Links = styled.span`
   margin: 0 1rem;
 `;
 
+const Text = withStyles(theme => ({
+  root: {
+    color: theme.tracker.lightTextColor,
+    marginRight: '-6.5rem',
+  },
+}))(TextField);
+
 const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
   const [weekStartDate, setWeekStartDate] = useState(
     new Date().toISOString().split('T')[0],
@@ -135,27 +142,21 @@ const ExpenseBySelect = ({ expenseBy, setExpenseBy }) => {
           </Tooltip>
           {expenseBy.type === 'weekly' && (
             <>
-              <TextField
+              <Text
                 type="date"
                 value={weekStartDate}
                 InputProps={{
                   readOnly: true,
                   disableUnderline: true,
                 }}
-                style={{
-                  marginRight: '-6.5rem',
-                }}
               />
               <WeekDash>-</WeekDash>
-              <TextField
+              <Text
                 type="date"
                 value={weekEndDate}
                 InputProps={{
                   readOnly: true,
                   disableUnderline: true,
-                }}
-                style={{
-                  marginRight: '-6.5rem',
                 }}
               />
             </>

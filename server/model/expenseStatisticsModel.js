@@ -15,7 +15,7 @@ ExpenseStatistics.getStatisticData = function ({ userId, type, year, weekStartDa
     FROM
      (SELECT category, sum(amount) as total_by_cat 
       FROM expense where user_id=${userId} GROUP BY category) as sum_by_cat 
-    JOIN (SELECT sum(amount) as total FROM expense) as total_amnt`;
+    JOIN (SELECT sum(amount) as total FROM expense where user_id=${userId}) as total_amnt`;
 
     const dataByYearQuery = `SELECT YEAR(e.expense_date) as date, 
     sum(amount) as totalAmount

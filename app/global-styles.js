@@ -19,8 +19,8 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: 'Lora', sans-serif;
-    font-weight: 300;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
     min-height: 100vh;
     width: 100%;
     overflow-x: hidden;

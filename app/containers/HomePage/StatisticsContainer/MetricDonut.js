@@ -22,15 +22,15 @@ const MetricDonutContainer = styled.div`
 `;
 
 const DonutTitleContainer = styled.div`
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  left: 38%;
-  top: 37%;
-  font-size: 13px;
-  color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  top: -2rem;
+  left: 10rem;
+  font-size: 1.4rem;
+  color: ${props => props.theme.tracker.lightTextColor};
 `;
 
 export const getAvailabilityDoughnutData = (data, theme) => ({
@@ -64,16 +64,15 @@ const MetricDonut = ({ doughnutData = [], theme }) => (
     {doughnutData.length > 0 ? (
       <>
         <DonutTitleContainer>
-          <div>Expense by</div>
-          <div>CATEGORY</div>
+          <div>Total</div>
         </DonutTitleContainer>
         <DoughnutWidget
           doughnutData={getAvailabilityDoughnutData(doughnutData, theme)}
         />
       </>
     ) : (
-      <NoDataMsg> No data available</NoDataMsg>
-    )}
+        <NoDataMsg> No data available</NoDataMsg>
+      )}
   </MetricDonutContainer>
 );
 

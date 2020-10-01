@@ -44,6 +44,7 @@ const options = {
         display: true,
         ticks: {
           beginAtZero: true,
+          fontFamily: 'Josefin Sans, sans-serif',
         },
       },
     ],
@@ -55,10 +56,13 @@ const options = {
           drawOnChartArea: false,
           display: true,
         },
-
+        ticks: {
+          fontFamily: 'Josefin Sans, sans-serif',
+        },
         scaleLabel: {
           display: true,
           labelString: 'Expense Amount',
+          fontFamily: 'Josefin Sans, sans-serif',
         },
       },
     ],
@@ -66,9 +70,9 @@ const options = {
   tooltips: {
     callbacks: {
       label: tooltipItem => customTooltip(tooltipItem),
-      // hide the title,
-      // title: () => '',
     },
+    titleFontFamily: 'Josefin Sans, sans-serif',
+    bodyFontFamily: 'Josefin Sans, sans-serif',
   },
 };
 
@@ -98,8 +102,9 @@ const ExpensePerDayWidget = ({
       : ['No data'],
     datasets: [
       {
-        fill: false,
+        fill: true,
         lineTension: 0.1,
+        backgroundColor: theme.palette.secondary.main,
         borderColor: theme.palette.primary.dark,
         borderCapStyle: 'butt',
         borderDash: [],

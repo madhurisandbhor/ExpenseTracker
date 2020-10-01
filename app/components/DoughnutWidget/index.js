@@ -16,6 +16,7 @@ const options = {
   },
   labels: {
     fontSize: '8px',
+    fontFamily: 'Josefin sans, sans-serif',
   },
   elements: {
     center: {
@@ -33,6 +34,7 @@ const options = {
         return `${data.labels[tooltipItem.index]}: ${percentageValue}%`;
       },
     },
+    bodyFontFamily: 'Josefin sans, sans-serif',
   },
 };
 
@@ -52,7 +54,7 @@ const DoughnutWidget = ({ doughnutData }) => {
   const { data, labels, colors } = doughnutData;
   const dataSet = getDoughnutData(data, labels, colors);
   return (
-    <div style={{ paddingBottom: '5px' }}>
+    <div style={{ paddingBottom: '0.5rem' }}>
       <Doughnut data={dataSet} options={options} height={180} />
     </div>
   );

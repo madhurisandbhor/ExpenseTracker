@@ -14,18 +14,22 @@ const fontSize12 = {
 const theme = createMuiTheme({
   palette: {
     primary: { light: '#d3bcc0', main: '#f34925', dark: '#69306D' },
-    secondary: { light: '#613ba1', main: '#4CC9F0', dark: '#4003a8' },
+    secondary: { light: '#d3bcc0', main: '#4CC9F0', dark: '#4003a8' },
   },
   tracker: {
     white: '#fff',
     grey: '#dbdbdb',
     black: '#000',
+    lightTextColor: 'rgba(0, 0, 0, 0.87)',
     category: {
       yellow: '#ebb734',
       red: '#e33030',
-      blue: '#3330e3',
+      blue: '#4003a8',
       green: '#1fab26',
     },
+  },
+  typography: {
+    fontFamily: 'Josefin sans, sans-serif',
   },
   overrides: {
     MuiInputLabel: fontSize14,
@@ -33,7 +37,6 @@ const theme = createMuiTheme({
     MuiInputBase: {
       root: {
         fontSize: '1.4rem',
-        fontFamily: 'Lora, sans-serif',
       },
     },
     MuiChip: fontSize12,
