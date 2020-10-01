@@ -78,7 +78,7 @@ function Footer() {
         </Icons>
         <Icons>
           <PhoneAndroidIconWrapper />
-          <Text>+33 634409811</Text>
+          <Text>+33 12345678</Text>
         </Icons>
         <Icons>
           <EmailIconWrapper />

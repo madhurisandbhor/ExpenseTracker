@@ -25,7 +25,6 @@ import makeSelectConnectionForm from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import { InfoContext } from '../App/InfoContext';
-// import logo from '../../images/ExpenseTrackerLogo.png';
 import Register from './Register';
 import Login from './Login';
 import {
@@ -41,8 +40,12 @@ const LogoWrapper = styled.div`
   width: 100%;
   height: 100%;
   z-index: 1;
-  background: rgb(243,73,37);
-  background: linear-gradient(180deg, rgba(243,73,37,1) 0%, rgba(105,48,109,1) 100%);
+  background: rgb(243, 73, 37);
+  background: linear-gradient(
+    180deg,
+    rgba(243, 73, 37, 1) 0%,
+    rgba(105, 48, 109, 1) 100%
+  );
 `;
 
 const Logo = styled.div`
@@ -52,9 +55,9 @@ const Logo = styled.div`
   margin-top: 6rem;
 `;
 
-const Image = styled.img`
-  width: 230rem;
-`;
+// const Image = styled.img`
+//   width: 230rem;
+// `;
 
 const Title = styled.span`
   margin-left: 1rem;
@@ -68,17 +71,17 @@ const Wrapper = styled.div`
   z-index: 2;
   width: 100%;
   top: 0;
-  margin-top: 6rem;
+  margin-top: 10rem;
   display: flex;
   justify-content: center;
 `;
 
 const Form = styled.div`
   position: relative;
-  margin: 3.5rem auto;
+  margin: 4.5rem auto;
   padding: 2rem 6.5rem;
   width: 40%;
-  background-color: ${props=>props.theme.tracker.white};
+  background-color: ${props => props.theme.tracker.white};
   border-radius: 0.4rem;
 `;
 

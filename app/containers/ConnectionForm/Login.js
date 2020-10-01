@@ -51,6 +51,7 @@ const Login = ({ onLogin }) => {
             label="Email ID"
             type="email"
             required
+            autoComplete="username"
             value={emailId}
             onChange={e => setEmailId(e.target.value)}
           />

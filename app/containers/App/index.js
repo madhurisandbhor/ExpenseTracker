@@ -19,7 +19,6 @@ import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import AboutPage from 'containers/AboutPage/Loadable';
 import ConnectionForm from 'containers/ConnectionForm/Loadable';
 import ExpenseList from 'containers/ExpenseList/Loadable';
-import AuthHeader from './AuthHeader';
 import PrivateRoute from './PrivateRoute';
 import theme from './Theme';
 import GlobalStyle from '../../global-styles';
@@ -32,13 +31,6 @@ const AppWrapper = styled.div`
   width: 100%;
   flex-direction: column;
   position: relative;
-`;
-
-const AppContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  padding-top: 7rem;
-  z-index: 2;
 `;
 
 // eslint-disable-next-line react/prop-types
@@ -60,16 +52,13 @@ function App() {
                   content="Expense tracker application"
                 />
               </Helmet>
-              <AuthHeader />
-              <AppContainer>
-                <Switch>
-                  <PrivateRoute exact path="/" component={HomePage} />
-                  <PrivateRoute path="/expensesList" component={ExpenseList} />
-                  <PrivateRoute path="/about" component={AboutPage} />
-                  <Route path="/connect" component={ConnectionForm} />
-                  <Route component={NotFoundPage} />
-                </Switch>
-              </AppContainer>
+              <Switch>
+                <PrivateRoute exact path="/" component={HomePage} />
+                <PrivateRoute path="/expensesList" component={ExpenseList} />
+                <PrivateRoute path="/about" component={AboutPage} />
+                <Route path="/connect" component={ConnectionForm} />
+                <Route component={NotFoundPage} />
+              </Switch>
               <GlobalStyle />
             </AppWrapper>
           </InfoProvider>

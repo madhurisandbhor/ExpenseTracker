@@ -43,7 +43,8 @@ const AboutPage = () => (
     <Para>
       <span>Technologies/Frameworks :</span>
       <span>
-        react hooks, redux, material ui, styled components, node JS and mysql
+        react hooks, redux, webpack, material ui, styled components, node JS,
+        mysql & aws
       </span>
     </Para>
     <Para>
