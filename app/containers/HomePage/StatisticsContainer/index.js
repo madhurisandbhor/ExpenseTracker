@@ -40,24 +40,24 @@ const TopWidgetsContainer = styled.div`
 `;
 
 const BlockTitle = styled.div`
-  font-size: 14px;
+  font-size: 1.4rem;
   color: ${props=>props.theme.tracker.lightTextColor};
 `;
 
 const WidgetCard = withStyles(theme => ({
   root: {
     position: 'relative',
-    padding: '25px 20px 8px 20px',
-    height: '300px',
-    width: '468px',
+    padding: '2.5rem 2rem 0.8rem 2rem',
+    height: '30rem',
+    width: '46.8rem',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: theme.palette.background.paper,
     '&:nth-child(2)': {
-      paddingTop: '22px',
-      width: '290px',
+      paddingTop: '2.2rem',
+      width: '29rem',
     },
   },
 }))(Card);

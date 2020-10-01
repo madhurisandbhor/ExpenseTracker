@@ -6,7 +6,6 @@
 
 import React, { memo } from 'react';
 import styled from 'styled-components';
-// import PropTypes from 'prop-types';
 
 const Wrapper = styled.div`
   margin: auto;
@@ -21,11 +20,14 @@ const Wrapper = styled.div`
 `;
 
 const Para = styled.p`
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   margin: 1rem;
   span:first-child {
     font-weight: bold;
     color: ${props => props.theme.palette.primary.main};
+  }
+  span:nth-child(2) {
+    margin-left: 0.2rem;
   }
 `;
 
@@ -39,11 +41,14 @@ const AboutPage = () => (
       expenses by means user can share expenses with other users and calculate.
     </Para>
     <Para>
-      <span>Technologies/Frameworks:</span> react hooks, redux, material ui,
-      styled components, node JS and mysql
+      <span>Technologies/Frameworks :</span>
+      <span>
+        react hooks, redux, material ui, styled components, node JS and mysql
+      </span>
     </Para>
     <Para>
-      <span>Author :</span> Madhuri Sandbhor (madhurisandbhor@gmail.com)
+      <span>Author :</span>
+      <span>Madhuri Sandbhor (madhurisandbhor@gmail.com)</span>
     </Para>
   </Wrapper>
 );

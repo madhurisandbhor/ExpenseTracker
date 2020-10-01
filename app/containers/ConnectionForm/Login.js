@@ -59,6 +59,7 @@ const Login = ({ onLogin }) => {
             label="Password"
             type="password"
             required
+            autoComplete="current-password"
             inputProps={{
               min: 0,
               maxLength: 12,

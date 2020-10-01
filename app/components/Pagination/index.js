@@ -10,11 +10,10 @@ import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
-
 const Wrapper = styled.div`
   display: flex;
-  align-items:center;
-  justify-content:center;
+  align-items: center;
+  justify-content: center;
   padding: 1rem;
 `;
 
@@ -39,31 +38,37 @@ const Btn = withStyles(theme => ({
     },
     '&:disabled': {
       opacity: '0.5',
-    }
-  }
+    },
+  },
 }))(Button);
 
-const Pagination = ({ nextLink, prevLink, currentPage, pagesCount, onNavigationClick }) => {
-  return (
-    <Wrapper>
-      <Btn
-        size="large"
-        onClick={() => onNavigationClick('prev')}
-        disabled={prevLink === ''}
-      >
-        &#8249;
-      </Btn>
-      <span>{currentPage}/{pagesCount}</span>
-      <Btn
-        size="small"
-        onClick={() => onNavigationClick('next')}
-        disabled={nextLink === ''}
-      >
-        &#8250;
-      </Btn>
-    </Wrapper>
-  );
-}
+const Pagination = ({
+  nextLink,
+  prevLink,
+  currentPage,
+  pagesCount,
+  onNavigationClick,
+}) => (
+  <Wrapper>
+    <Btn
+      size="large"
+      onClick={() => onNavigationClick('prev')}
+      disabled={prevLink === ''}
+    >
+      &#8249;
+    </Btn>
+    <span>
+      {currentPage}/{pagesCount}
+    </span>
+    <Btn
+      size="small"
+      onClick={() => onNavigationClick('next')}
+      disabled={nextLink === ''}
+    >
+      &#8250;
+    </Btn>
+  </Wrapper>
+);
 
 Pagination.propTypes = {
   nextLink: PropTypes.string.isRequired,
